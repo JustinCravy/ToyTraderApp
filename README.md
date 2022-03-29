@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # toy_trader
 
 Sac State senior project
@@ -10,3 +11,7 @@ Backend: Google Firebase
 
 i made a change!
  Change 
+=======
+# ToyTraderApp
+ToyTraderApp Project
+>>>>>>> ea02182 (Create README.md)
