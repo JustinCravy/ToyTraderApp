@@ -1,3 +1,0 @@
-# ToyTraderApp
-ToyTraderApp Project
-test
