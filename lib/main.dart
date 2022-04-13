@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toy_trader/screens/HomeScreen.dart';
+import 'package:toy_trader/screens/authentication/SignInScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
+      home: const SignInScreen(),
     );
   }
 }
