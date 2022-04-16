@@ -23,28 +23,78 @@ class RegistrationScreen extends StatelessWidget{
         // backgroundColor: Colors.white,
       ),
       body: Container(
-        // color: const Color(0xffC4DFCB),
-        child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Registration Screen",
-                  style: TextStyle(
-                    color: Colors.blue[900],
-                    fontSize: 40,
-                    fontWeight: FontWeight.w500,
+        alignment: Alignment.center,
+        child: SingleChildScrollView(
+          // color: const Color(0xffC4DFCB),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0,10,0,5),
+                child: Image.asset(
+                    'assets/images/default-image-620x600.jpg',
+                    width: 200,
+                    height: 200
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(5),
+                child: SizedBox(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Email',
+                    ),
                   ),
+                  height: 60,
+                  width: 350,
                 ),
-                SizedBox(height: 20.0),
-                RaisedButton(
-                    child: const Text('To Questionnaire'),
-                    onPressed: ()  {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const QuestionnaireScreen()));
-                    }
+              ),
+              const Padding(
+                padding: EdgeInsets.all(5),
+                child: SizedBox(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Choose Password',
+                    ),
+                  ),
+                  height: 60,
+                  width: 350,
                 ),
-              ],
-            )
+              ),
+              const Padding(
+                padding: EdgeInsets.all(5),
+                child: SizedBox(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Confirm Password',
+                    ),
+                  ),
+                  height: 60,
+                  width: 350,
+                ),
+              ),
+              const Text(
+                "*Has at least 8 characters",
+                style: TextStyle(
+                    fontSize: 12
+                ),
+              ),
+              const Text(
+                "*Has at least 1 number",
+                style: TextStyle(
+                    fontSize: 12
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              RaisedButton(
+                  child: const Text('Sign Up'),
+                  onPressed: ()  {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const QuestionnaireScreen()));
+                  }),
+            ],
+          ),
         ),
       ),
     );
