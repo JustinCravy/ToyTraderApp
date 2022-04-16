@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class ToyDetailsScreen extends StatelessWidget{
@@ -5,6 +7,24 @@ class ToyDetailsScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    Widget titleSection = Row(
+      children: <Widget>[
+        Expanded(
+          child: new Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              new Text("Toy Name: Nerf Gun", style: new TextStyle(fontSize: 25.0)),
+              new Text("Quality: Excellent", style: new TextStyle(fontSize: 25.0)),
+              new Text("Seller: James Smith", style: new TextStyle(fontSize: 25.0)),
+              new Text("Location: Sacramento, CA", style: new TextStyle(fontSize: 25.0)),
+              new Image.asset('assets/images/greenbutton.png',),
+              new Image.asset('assets/images/redbutton.png',)
+            ],
+          )
+        ),
+      ]
+    );
+
     return Scaffold(
       // backgroundColor: const Color(0xffC4DFCB),
       appBar: AppBar(
@@ -19,24 +39,17 @@ class ToyDetailsScreen extends StatelessWidget{
         // centerTitle: true,
         // backgroundColor: Colors.white,
       ),
-      body: Container(
-        // color: const Color(0xffC4DFCB),
-        child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Toy Details Screen",
-                  style: TextStyle(
-                    color: Colors.blue[900],
-                    fontSize: 35,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            )
-        ),
-      ),
+
+      body: new ListView(
+        children: <Widget>[
+          new Image.asset(
+            'assets/images/nerfgun1.jpg',
+          ),
+          titleSection,
+        ]
+      )
     );
   }
 }
+
+
