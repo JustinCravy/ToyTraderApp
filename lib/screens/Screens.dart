@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'MessageDetailsScreen.dart';
+import 'MessageTabScreen.dart';
 import 'ToyDetailsScreen.dart';
 
 class MessagesScreen extends StatelessWidget{
@@ -11,29 +12,7 @@ class MessagesScreen extends StatelessWidget{
     return Scaffold(
       body: Container(
         // color: const Color(0xffC4DFCB),
-        child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Messages Screen",
-                  style: TextStyle(
-                    color: Colors.blue[900],
-                    fontSize: 45,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-
-                SizedBox(height: 20.0),
-                RaisedButton(
-                    child: const Text('To Message Details'),
-                    onPressed: ()  {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const MessageDetailsScreen()));
-                    }
-                ),
-              ],
-            )
-        ),
+         child: MessageTabScreen(),
       ),
     );
   }
