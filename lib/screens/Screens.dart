@@ -24,17 +24,10 @@ class MainScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // color: const Color(0xffC4DFCB),
-      child: Center(
-        child: Text(
-          "Home",
-          style: TextStyle(
-            color: Colors.blue[900],
-            fontSize: 45,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+    return Scaffold(
+      body: Container(
+        // color: const Color(0xffC4DFCB),
+        child: MainHomeScreen(),
       ),
     );
   }
