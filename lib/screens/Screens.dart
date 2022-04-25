@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'MainScreen.dart';
 import 'MessageDetailsScreen.dart';
 import 'MessageTabScreen.dart';
 import 'ToyDetailsScreen.dart';
@@ -43,30 +44,60 @@ class SearchToysScreen extends StatelessWidget{
         // color: const Color(0xffC4DFCB),
         child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  "Search Toys Screen",
-                  style: TextStyle(
-                    color: Colors.blue[900],
-                    fontSize: 35,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                 Padding(
+                  padding : EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: TextField(
 
-                SizedBox(height: 20.0),
+                    decoration: InputDecoration(
+
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+
+                        }//Need to be linked with search result
+                      ),
+                        hintText: 'Search your toys',
+                      border: OutlineInputBorder()
+                    ),
+                  )
+                )
+
+               /* SizedBox(height: 20.0),
                 RaisedButton(
                     child: const Text('To Toy Details'),
                     onPressed: ()  {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const ToyDetailsScreen()));
                     }
-                ),
+                ),*/
               ],
             )
+
         ),
       ),
     );
   }
+}
+
+//longlist, need to get data from data base and covert
+//into widget data type
+//will be moved into SearchToyScreen and rebuild framework.
+List<String> getList(){
+  var items=List<String>.generate(10,(counter)=>"Toy $counter");
+  return items;
+}
+
+Widget getListView(){
+  var listitems = getList();
+  var listView = ListView.builder(
+      itemBuilder:(context, index){
+        return ListTile(
+          title: Text(listitems[index])
+        );
+      }
+  );
+  return listView;
 }
 
 
