@@ -6,33 +6,37 @@ class MessageDetailsScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: const Color(0xffC4DFCB),
-      appBar: AppBar(
-        title: const Text(
-          "Toy Trader",
-          style: TextStyle(
-            // color: Theme.of(context).primaryColor,
-            fontSize: 25,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        // centerTitle: true,
-        // backgroundColor: Colors.white,
-      ),
+
       body: Container(
         // color: const Color(0xffC4DFCB),
         child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  "Message Details Screen",
-                  style: TextStyle(
-                    color: Colors.blue[900],
-                    fontSize: 35,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                Padding(
+                    padding : EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+
+                    // TODO: connect with firebase cloud messaging
+                    // TODO: add list containing the previous messages sent
+
+
+                    child: TextField(
+
+                      decoration: InputDecoration(
+
+                          suffixIcon: IconButton(
+                              icon: Icon(Icons.send),
+
+                              // TODO: button needs to be setup to send message
+                              onPressed: () {
+
+                              }
+                          ),
+                          hintText: 'Enter message here',
+                          border: OutlineInputBorder()
+                      ),
+                    )
+                )
               ],
             )
         ),
