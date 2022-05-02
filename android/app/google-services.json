@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "915091454321",
+    "project_id": "toytrader-26f11",
+    "storage_bucket": "toytrader-26f11.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915091454321:android:db59c6041605050fe5ded0",
+        "android_client_info": {
+          "package_name": "com.example.toy_trader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "915091454321-kq4l21a18du0bre1spcdt204v8i1qf80.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.toy_trader",
+            "certificate_hash": "48a97f68d6b4a23d9b6657ed729afb7b02c4b616"
+          }
+        },
+        {
+          "client_id": "915091454321-p7b6lamlkn5027p4l6ne1nkn12s4v5kl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjIsRvlHH-rsP1shqGzQkrgkwYIWvsCOg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "915091454321-p7b6lamlkn5027p4l6ne1nkn12s4v5kl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -17,43 +17,47 @@ class SignInScreen extends StatelessWidget{
             fontSize: 25,
             fontWeight: FontWeight.w600,
           ),
-        ),
-        // centerTitle: true,
+        ),        actions: <Widget>[
+        FlatButton.icon(
+            onPressed: () {
+              
+            },
+            icon: Icon(Icons.person),
+            label: Text('Register'))
+      ]
         // backgroundColor: Colors.white,
       ),
       body: Container(
-        // color: const Color(0xffC4DFCB),
-        child: Center(
+          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+          child: Form(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Login Screen",
-                  style: TextStyle(
-                    color: Colors.blue[900],
-                    fontSize: 45,
-                    fontWeight: FontWeight.w500,
-                  ),
+              children: <Widget>[
+                SizedBox( height: 20.0),
+                TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Email',
+                    ),
+                    validator: (val) => val!.isEmpty ? 'Enter email' : null,
                 ),
+                SizedBox( height: 20.0),
+                TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                    ),
+                    validator: (val) => val!.length < 2 ? 'Password must be > 2 chars' : null,
+                    obscureText: true,
+                ),
+                SizedBox(height: 20.0),
+                RaisedButton(
+                    child: Text('Sign in'),
+                    onPressed: ()  {
 
-                SizedBox(height: 20.0),
-                RaisedButton(
-                    child: const Text('To Registration'),
-                    onPressed: ()  {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const RegistrationScreen()));
-                    }
-                ),
-                SizedBox(height: 20.0),
-                RaisedButton(
-                    child: const Text('Login'),
-                    onPressed: ()  {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
                     }
                 ),
               ],
-            )
-        ),
-      ),
+            ),
+          )
+      )
     );
   }
 }
