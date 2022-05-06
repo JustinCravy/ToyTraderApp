@@ -20,7 +20,7 @@ class SignInScreen extends StatelessWidget{
         ),        actions: <Widget>[
         FlatButton.icon(
             onPressed: () {
-              
+
             },
             icon: Icon(Icons.person),
             label: Text('Register'))
@@ -51,7 +51,7 @@ class SignInScreen extends StatelessWidget{
                 RaisedButton(
                     child: Text('Sign in'),
                     onPressed: ()  {
-
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
                     }
                 ),
               ],
