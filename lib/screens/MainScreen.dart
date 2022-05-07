@@ -5,6 +5,7 @@ class MainHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /*
         appBar: AppBar(
           title: const Text(
             "Toy Trader",
@@ -14,7 +15,7 @@ class MainHomeScreen extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-        ),
+        ), */
         body: SafeArea(
             child: Column(children: <Widget>[
           Container(
