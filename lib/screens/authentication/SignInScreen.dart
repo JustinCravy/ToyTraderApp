@@ -20,7 +20,7 @@ class SignInScreen extends StatelessWidget{
         ),        actions: <Widget>[
         FlatButton.icon(
             onPressed: () {
-
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const RegistrationScreen()));
             },
             icon: Icon(Icons.person),
             label: Text('Register'))
