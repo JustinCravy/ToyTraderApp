@@ -5,113 +5,61 @@ class MainHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*
-        appBar: AppBar(
-          title: const Text(
-            "Toy Trader",
-            style: TextStyle(
-              // color: Theme.of(context).primaryColor,
-              fontSize: 25,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ), */
-        body: SafeArea(
-            child: Column(children: <Widget>[
-          Container(
-            // color: Colors.white,
-            height: MediaQuery.of(context).size.height / 2,
+      body: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: const Image(
+                        image: AssetImage('assets/images/profile_pic_place_holder.png'),
+                      ),
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      child: const Image(
+                        image: AssetImage('assets/images/profile_pic_place_holder.png'),
+                      ),
+                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
+                    ),
+                    Container(
+                      child: const Image(
+                        image: AssetImage(
+                            'assets/images/profile_pic_place_holder_main.png'),
+                      ),
+                      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                    ),
+                    Container(
+                      child: const Image(
+                        image: AssetImage('assets/images/profile_pic_place_holder.png'),
+                      ),
+                      padding: const EdgeInsets.fromLTRB(0, 0, 20, 20),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      child: const Image(
+                        image: AssetImage('assets/images/profile_pic_place_holder.png'),
+                      ),
+                      padding: const EdgeInsets.fromLTRB(0, 30, 30, 0),
+                    ),
+                    Container(
+                      child: const Image(
+                        image: AssetImage('assets/images/profile_pic_place_holder.png'),
+                      ),
+                      padding: const EdgeInsets.fromLTRB(30, 30, 0, 0),
+                    )
+                  ],
+                ),
 
-            // child: const Align(
-            //   alignment: Alignment.center,
-            //   child: Text('Your \n profile',style: TextStyle(
-            //     fontSize: 30,
-            //   ),),
-            // ),
-
-            child: Column(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 150, 0, 0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      '1',
-                      style: TextStyle(
-                        fontSize: 30,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(300, 0, 0, 0),
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Text(
-                      '2',
-                      style: TextStyle(
-                        fontSize: 30,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 300, 0),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      '5',
-                      style: TextStyle(
-                        fontSize: 30,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Your \n profile',
-                      style: TextStyle(
-                        fontSize: 30,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(150, 50, 0, 0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      '4',
-                      style: TextStyle(
-                        fontSize: 30,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 150, 0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      '3',
-                      style: TextStyle(
-                        fontSize: 30,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const Divider(),
-          //TabBarView(children: [ImageList(),])
-          Expanded(
-            child: Column(
-              children: const [
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
                   child: SizedBox(
@@ -169,7 +117,6 @@ class MainHomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ])));
+    );
   }
 }
