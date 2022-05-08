@@ -24,6 +24,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       // backgroundColor: const Color(0xffC4DFCB),
       appBar: AppBar(
+        actions: <Widget>[
+          FlatButton.icon(
+              onPressed: () {
+              },
+              icon: Icon(Icons.person),
+              label: Text('Logout')
+          )
+        ],
         title: const Text(
           "Toy Trader",
           style: TextStyle(
@@ -31,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
             fontSize: 25,
             fontWeight: FontWeight.w600,
           ),
+
         ),
         // centerTitle: true,
         // backgroundColor: Colors.white,
