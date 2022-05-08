@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Screens.dart';
 
@@ -27,8 +28,9 @@ class _HomeScreenState extends State<HomeScreen> {
           FlatButton.icon(
               onPressed: () {
               },
-              icon: Icon(Icons.person),
-              label: Text('Logout')
+              icon: Icon(Icons.person, color: Colors.white,),
+              label: Text('Logout', style: TextStyle(color: Colors.white),),
+
           )
         ],
         title: const Text(

@@ -22,8 +22,8 @@ class SignInScreen extends StatelessWidget{
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const RegistrationScreen()));
             },
-            icon: Icon(Icons.person),
-            label: Text('Register'))
+            icon: Icon(Icons.person, color: Colors.white,),
+            label: Text('Register', style: TextStyle(color: Colors.white),))
       ]
         // backgroundColor: Colors.white,
       ),
