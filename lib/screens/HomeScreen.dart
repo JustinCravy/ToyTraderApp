@@ -1,5 +1,4 @@
-    import 'package:flutter/material.dart';
-
+import 'package:flutter/material.dart';
 import 'Screens.dart';
 
 class HomeScreen extends StatefulWidget {

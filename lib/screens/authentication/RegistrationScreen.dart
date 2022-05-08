@@ -91,7 +91,7 @@ class RegistrationScreen extends StatelessWidget{
               RaisedButton(
                   child: const Text('Sign Up'),
                   onPressed: ()  {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const QuestionnaireScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => QuestionnaireScreen()));
                   }),
             ],
           ),
