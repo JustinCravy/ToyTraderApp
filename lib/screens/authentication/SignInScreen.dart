@@ -44,7 +44,7 @@ class SignInScreen extends StatelessWidget {
               Image.asset(
                   'assets/images/logo.png',
                   width: 350,
-                  height: 250
+                  height: 175
               ),
               Form(
                 child: Column(
