@@ -11,7 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  int screenIndex = 1;
+  int screenIndex = 2;
 
   final screens = [
     const MessagesScreen(),
@@ -81,10 +81,10 @@ class _HomeScreenState extends State<HomeScreen> {
               enableFeedback: false,
               onPressed: () {
                 setState(() {
-                  screenIndex = 1;
+                  screenIndex = 2;
                 });
               },
-              icon: screenIndex == 1
+              icon: screenIndex == 2
                   ? const Icon(
                 Icons.home_rounded,
                 color: Colors.white,
@@ -100,10 +100,10 @@ class _HomeScreenState extends State<HomeScreen> {
               enableFeedback: false,
               onPressed: () {
                 setState(() {
-                  screenIndex = 2;
+                  screenIndex = 1;
                 });
               },
-              icon: screenIndex == 2
+              icon: screenIndex == 1
                   ? const Icon(
                 Icons.toys_rounded,
                 color: Colors.white,
