@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final screens = [
     const MessagesScreen(),
     const MainScreen(),
-    const SearchToysScreen(),
+    const ProfileScreen(),
   ];
 
   @override
@@ -105,12 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               icon: screenIndex == 1
                   ? const Icon(
-                Icons.toys_rounded,
+                Icons.person_rounded,
                 color: Colors.white,
                 size: 35,
               )
                   : const Icon(
-                Icons.toys_outlined,
+                Icons.person_outlined,
                 color: Colors.white,
                 size: 35,
               ),

@@ -33,8 +33,8 @@ class MainScreen extends StatelessWidget{
   }
 }
 
-class SearchToysScreen extends StatelessWidget{
-  const SearchToysScreen({Key? key}) : super(key: key);
+class ProfileScreen extends StatelessWidget{
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
