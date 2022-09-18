@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'AddToyScreen.dart';
 import 'MainScreen.dart';
-import 'MessageDetailsScreen.dart';
 import 'MessageTabScreen.dart';
-import 'ToyDetailsScreen.dart';
 
 class MessagesScreen extends StatelessWidget{
   const MessagesScreen({Key? key}) : super(key: key);
@@ -62,15 +61,15 @@ class SearchToysScreen extends StatelessWidget{
                       border: OutlineInputBorder()
                     ),
                   )
-                )
+                ),
 
-               /* SizedBox(height: 20.0),
+               SizedBox(height: 20.0),
                 RaisedButton(
-                    child: const Text('To Toy Details'),
+                    child: const Text('To Add Toys'),
                     onPressed: ()  {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ToyDetailsScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddToyScreen()));
                     }
-                ),*/
+                ),
               ],
             )
 

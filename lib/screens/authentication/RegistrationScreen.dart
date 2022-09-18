@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toy_trader/screens/QuestionnaireScreen.dart';
+import 'package:toy_trader/screens/authentication/QuestionnaireScreen.dart';
 import 'package:toy_trader/screens/authentication/SignInScreen.dart';
 import '../HomeScreen.dart';
 
@@ -31,7 +31,7 @@ class RegistrationScreen extends StatelessWidget{
               Padding(
                 padding: const EdgeInsets.fromLTRB(0,10,0,5),
                 child: Image.asset(
-                    'assets/images/default-image-620x600.jpg',
+                    'assets/images/logo.png',
                     width: 200,
                     height: 200
                 ),
