@@ -72,7 +72,8 @@ class SignInScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const HomeScreen()));
-                        }),
+                        }
+                        ),
                   ],
                 ),
               ),
