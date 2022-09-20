@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toy_trader/screens/authentication/QuestionnaireScreen.dart';
 import 'package:toy_trader/screens/authentication/SignInScreen.dart';
+import 'package:toy_trader/screens/authentication/PhotoAndNameScreen.dart';
 import '../HomeScreen.dart';
 
 class RegistrationScreen extends StatelessWidget{
@@ -32,8 +33,21 @@ class RegistrationScreen extends StatelessWidget{
                 padding: const EdgeInsets.fromLTRB(0,10,0,5),
                 child: Image.asset(
                     'assets/images/logo.png',
-                    width: 200,
-                    height: 200
+                    width: 150,
+                    height: 150
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(5),
+                child: SizedBox(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Username',
+                    ),
+                  ),
+                  height: 50,
+                  width: 350,
                 ),
               ),
               const Padding(
@@ -45,7 +59,7 @@ class RegistrationScreen extends StatelessWidget{
                       hintText: 'Email',
                     ),
                   ),
-                  height: 60,
+                  height: 50,
                   width: 350,
                 ),
               ),
@@ -58,7 +72,7 @@ class RegistrationScreen extends StatelessWidget{
                       hintText: 'Choose Password',
                     ),
                   ),
-                  height: 60,
+                  height: 50,
                   width: 350,
                 ),
               ),
@@ -71,7 +85,7 @@ class RegistrationScreen extends StatelessWidget{
                       hintText: 'Confirm Password',
                     ),
                   ),
-                  height: 60,
+                  height: 50,
                   width: 350,
                 ),
               ),
@@ -91,7 +105,7 @@ class RegistrationScreen extends StatelessWidget{
               RaisedButton(
                   child: const Text('Sign Up'),
                   onPressed: ()  {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => QuestionnaireScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => PhotoAndNameScreen()));
                   }),
             ],
           ),
