@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:toy_trader/screens/MessageDetailsScreen.dart';
+import 'package:toy_trader/widgets/MessageDetailsBox.dart';
 
 class MessageBox extends StatefulWidget {
   @override
@@ -10,6 +11,8 @@ class MessageBox extends StatefulWidget {
 }
 
 class _MessageBoxState extends State<MessageBox>{
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -73,7 +76,7 @@ class _MessageBoxState extends State<MessageBox>{
           onTap:(){
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MessageDetailsScreen())
+                MaterialPageRoute(builder: (context) => MessageDetailsBox())
             );
           }
       ),
