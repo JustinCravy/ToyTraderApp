@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:toy_trader/widgets/MessageList.dart';
+import 'package:toy_trader/widgets/ToyBox.dart';
+import 'package:toy_trader/widgets/ToyGridList.dart';
 
 import 'AddToyScreen.dart';
 import 'MainScreen.dart';
@@ -63,13 +66,22 @@ class ProfileScreen extends StatelessWidget{
                   )
                 ),
 
-               SizedBox(height: 20.0),
+               Container(
+                 width: deviceWidth(context),
+                 height: deviceHeight(context) *.58,
+                 alignment: Alignment.topLeft,
+                 child: ToyGridList(),
+               ),
+
+               SizedBox(height: 0.0),
                 RaisedButton(
                     child: const Text('To Add Toys'),
                     onPressed: ()  {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => AddToyScreen()));
                     }
                 ),
+
+
               ],
             )
 
@@ -98,5 +110,7 @@ Widget getListView(){
   );
   return listView;
 }
+double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;
+double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
 
 
