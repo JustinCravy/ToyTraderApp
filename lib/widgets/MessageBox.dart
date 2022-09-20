@@ -19,6 +19,8 @@ class _MessageBoxState extends State<MessageBox>{
         left: deviceWidth(context) *.02,
       ),
       child: InkWell(
+
+          //
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children:  <Widget>[
@@ -70,6 +72,8 @@ class _MessageBoxState extends State<MessageBox>{
              )
             ],
           ),
+
+          //When pressed will be sent to the message details screen
           onTap:(){
             Navigator.push(
                 context,
