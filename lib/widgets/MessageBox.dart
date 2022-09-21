@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:toy_trader/screens/MessageBox.dart';
+import 'package:toy_trader/screens/MessageDetailsBox.dart';
 
 
 class MessageBox extends StatefulWidget {
