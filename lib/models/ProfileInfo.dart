@@ -1,6 +1,6 @@
 import 'Toy.dart';
 
-class UserInfo {
+class ProfileInfo {
 
   final String userId;
   final String screenName;
@@ -9,7 +9,7 @@ class UserInfo {
   final List<Toy> toys;
   final String profileImageUrl;
 
-  UserInfo(
+ ProfileInfo(
       this.userId,
       this.screenName,
       this.ageRange,

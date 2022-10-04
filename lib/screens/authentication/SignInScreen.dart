@@ -1,13 +1,26 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../HomeScreen.dart';
 import 'RegistrationScreen.dart';
 
-class SignInScreen extends StatelessWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+class SignInScreen extends StatefulWidgetWidget {
+  SignInScreen({Key? key}) : super(key: key);
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose(){
+    emailController.dispose();
+    passwordController.dispose();
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
         // backgroundColor: const Color(0xffC4DFCB),
         appBar: AppBar(
@@ -51,10 +64,9 @@ class SignInScreen extends StatelessWidget {
                   children: <Widget>[
                     TextFormField(
                       decoration: InputDecoration(
-                        hintText: 'Email',
-                      ),
-                      validator: (val) => val!.isEmpty ? 'Enter email' : null,
-                    ),
+                        hintText: 'Email',),
+                      controller: emailController,
+                      validator: (val) => val!.isEmpty ? 'Enter email' : null,),
                     SizedBox(height: 20.0),
                     TextFormField(
                       decoration: InputDecoration(
@@ -62,16 +74,21 @@ class SignInScreen extends StatelessWidget {
                       ),
                       validator: (val) =>
                           val!.length < 2 ? 'Password must be > 2 chars' : null,
+                      controller: passwordController,
                       obscureText: true,
                     ),
                     SizedBox(height: 20.0),
                     RaisedButton(
                         child: Text('Sign in'),
                         onPressed: () {
+
+                          /*
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const HomeScreen()));
+
+                           */
                         }
                         ),
                   ],
