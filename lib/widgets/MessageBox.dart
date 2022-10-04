@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:toy_trader/screens/MessageDetailsBox.dart';
+import 'package:toy_trader/widgets/MessageDetailsBox.dart';
 
 
 class MessageBox extends StatefulWidget {
@@ -14,6 +14,8 @@ class _MessageBoxState extends State<MessageBox>{
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 100,
+      width: double.infinity,
       padding: EdgeInsets.only(
         top: deviceHeight(context) * .04,
         right: deviceWidth(context) *.02,
@@ -46,7 +48,6 @@ class _MessageBoxState extends State<MessageBox>{
                    bottomRight: Radius.circular(15),
                  )
                ),
-               child:Expanded(
                  child: Padding(
                  padding: EdgeInsets.only(
                    left: deviceWidth(context) *.05,
@@ -69,7 +70,6 @@ class _MessageBoxState extends State<MessageBox>{
                  ],
                ),
                  )
-               )
              )
             ],
           ),

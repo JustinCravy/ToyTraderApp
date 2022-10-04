@@ -5,7 +5,7 @@ import 'package:toy_trader/widgets/ToyGridList.dart';
 
 import 'AddToyScreen.dart';
 import 'MainScreen.dart';
-import 'MessageTabScreen.dart';
+import 'ConversationsScreen.dart';
 
 class MessagesScreen extends StatelessWidget{
   const MessagesScreen({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class MessagesScreen extends StatelessWidget{
     return Scaffold(
       body: Container(
         // color: const Color(0xffC4DFCB),
-         child: MessageTabScreen(),
+         child: ConversationsScreen(),
       ),
     );
   }
