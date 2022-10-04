@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
 
 import '../../models/Toy.dart';
+import 'SignInScreen.dart';
 
 class AuthService{
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -27,5 +31,14 @@ class AuthService{
       return null;
     }
 
+  }
+
+  Future signOut() async {
+    try{
+      return await firebaseAuth.signOut();
+    }
+    catch(e){
+      print(e);
+    }
   }
 }

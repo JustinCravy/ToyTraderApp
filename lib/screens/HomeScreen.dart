@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'BottomNavBar.dart';
+import 'package:toy_trader/screens/authentication/AuthService.dart';
+
+import 'authentication/SignInScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   int screenIndex = 2;
+  AuthService authService = AuthService();
 
   final screens = [
     const MessagesScreen(),
@@ -26,10 +30,16 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         actions: <Widget>[
           FlatButton.icon(
-              onPressed: () {
+              onPressed: () async{
+                await authService.signOut();
+                /*Navigator.pushAndRemoveUntil(context,
+                    MaterialPageRoute(builder: (context)=>SignInScreen()),
+                    (route)=>false);*/
               },
-              icon: Icon(Icons.person, color: Colors.white,),
-              label: Text('Logout', style: TextStyle(color: Colors.white),),
+                icon:
+                Icon(Icons.person, color: Colors.white,)
+                ,
+                label: Text('Logout', style: TextStyle(color: Colors.white),),
 
           )
         ],
