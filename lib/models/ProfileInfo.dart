@@ -9,12 +9,13 @@ class ProfileInfo {
   final List<Toy> toys;
   final String profileImageUrl;
 
- ProfileInfo(
-      this.userId,
-      this.screenName,
-      this.ageRange,
-      this.interests,
-      this.toys,
-      this.profileImageUrl
-      );
+ ProfileInfo({
+   required this.userId,
+   required this.screenName,
+   required this.ageRange,
+   required this.interests,
+   required this.toys,
+   required this.profileImageUrl
+ });
+
 }

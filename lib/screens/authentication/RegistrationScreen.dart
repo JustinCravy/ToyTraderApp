@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:toy_trader/screens/authentication/QuestionnaireScreen.dart';
 import 'package:toy_trader/screens/authentication/SignInScreen.dart';
-import 'package:toy_trader/screens/authentication/PhotoAndNameScreen.dart';
-import '../HomeScreen.dart';
+import 'package:toy_trader/screens/HomeScreen.dart';
 
-class RegistrationScreen extends StatelessWidget{
-  const RegistrationScreen({Key? key}) : super(key: key);
+import '../../firebase_services/AuthService.dart';
+
+class RegistrationScreen extends StatefulWidget {
+  final Function toggleView;
+
+  const RegistrationScreen({Key? key, required this.toggleView})
+      : super(key: key);
+
+  @override
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
+}
+
+class _RegistrationScreenState extends State<RegistrationScreen> {
+
+  final AuthService authService = AuthService();
+  final _formKey = GlobalKey<FormState>();
+
+  //text field state
+  String email = '';
+  String pw = '';
+  String confirmPw = '';
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -20,97 +39,110 @@ class RegistrationScreen extends StatelessWidget{
             fontWeight: FontWeight.w600,
           ),
         ),
+        actions: <Widget>[
+          FlatButton.icon(
+              onPressed: () {
+                widget.toggleView();
+              },
+              icon: Icon(
+                Icons.person,
+                color: Colors.white,
+              ),
+              label: Text(
+                'Sign in',
+                style: TextStyle(color: Colors.white),
+              ))
+
+        ],
         // centerTitle: true,
         // backgroundColor: Colors.white,
       ),
-      body: Container(
-        alignment: Alignment.center,
-        child: SingleChildScrollView(
-          // color: const Color(0xffC4DFCB),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,10,0,5),
-                child: Image.asset(
-                    'assets/images/logo.png',
-                    width: 150,
-                    height: 150
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(5),
-                child: SizedBox(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Username',
-                    ),
-                  ),
-                  height: 50,
+        body: SingleChildScrollView(
+            child: Container(
+            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+            child: Column(children: <Widget>[
+              Image.asset(
+                  'assets/images/logo.png',
                   width: 350,
-                ),
+                  height: 175
               ),
-              const Padding(
-                padding: EdgeInsets.all(5),
-                child: SizedBox(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Email',
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Email',
+                      ),
+                      validator: (val) => val!.isEmpty ? 'Email must not be empty' : null,
+                        onChanged: (val) {
+                          setState(() => email = val);
+                        }
                     ),
-                  ),
-                  height: 50,
-                  width: 350,
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(5),
-                child: SizedBox(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Choose Password',
+                    SizedBox(height: 20.0),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                      ),
+                      validator: (val) =>
+                      val!.length < 2 ? 'Password must be > 2 chars' : null,
+                      obscureText: true,
+                        onChanged: (val) {
+                          setState(() => pw = val);
+                        }
                     ),
-                  ),
-                  height: 50,
-                  width: 350,
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(5),
-                child: SizedBox(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Confirm Password',
+                    SizedBox(height: 20.0),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Confirm Password',
+                      ),
+                      validator: (val) =>
+                      val! != pw ? 'Passwords must match' : null,
+                      obscureText: true,
+                        onChanged: (val) {
+                          setState(() => confirmPw = val);
+                        }
                     ),
-                  ),
-                  height: 50,
-                  width: 350,
+
+                    SizedBox(height: 20.0),
+                    RaisedButton(
+                        child: Text('Register'),
+                        onPressed: () async {
+                          if(_formKey.currentState!.validate()){
+                            dynamic result = await authService.registerWithEmailAndPw(email, pw);
+                            if(result == null){
+                              setState(() => error = 'Couldnt register...');
+                            }
+                          }
+                        }
+                    ),
+                    SizedBox(height: 20.0),
+                    Text(
+                      error,
+                      style: TextStyle(color: Colors.red, fontSize: 14.0),
+                    )
+
+                  ],
                 ),
               ),
-              const Text(
-                "*Has at least 8 characters",
-                style: TextStyle(
-                    fontSize: 12
-                ),
-              ),
-              const Text(
-                "*Has at least 1 number",
-                style: TextStyle(
-                    fontSize: 12
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              RaisedButton(
-                  child: const Text('Sign Up'),
-                  onPressed: ()  {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => PhotoAndNameScreen()));
-                  }),
-            ],
-          ),
-        ),
-      ),
+            ]
+            )
+        )
+        )
+
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

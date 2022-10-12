@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:toy_trader/models/ProfileInfo.dart';
 import 'BottomNavBar.dart';
-import 'package:toy_trader/screens/authentication/AuthService.dart';
+import 'package:toy_trader/firebase_services/AuthService.dart';
 
 import 'authentication/SignInScreen.dart';
 
@@ -17,14 +19,11 @@ class _HomeScreenState extends State<HomeScreen> {
   int screenIndex = 2;
   AuthService authService = AuthService();
 
-  final screens = [
-    const MessagesScreen(),
-    const MainScreen(),
-    const ProfileScreen(),
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final profileInfo = Provider.of<ProfileInfo?>(context);
+    String uid = profileInfo!.userId;
     return Scaffold(
       // backgroundColor: const Color(0xffC4DFCB),
       appBar: AppBar(
@@ -55,8 +54,15 @@ class _HomeScreenState extends State<HomeScreen> {
         // centerTitle: true,
         // backgroundColor: Colors.white,
       ),
-      body: screens[screenIndex],
-      bottomNavigationBar: Container(
+      body: (() {
+        if(screenIndex == 0) {
+          return ConversationsScreen();
+        } else if( screenIndex == 1) {
+          return MainHomeScreen();
+        } else {
+          return ProfileScreen();
+        }
+      }()),      bottomNavigationBar: Container(
         height: 60,
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
