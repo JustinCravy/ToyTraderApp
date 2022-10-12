@@ -30,7 +30,8 @@ class AuthService{
     try{
       UserCredential result = await firebaseAuth.createUserWithEmailAndPassword(email: email, password: pw);
       User? user = result.user;
-      await dbService.setProfileInfo(profileInfo!);
+      profileInfo!.userId = user!.uid;
+      await dbService.setProfileInfo(profileInfo);
 
       return _userFromFirebaseUser(user);
     }catch(e){

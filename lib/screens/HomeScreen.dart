@@ -23,7 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final profileInfo = ModalRoute.of(context)!.settings.arguments as ProfileInfo?;
-    print(profileInfo);
 
     return Scaffold(
       // backgroundColor: const Color(0xffC4DFCB),
@@ -32,9 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
           FlatButton.icon(
               onPressed: () async{
                 await authService.signOut();
-                /*Navigator.pushAndRemoveUntil(context,
-                    MaterialPageRoute(builder: (context)=>SignInScreen()),
-                    (route)=>false);*/
               },
                 icon:
                 Icon(Icons.person, color: Colors.white,)

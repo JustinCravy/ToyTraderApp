@@ -63,6 +63,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                             setState(() => profileInfo.screenName = val);
                           }
                       ),
+                      SizedBox(height: 20.0),
                       Text('Please select a categegory'),
                       DropdownButton<String>(
                         isExpanded: true,
