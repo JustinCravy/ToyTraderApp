@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toy_trader/widgets/MessageList.dart';
 import 'package:toy_trader/widgets/ToyGridList.dart';
+import '../models/ProfileInfo.dart';
 import 'AddToyScreen.dart';
 
 
@@ -23,14 +24,14 @@ class ConversationsScreen extends StatelessWidget{
 
 
 
-class MainHomeScreen extends StatefulWidget {
-  const MainHomeScreen({Key? key}) : super(key: key);
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
-  _MainHomeScreenState createState() => _MainHomeScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _MainHomeScreenState extends State<MainHomeScreen> {
+class _ProfileScreenState extends State<ProfileScreen> {
   String dropdownValue1 = 'Category One';
   String dropdownValue2 = '0 - 2';
   String dropdownValue3 = 'Interested1';
@@ -211,11 +212,13 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 }
 
 
-class ProfileScreen extends StatelessWidget{
-  const ProfileScreen({Key? key}) : super(key: key);
+class MainScreen extends StatelessWidget{
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final profileInfo = ModalRoute.of(context)!.settings.arguments as ProfileInfo?;
+    print(profileInfo);
     return Scaffold(
       body: Container(
         // color: const Color(0xffC4DFCB),

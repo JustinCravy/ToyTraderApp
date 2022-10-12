@@ -1,28 +1,36 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:toy_trader/firebase_services/DatabaseService.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
 
 import '../models/Toy.dart';
-import '../screens/authentication/SignInScreen.dart';
 
 class AuthService{
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final DatabaseService dbService = DatabaseService();
 
 
   ProfileInfo? _userFromFirebaseUser(User? user){
-    return user != null ? ProfileInfo(userId: user.uid, screenName: '', ageRange: <int>[], interests: <String>[], toys: <Toy>[], profileImageUrl: '') : null;
+    return user != null ? ProfileInfo(
+        userId: user.uid,
+        screenName: '',
+        ageRange: '',
+        interests: '',
+        toys: <Toy>[],
+        profileImageUrl: ''
+    ) : null;
   }
 
   Stream<ProfileInfo?> get user {
     return firebaseAuth.authStateChanges().map((User? user) => _userFromFirebaseUser(user));
   }
   //register with email/pw
-  Future registerWithEmailAndPw(String email, String pw) async {
+  Future registerWithEmailAndPw(String email, String pw, ProfileInfo? profileInfo) async {
     try{
       UserCredential result = await firebaseAuth.createUserWithEmailAndPassword(email: email, password: pw);
       User? user = result.user;
+      await dbService.setProfileInfo(profileInfo!);
 
       return _userFromFirebaseUser(user);
     }catch(e){

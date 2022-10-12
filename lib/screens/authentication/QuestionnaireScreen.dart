@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:toy_trader/models/ProfileInfo.dart';
 import 'package:toy_trader/screens/HomeScreen.dart';
+import '../../firebase_services/AuthService.dart';
+import '../../models/Toy.dart';
+import 'package:uuid/uuid.dart';
 
 class QuestionnaireScreen extends StatefulWidget {
+
   const QuestionnaireScreen({Key? key}) : super(key: key);
 
   @override
@@ -11,9 +16,16 @@ class QuestionnaireScreen extends StatefulWidget {
 class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   String dropdownValue1 = 'Category One';
   String dropdownValue2 = '0 - 2';
+  static String userId = Uuid().v1().toString();
+  ProfileInfo profileInfo = ProfileInfo(
+      userId: userId, screenName: '',
+      ageRange: '', interests: '', toys: <Toy>[], profileImageUrl: '');
+  final _formKey = GlobalKey<FormState>();
+  AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as List<String>;
     return Scaffold(
       // backgroundColor: const Color(0xffC4DFCB),
       appBar: AppBar(
@@ -29,23 +41,28 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
       body: Container(
         // color: const Color(0xffC4DFCB),
         child: Center(
+
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "Questionnaire Screen",
-              style: TextStyle(
-                color: Colors.blue[900],
-                fontSize: 40,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
             SizedBox(height: 20.0),
             Container(
                 padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                child: Form(
+                  key: _formKey,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+
+                      TextFormField(
+                          decoration: InputDecoration(
+                            hintText: 'Screen Name',
+                          ),
+                          validator: (val) => val!.isEmpty ? 'Screen name must not be empty' : null,
+                          onChanged: (val) {
+                            setState(() => profileInfo.screenName = val);
+                          }
+                      ),
                       Text('Please select a categegory'),
                       DropdownButton<String>(
                         isExpanded: true,
@@ -61,6 +78,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                         onChanged: (String? newValue) {
                           setState(() {
                             dropdownValue1 = newValue!;
+                            profileInfo.interests = newValue;
                           });
                         },
                         items: <String>[
@@ -92,6 +110,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                         onChanged: (String? newValue) {
                           setState(() {
                             dropdownValue2 = newValue!;
+                            profileInfo.ageRange = newValue;
                           });
                         },
                         items: <String>[
@@ -108,14 +127,22 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                           );
                         }).toList(),
                       ),
-                    ])),
+                    ])
+                )
+            ),
             RaisedButton(
-                child: const Text('To Home Screen'),
-                onPressed: () {
+                child: const Text('Submit'),
+                onPressed: () async {
+                  await authService.registerWithEmailAndPw(args[0], args[1], profileInfo);
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const HomeScreen()));
+                          builder: (context) => const HomeScreen(),
+                        settings: RouteSettings(
+                          arguments: profileInfo
+                        )
+                      ));
                 }),
           ],
         )),

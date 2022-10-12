@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toy_trader/firebase_services/DatabaseService.dart';
 import 'package:toy_trader/screens/authentication/QuestionnaireScreen.dart';
 import 'package:toy_trader/screens/authentication/SignInScreen.dart';
 import 'package:toy_trader/screens/HomeScreen.dart';
@@ -18,11 +19,13 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
 
   final AuthService authService = AuthService();
+  final DatabaseService databaseService = DatabaseService();
   final _formKey = GlobalKey<FormState>();
 
   //text field state
   String email = '';
   String pw = '';
+  List<String> args = ['', ''];
   String confirmPw = '';
   String error = '';
 
@@ -107,13 +110,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     SizedBox(height: 20.0),
                     RaisedButton(
                         child: Text('Register'),
-                        onPressed: () async {
-                          if(_formKey.currentState!.validate()){
-                            dynamic result = await authService.registerWithEmailAndPw(email, pw);
-                            if(result == null){
-                              setState(() => error = 'Couldnt register...');
-                            }
-                          }
+                        onPressed: () {
+                          args[0] = email;
+                          args[1] = pw;
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => QuestionnaireScreen(),
+                                settings: RouteSettings(
+                                  arguments: args
+                                )
+                              )
+                          );
                         }
                     ),
                     SizedBox(height: 20.0),

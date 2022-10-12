@@ -22,8 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final profileInfo = Provider.of<ProfileInfo?>(context);
-    String uid = profileInfo!.userId;
+    final profileInfo = ModalRoute.of(context)!.settings.arguments as ProfileInfo?;
+    print(profileInfo);
+
     return Scaffold(
       // backgroundColor: const Color(0xffC4DFCB),
       appBar: AppBar(
@@ -58,9 +59,9 @@ class _HomeScreenState extends State<HomeScreen> {
         if(screenIndex == 0) {
           return ConversationsScreen();
         } else if( screenIndex == 1) {
-          return MainHomeScreen();
-        } else {
           return ProfileScreen();
+        } else {
+          return MainScreen();
         }
       }()),      bottomNavigationBar: Container(
         height: 60,
