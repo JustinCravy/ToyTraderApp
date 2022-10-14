@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:toy_trader/firebase_services/DatabaseService.dart';
 import 'package:toy_trader/screens/authentication/QuestionnaireScreen.dart';
-import 'package:toy_trader/screens/authentication/SignInScreen.dart';
-import 'package:toy_trader/screens/HomeScreen.dart';
 
-import '../../firebase_services/AuthService.dart';
 
 class RegistrationScreen extends StatefulWidget {
   final Function toggleView;
@@ -18,8 +14,6 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
 
-  final AuthService authService = AuthService();
-  final DatabaseService databaseService = DatabaseService();
   final _formKey = GlobalKey<FormState>();
 
   //text field state

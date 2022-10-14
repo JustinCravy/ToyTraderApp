@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:toy_trader/firebase_services/DatabaseService.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
 
@@ -26,12 +27,12 @@ class AuthService{
     return firebaseAuth.authStateChanges().map((User? user) => _userFromFirebaseUser(user));
   }
   //register with email/pw
-  Future registerWithEmailAndPw(String email, String pw, ProfileInfo? profileInfo) async {
+  Future registerWithEmailAndPw(String email, String pw, ProfileInfo? profileInfo, File fileImg) async {
     try{
       UserCredential result = await firebaseAuth.createUserWithEmailAndPassword(email: email, password: pw);
       User? user = result.user;
       profileInfo!.userId = user!.uid;
-      await dbService.setProfileInfo(profileInfo);
+      await dbService.setProfileInfo(profileInfo, fileImg);
 
       return _userFromFirebaseUser(user);
     }catch(e){

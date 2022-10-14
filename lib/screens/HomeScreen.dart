@@ -5,7 +5,6 @@ import 'package:toy_trader/models/ProfileInfo.dart';
 import 'BottomNavBar.dart';
 import 'package:toy_trader/firebase_services/AuthService.dart';
 
-import 'authentication/SignInScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -22,19 +21,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final profileInfo = ModalRoute.of(context)!.settings.arguments as ProfileInfo?;
+    final user = Provider.of<ProfileInfo?>(context);
 
     return Scaffold(
       // backgroundColor: const Color(0xffC4DFCB),
       appBar: AppBar(
         actions: <Widget>[
           FlatButton.icon(
-              onPressed: () async{
+              onPressed: () async {
                 await authService.signOut();
               },
-                icon:
-                Icon(Icons.person, color: Colors.white,)
-                ,
+                icon: Icon(Icons.person, color: Colors.white),
                 label: Text('Logout', style: TextStyle(color: Colors.white),),
 
           )

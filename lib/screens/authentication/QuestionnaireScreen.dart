@@ -1,9 +1,10 @@
+
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
-import 'package:toy_trader/screens/HomeScreen.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../firebase_services/AuthService.dart';
 import '../../models/Toy.dart';
-import 'package:uuid/uuid.dart';
 
 class QuestionnaireScreen extends StatefulWidget {
 
@@ -16,12 +17,20 @@ class QuestionnaireScreen extends StatefulWidget {
 class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   String dropdownValue1 = 'Category One';
   String dropdownValue2 = '0 - 2';
-  static String userId = Uuid().v1().toString();
   ProfileInfo profileInfo = ProfileInfo(
-      userId: userId, screenName: '',
+      userId: '', screenName: '',
       ageRange: '', interests: '', toys: <Toy>[], profileImageUrl: '');
   final _formKey = GlobalKey<FormState>();
   AuthService authService = AuthService();
+  File? image;
+
+  Future pickImage(ImageSource source) async{
+    final image = await ImagePicker().pickImage(source: source);
+    if (image ==null) return;
+
+    final imageTemporary = File(image.path);
+    setState(() => this.image = imageTemporary);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +72,19 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                             setState(() => profileInfo.screenName = val);
                           }
                       ),
+                      SizedBox(height: 20.0),
+                      CustomButton(
+                        title: 'Pick from Gallery',
+                        icon: Icons.image_outlined,
+                        onClick: () => pickImage(ImageSource.gallery),
+                      ),
+                      SizedBox(height: 10,),
+                      CustomButton(
+                        title: 'Pick from Camera',
+                        icon: Icons.camera,
+                        onClick: () => pickImage(ImageSource.camera),
+                      ),
+
                       SizedBox(height: 20.0),
                       Text('Please select a categegory'),
                       DropdownButton<String>(
@@ -134,20 +156,35 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
             RaisedButton(
                 child: const Text('Submit'),
                 onPressed: () async {
-                  await authService.registerWithEmailAndPw(args[0], args[1], profileInfo);
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomeScreen(),
-                        settings: RouteSettings(
-                          arguments: profileInfo
-                        )
-                      ));
+                  await authService.registerWithEmailAndPw(args[0], args[1], profileInfo, image!);
+                  Navigator.of(context).pop();
                 }),
           ],
         )),
       ),
     );
   }
+}
+
+
+Widget CustomButton({
+  required String title,
+  required IconData icon,
+  required VoidCallback onClick,
+}) {
+  return Container(
+    width: 280,
+    child: ElevatedButton(
+      onPressed: onClick,
+      child: Row(
+        children:[
+          Icon(icon),
+          SizedBox(
+            width: 20,
+          ),
+          Text(title)
+        ],
+      ),
+    ),
+  );
 }
