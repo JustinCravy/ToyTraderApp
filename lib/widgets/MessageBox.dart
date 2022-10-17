@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:toy_trader/screens/MessageDetailsScreen.dart';
 import 'package:toy_trader/widgets/MessageDetailsBox.dart';
+
 
 class MessageBox extends StatefulWidget {
   @override
@@ -11,17 +11,19 @@ class MessageBox extends StatefulWidget {
 }
 
 class _MessageBoxState extends State<MessageBox>{
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 100,
+      width: double.infinity,
       padding: EdgeInsets.only(
         top: deviceHeight(context) * .04,
         right: deviceWidth(context) *.02,
         left: deviceWidth(context) *.02,
       ),
       child: InkWell(
+
+          //
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children:  <Widget>[
@@ -46,7 +48,6 @@ class _MessageBoxState extends State<MessageBox>{
                    bottomRight: Radius.circular(15),
                  )
                ),
-               child:Expanded(
                  child: Padding(
                  padding: EdgeInsets.only(
                    left: deviceWidth(context) *.05,
@@ -69,10 +70,11 @@ class _MessageBoxState extends State<MessageBox>{
                  ],
                ),
                  )
-               )
              )
             ],
           ),
+
+          //When pressed will be sent to the message details screen
           onTap:(){
             Navigator.push(
                 context,

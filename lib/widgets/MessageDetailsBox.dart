@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:toy_trader/screens/MessageDetailsScreen.dart';
+import 'package:toy_trader/widgets/MessageDetailsList.dart';
+import 'package:grouped_list/grouped_list.dart';
+import 'package:intl/intl.dart';
 
 class MessageDetailsBox extends StatefulWidget {
   @override
@@ -9,6 +9,50 @@ class MessageDetailsBox extends StatefulWidget {
 }
 
 class _MessageDetailsBoxState extends State<MessageDetailsBox> {
+  List<MessageDetailsList> messages = [
+
+    MessageDetailsList(
+      text: 'Sure lets trade!',
+      date: DateTime.now().subtract(
+        const Duration(days: 1, minutes: 30),
+      ),
+      isSentByMe: false,
+    ),
+    MessageDetailsList(
+        text: 'Would you like to trade?',
+        date: DateTime.now().subtract(
+          const Duration(days: 1, minutes: 50),
+        ),
+        isSentByMe: true
+    ),
+    MessageDetailsList(
+      text: 'Thanks I got my eye on that toy tractor.',
+      date: DateTime.now().subtract(
+        const Duration(days: 1, minutes: 55),
+      ),
+      isSentByMe: false,
+    ),
+    MessageDetailsList(
+        text: 'Here is my adress ... thanks for a good trade!',
+        date: DateTime.now().subtract(
+          const Duration(minutes: 60),
+        ),
+        isSentByMe: true
+    ),
+    MessageDetailsList(
+        text: 'You can send the toy here.. where should I send yours?',
+        date: DateTime.now().subtract(
+          const Duration(minutes: 50),
+        ),
+        isSentByMe: false
+    ),
+    MessageDetailsList(
+        text: 'Hey I like that Nerf gun you have.',
+        date: DateTime.now().subtract(
+          const Duration(days: 1, minutes: 70),
+        ),
+        isSentByMe: true)
+  ].reversed.toList();
 
   @override
   Widget build(BuildContext context) {
@@ -18,143 +62,65 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
         title: const Text('Username'),
       ),
       body: Column(
-        children: <Widget>[
+        children: [
           Expanded(
-            child: Column(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment.topLeft,
-                      child: Container(
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.80,
-                        ),
-                        padding: EdgeInsets.all(10),
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.blue.withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                            ),
-                          ],
-                        ),
-                        child: Text(
-                            'Test',
-                            style: TextStyle(
-                              color: Colors.black87,
-                            )),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.blue.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                          child: CircleAvatar(
-                            radius: 15,
-                            backgroundImage:
-                                AssetImage('assets/images/profile.png'),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          '1:00pm',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black45,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+            child: GroupedListView<MessageDetailsList, DateTime>(
+              padding: const EdgeInsets.all(8),
+              reverse: true,
+              order: GroupedListOrder.DESC,
+              useStickyGroupSeparators: true,
+              floatingHeader: true,
+              elements: messages,
+              groupBy: (message) => DateTime(
+                message.date.year,
+                message.date.month,
+                message.date.day,
+              ),
+              groupHeaderBuilder: (MessageDetailsList message) => SizedBox(
+                  height: 40,
+                  child: Center(
+                      child: Card(
+                          color:Theme.of(context).primaryColor,
+                          child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Text(
+                                DateFormat.yMMMd().format(message.date),
+                                style: const TextStyle(color: Colors.white),
+                              )
+                          )
+                      )
+                  )
+              ),
+              itemBuilder: (context, MessageDetailsList message) => Align(
+                alignment: message.isSentByMe
+                    ? Alignment.centerRight
+                    : Alignment .centerLeft,
+                child: Card(
+                  elevation: 8,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Text(message.text),
+                  ),
                 ),
-                Column(
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.80,
-                        ),
-                        padding: EdgeInsets.all(10),
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.blue.withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                            ),
-                          ],
-                        ),
-                        child: Text(
-                            'Test',
-                            style: TextStyle(
-                              color: Colors.white,
-                            )),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          '1:20pm',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black45,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.blue.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                          child: CircleAvatar(
-                            radius: 15,
-                            backgroundImage:
-                                AssetImage('assets/images/profile.png'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Container(
-                  child: Text('data'),
-                ),
-                Container(
-                  child: Text('data'),
-                ),
-              ],
+              ),
             ),
           ),
-          Container(child: Text('Send Message text area'))
+          Container(
+            color: Colors.grey.shade300,
+            child: TextField(
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(12),
+                hintText: 'Type your message here...',
+              ),
+              onSubmitted: (text){
+                final message= MessageDetailsList
+                  (text: text,
+                    date: DateTime.now(),
+                    isSentByMe: true);
+                setState(()=> messages.add(message));
+              },
+            ),
+          ),
         ],
       ),
     );
