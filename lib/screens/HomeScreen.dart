@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:toy_trader/models/ProfileInfo.dart';
 import 'BottomNavBar.dart';
+import 'package:toy_trader/firebase_services/AuthService.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,24 +16,23 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   int screenIndex = 2;
+  AuthService authService = AuthService();
 
-  final screens = [
-    const MessagesScreen(),
-    const MainScreen(),
-    const ProfileScreen(),
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<ProfileInfo?>(context);
+
     return Scaffold(
       // backgroundColor: const Color(0xffC4DFCB),
       appBar: AppBar(
         actions: <Widget>[
           FlatButton.icon(
-              onPressed: () {
+              onPressed: () async {
+                await authService.signOut();
               },
-              icon: Icon(Icons.person, color: Colors.white,),
-              label: Text('Logout', style: TextStyle(color: Colors.white),),
+                icon: Icon(Icons.person, color: Colors.white),
+                label: Text('Logout', style: TextStyle(color: Colors.white),),
 
           )
         ],
@@ -45,8 +48,15 @@ class _HomeScreenState extends State<HomeScreen> {
         // centerTitle: true,
         // backgroundColor: Colors.white,
       ),
-      body: screens[screenIndex],
-      bottomNavigationBar: Container(
+      body: (() {
+        if(screenIndex == 0) {
+          return ConversationsScreen();
+        } else if( screenIndex == 1) {
+          return ProfileScreen();
+        } else {
+          return MainScreen();
+        }
+      }()),      bottomNavigationBar: Container(
         height: 60,
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
