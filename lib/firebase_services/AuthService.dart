@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:toy_trader/firebase_services/DatabaseService.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
 
@@ -58,6 +57,21 @@ class AuthService{
       return await firebaseAuth.signOut();
     }
     catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future getInfo() async {
+    return firebaseAuth.currentUser;
+  }
+
+  Future getCurrentUserId() async {
+    try {
+      final user = firebaseAuth.currentUser;
+      return user?.uid;
+    }
+    catch(e) {
       print(e.toString());
       return null;
     }

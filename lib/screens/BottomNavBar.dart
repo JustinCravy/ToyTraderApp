@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:toy_trader/widgets/MessageList.dart';
 import 'package:toy_trader/widgets/ToyGridList.dart';
+import '../firebase_services/AuthService.dart';
+import '../firebase_services/DatabaseService.dart';
 import '../models/ProfileInfo.dart';
 import 'AddToyScreen.dart';
 
@@ -32,14 +35,29 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String dropdownValue1 = 'Category One';
-  String dropdownValue2 = '0 - 2';
-  String dropdownValue3 = 'Interested1';
+  //String dropdownValue1 = 'Category One';
+  //String dropdownValue2 = '0 - 2';
+  //String dropdownValue3 = 'Interested1';
 
   @override
   Widget build(BuildContext context) {
+    final DatabaseService dbService = DatabaseService();
+
     return Scaffold(
-      body: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: RaisedButton(
+            onPressed: () async {
+              var profileInfo = await dbService.getProfileInfo("");
+              for(var i = 0; i <profileInfo.length; i++) {
+                print("${profileInfo[i].userId}, ${profileInfo[i].screenName}");
+              }
+            },
+          ),
+        )
+    );
+    /*
+    return Scaffold(
+        body: SingleChildScrollView(
         child: Column(
         children: [
           Row(
@@ -207,10 +225,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
       )
-    );
+    );*/
   }
 }
-
 
 class MainScreen extends StatelessWidget{
   const MainScreen({Key? key}) : super(key: key);
