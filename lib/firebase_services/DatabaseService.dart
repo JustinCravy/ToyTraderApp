@@ -4,6 +4,8 @@ import 'package:toy_trader/models/ProfileInfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import '../models/Toy.dart';
+
 class DatabaseService {
 
 
@@ -21,5 +23,35 @@ class DatabaseService {
       'toys': profileInfo.toys,
       'profileImage': profileInfo.profileImageUrl
     });
+  }
+  Future<List<Toy>> getMainFeed() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
+    final profileInfoList = querySnapshot.docs.map((doc) => ProfileInfo(
+        userId: doc.id,
+        screenName: doc.get("screenName"),
+        ageRange: doc.get("ageRange"),
+        interests: doc.get("interests"),
+        toys: <Toy>[],
+        profileImageUrl: doc.get("profileImage")
+    )).toList();
+    List<Toy> toysList = [];
+    /*r(var i = 0; i < profileInfoList.length; i++){
+      var checkProfileInfo = profileInfoList[i];
+      if(checkProfileInfo.userId == profileInfo.userId)
+        continue;
+      for(var j =0; j < checkProfileInfo.toys.length; j++){
+        var toy = checkProfileInfo.toys[j];
+        for (var k =0; k < toy.categories.length; k++){
+          var toyCategory = toy.categories[k];
+          if (profileInfo.interests.contains(toyCategory)){
+            toysList.add(toy);
+            break;
+          }
+        }
+      if(toy.ageRange == profileInfo.ageRange)
+        toysList.add(toy);
+      }
+    }
+   */return toysList;
   }
 }

@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:toy_trader/models/Toy.dart';
+import '../firebase_services/DatabaseService.dart';
 import 'package:toy_trader/widgets/MessageList.dart';
 import 'package:toy_trader/widgets/ToyGridList.dart';
 import '../models/ProfileInfo.dart';
 import 'AddToyScreen.dart';
+
+
+
+
+
 
 
 class ConversationsScreen extends StatelessWidget{
@@ -213,11 +220,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 
 class MainScreen extends StatelessWidget{
-  const MainScreen({Key? key}) : super(key: key);
+   MainScreen({Key? key}) : super(key: key);
+
+   DatabaseService dbService = DatabaseService();
+
 
   @override
   Widget build(BuildContext context) {
-    final profileInfo = ModalRoute.of(context)!.settings.arguments as ProfileInfo?;
+    final arg = ModalRoute.of(context)!.settings.arguments as ProfileInfo?;
+    ProfileInfo? profileInfo;
+    if(arg != null) {
+      profileInfo = arg;
+    }
     print(profileInfo);
     return Scaffold(
       body: Container(
@@ -254,8 +268,11 @@ class MainScreen extends StatelessWidget{
                SizedBox(height: 0.0),
                 RaisedButton(
                     child: const Text('To Add Toys'),
-                    onPressed: ()  {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddToyScreen()));
+                    onPressed: () async {
+                      var toyList = await dbService.getMainFeed();
+                      for(var i = 0; i < toyList.length; i++){
+                        print("${toyList[i].ageRange}, ${toyList[i].categories}");
+                      }
                     }
                 ),
               ],
