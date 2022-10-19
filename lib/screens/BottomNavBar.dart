@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:toy_trader/models/Toy.dart';
+import '../firebase_services/DatabaseService.dart';
 import 'package:toy_trader/widgets/MessageList.dart';
 import 'package:toy_trader/widgets/ToyGridList.dart';
-import '../firebase_services/AuthService.dart';
-import '../firebase_services/DatabaseService.dart';
 import '../models/ProfileInfo.dart';
 import 'AddToyScreen.dart';
+
+
+
+
+
 
 
 class ConversationsScreen extends StatelessWidget{
@@ -35,29 +39,14 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  //String dropdownValue1 = 'Category One';
-  //String dropdownValue2 = '0 - 2';
-  //String dropdownValue3 = 'Interested1';
+  String dropdownValue1 = 'Category One';
+  String dropdownValue2 = '0 - 2';
+  String dropdownValue3 = 'Interested1';
 
   @override
   Widget build(BuildContext context) {
-    final DatabaseService dbService = DatabaseService();
-
     return Scaffold(
-        body: SingleChildScrollView(
-          child: RaisedButton(
-            onPressed: () async {
-              var profileInfo = await dbService.getProfileInfo("");
-              for(var i = 0; i <profileInfo.length; i++) {
-                print("${profileInfo[i].userId}, ${profileInfo[i].screenName}");
-              }
-            },
-          ),
-        )
-    );
-    /*
-    return Scaffold(
-        body: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
         children: [
           Row(
@@ -225,16 +214,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
       )
-    );*/
+    );
   }
 }
 
+
 class MainScreen extends StatelessWidget{
-  const MainScreen({Key? key}) : super(key: key);
+   MainScreen({Key? key}) : super(key: key);
+
+   DatabaseService dbService = DatabaseService();
+
 
   @override
   Widget build(BuildContext context) {
-    final profileInfo = ModalRoute.of(context)!.settings.arguments as ProfileInfo?;
+    final arg = ModalRoute.of(context)!.settings.arguments as ProfileInfo?;
+    ProfileInfo? profileInfo;
+    if(arg != null) {
+      profileInfo = arg;
+    }
     print(profileInfo);
     return Scaffold(
       body: Container(
@@ -271,8 +268,11 @@ class MainScreen extends StatelessWidget{
                SizedBox(height: 0.0),
                 RaisedButton(
                     child: const Text('To Add Toys'),
-                    onPressed: ()  {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddToyScreen()));
+                    onPressed: () async {
+                      var toyList = await dbService.getMainFeed();
+                      for(var i = 0; i < toyList.length; i++){
+                        print("${toyList[i].ageRange}, ${toyList[i].categories}");
+                      }
                     }
                 ),
               ],
