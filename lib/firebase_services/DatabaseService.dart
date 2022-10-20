@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -17,6 +17,7 @@ class DatabaseService {
     profileInfo.profileImageUrl = profileImgUrl;
 
     return await FirebaseFirestore.instance.collection('users').doc(profileInfo.userId).set({
+      'uid': profileInfo.userId,
       'screenName': profileInfo.screenName,
       'ageRange': profileInfo.ageRange,
       'interests': profileInfo.interests,
@@ -24,6 +25,38 @@ class DatabaseService {
       'profileImage': profileInfo.profileImageUrl
     });
   }
+
+  Future<ProfileInfo> getProfileInfo(String userId) async {
+    if (userId.isEmpty) {
+      var user = FirebaseAuth.instance.currentUser?.uid;
+      var query = await FirebaseFirestore.instance.collection('users')
+          .where('uid', isEqualTo: user).get();
+      var userData = query.docs.map((doc) => doc).toList();
+
+      final profileInfo = ProfileInfo(userId: userData[0].id,
+          screenName: userData[0].get("screenName"),
+          ageRange: userData[0].get("ageRange"),
+          interests: userData[0].get("interests"),
+          toys: [],
+          profileImageUrl: userData[0].get("profileImage"));
+
+      return profileInfo;
+    }
+
+    var query = await FirebaseFirestore.instance.collection('users')
+        .where('uid', isEqualTo: userId).get();
+    var userData = query.docs.map((doc) => doc).toList();
+
+    final profileInfo = ProfileInfo(userId: userData[0].id,
+        screenName: userData[0].get("screenName"),
+        ageRange: userData[0].get("ageRange"),
+        interests: userData[0].get("interests"),
+        toys: [],
+        profileImageUrl: userData[0].get("profileImage"));
+
+    return profileInfo;
+  }
+
   Future<List<Toy>> getMainFeed() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
     final profileInfoList = querySnapshot.docs.map((doc) => ProfileInfo(

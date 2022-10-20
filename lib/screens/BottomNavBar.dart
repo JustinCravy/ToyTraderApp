@@ -6,12 +6,6 @@ import 'package:toy_trader/widgets/ToyGridList.dart';
 import '../models/ProfileInfo.dart';
 import 'AddToyScreen.dart';
 
-
-
-
-
-
-
 class ConversationsScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -39,181 +33,73 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String dropdownValue1 = 'Category One';
-  String dropdownValue2 = '0 - 2';
-  String dropdownValue3 = 'Interested1';
+  DatabaseService dbService = DatabaseService();
+  late ProfileInfo userProfile;
 
   @override
   Widget build(BuildContext context) {
+    ProfileInfo userProfile;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                child: const Image(
-                  image: AssetImage('assets/images/profile_pic_place_holder.png'),
-                ),
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                child: const Image(
-                  image: AssetImage('assets/images/profile_pic_place_holder.png'),
-                ),
-                padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
-              ),
-              Container(
-                child: const Image(
-                  image: AssetImage(
-                      'assets/images/profile_pic_place_holder_main.png'),
-                ),
-                padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-              ),
-              Container(
-                child: const Image(
-                  image: AssetImage('assets/images/profile_pic_place_holder.png'),
-                ),
-                padding: const EdgeInsets.fromLTRB(0, 0, 20, 20),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                child: const Image(
-                  image: AssetImage('assets/images/profile_pic_place_holder.png'),
-                ),
-                padding: const EdgeInsets.fromLTRB(0, 30, 30, 0),
-              ),
-              Container(
-                child: const Image(
-                  image: AssetImage('assets/images/profile_pic_place_holder.png'),
-                ),
-                padding: const EdgeInsets.fromLTRB(30, 30, 0, 0),
-              )
-            ],
-          ),
-          SizedBox(height: 20.0),
-          Text(
-            "Current Preferences",
-            style: TextStyle(
-              color: Colors.blue[900],
-              fontSize: 25,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          Container(
-              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Interested in these toy categories'),
-                    DropdownButton<String>(
-                      isExpanded: true,
-                      value: dropdownValue1,
-                      icon: const Icon(Icons.arrow_downward),
-                      iconSize: 24,
-                      elevation: 16,
-                      style: const TextStyle(color: Colors.deepPurple),
-                      underline: Container(
-                        height: 2,
-                        color: Colors.deepPurpleAccent,
-                      ),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownValue1 = newValue!;
-                        });
-                      },
-                      items: <String>[
-                        'Category One',
-                        'Category Two',
-                        'Category Three',
-                        'Category Four',
-                        'More Categories'
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Center(child: Text(value)),
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(height: 20.0),
-                    Text('Interested in these age ranges'),
-                    DropdownButton<String>(
-                      isExpanded: true,
-                      value: dropdownValue2,
-                      icon: const Icon(Icons.arrow_downward),
-                      iconSize: 24,
-                      elevation: 16,
-                      style: const TextStyle(color: Colors.deepPurple),
-                      underline: Container(
-                        height: 2,
-                        color: Colors.deepPurpleAccent,
-                      ),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownValue2 = newValue!;
-                        });
-                      },
-                      items: <String>[
-                        '0 - 2',
-                        '2 - 5',
-                        '5 - 10',
-                        '10 - 15',
-                        '15 - 18',
-                        '> 18'
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Center(child: Text(value)),
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(height: 20.0),
-                    Text('More Interested'),
-                    DropdownButton<String>(
-                      isExpanded: true,
-                      value: dropdownValue3,
-                      icon: const Icon(Icons.arrow_downward),
-                      iconSize: 24,
-                      elevation: 16,
-                      style: const TextStyle(color: Colors.deepPurple),
-                      underline: Container(
-                        height: 2,
-                        color: Colors.deepPurpleAccent,
-                      ),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownValue3 = newValue!;
-                        });
-                      },
-                      items: <String>[
-                        'Interested1',
-                        'Interested2',
-                        'Interested3',
-                        'Interested4',
-                        '1Interested5'
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Center(child: Text(value)),
-                        );
-                      }).toList(),
-                    ),
-                  ]
-              )
-          ),
-        ],
+      body: Container(
+        padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
+        alignment: Alignment.topCenter,
+        child: FutureBuilder<ProfileInfo?>(
+          future: dbService.getProfileInfo(""),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              userProfile = snapshot.data!;
+              return Column(
+                children: [
+                  Container(
+                    width: 150,
+                    height: 150,
+                    padding: const EdgeInsets.all(200),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(width: 3, color: Colors.blue),
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: NetworkImage(userProfile.profileImageUrl)
+                      )
+                    )
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    alignment: Alignment.centerLeft,
+                    child: Text('Name: ' + userProfile.screenName, style: const TextStyle(fontSize: 20))
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    child: const Text('Your Toys',
+                    style: TextStyle(fontSize: 30),)
+                  ),
+                  Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.blue,
+                            width: 2,
+                          ),
+                        ),
+                        child: GridView.builder(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                          itemBuilder: (BuildContext context, int index) {
+                            return const Text("Toy test");
+                          },
+                        itemCount: 6,
+                      )
+                    )
+                  )
+                ],
+              );
+            }
+            else {
+              return const CircularProgressIndicator();
+            }
+          },
+        ),
       ),
-      )
     );
   }
 }
@@ -232,6 +118,7 @@ class MainScreen extends StatelessWidget{
     if(arg != null) {
       profileInfo = arg;
     }
+
     print(profileInfo);
     return Scaffold(
       body: Container(
@@ -269,11 +156,11 @@ class MainScreen extends StatelessWidget{
                 RaisedButton(
                     child: const Text('To Add Toys'),
                     onPressed: () async {
-                      var toyList = await dbService.getMainFeed();
-                      for(var i = 0; i < toyList.length; i++){
-                        print("${toyList[i].ageRange}, ${toyList[i].categories}");
-                      }
+                      print("help me");
+                      var userProfile = await dbService.getProfileInfo("");
+                      print(userProfile.screenName);
                     }
+                 //   }
                 ),
               ],
             )
