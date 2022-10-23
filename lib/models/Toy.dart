@@ -1,12 +1,13 @@
 class Toy {
 
-  final String toyId;
-  final String ownerId;
-  final String name;
-  final String description;
-  final String condition;
-  final String ageRange;
-  final List<String> categories;
+   String toyId = '';
+   String ownerId = '';
+   String name = '';
+   String description = '';
+   String condition = '';
+   String ageRange = '';
+   String categories = '';
+   String toyImageURL = '';
 
   Toy (
       this.toyId,
@@ -15,7 +16,8 @@ class Toy {
       this.description,
       this.condition,
       this.ageRange,
-      this.categories
+      this.categories,
+      this.toyImageURL,
       );
   
 }

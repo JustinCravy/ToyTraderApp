@@ -3,21 +3,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
-import '../models/Toy.dart';
+import '../../../models/Toy.dart';
 
 class DatabaseService {
 
 
-  Future setProfileInfo(ProfileInfo profileInfo, File imageFile) async {
+  Future setProfileInfo(ProfileInfo profileInfo, File? imageFile) async {
 
     final storage = FirebaseStorage.instance.ref('users').child(profileInfo.userId);
-    await storage.putFile(imageFile);
+    await storage.putFile(imageFile!);
     final profileImgUrl = (await storage.getDownloadURL()).toString();
     profileInfo.profileImageUrl = profileImgUrl;
 
     return await FirebaseFirestore.instance.collection('users').doc(profileInfo.userId).set({
-      'uid': profileInfo.userId,
       'screenName': profileInfo.screenName,
       'ageRange': profileInfo.ageRange,
       'interests': profileInfo.interests,
@@ -25,6 +23,7 @@ class DatabaseService {
       'profileImage': profileInfo.profileImageUrl
     });
   }
+
 
   Future<ProfileInfo> getProfileInfo(String userId) async {
     if (userId.isEmpty) {
@@ -86,5 +85,20 @@ class DatabaseService {
       }
     }
    */return toysList;
+  }
+
+  Future<bool> addToyData(Toy toy, ProfileInfo profileInfo, File? toyImage,) async {
+    final storage = FirebaseStorage.instance.ref('users').child(profileInfo.userId).child('toys');
+    await storage.putFile(toyImage!);
+    final toyImgURL = (await storage.getDownloadURL()).toString();
+    toy.toyImageURL = toyImgURL;
+    profileInfo.toys.add(toy);
+    try {
+      await setProfileInfo(profileInfo, null);
+      return true;
+    }
+    on Exception catch(_) {
+      return false;
+    }
   }
 }

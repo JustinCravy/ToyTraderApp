@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../firebase_services/DatabaseService.dart';
+import '../../../models/ProfileInfo.dart';
+import '../../../models/Toy.dart';
+
 
 class AddToyScreen extends StatefulWidget {
   @override
@@ -11,11 +15,17 @@ class _AddToyScreenState extends State<AddToyScreen> {
   String? conditionDropdownValue;
   String? categoryDropdownValue;
   String? ageRangeDropdownValue;
+  late Toy toy;
+
+
+  DatabaseService dbService = DatabaseService();
 
   @override
   Widget build(BuildContext context) {
+    var profileInfo = ModalRoute.of(context)!.settings.arguments as ProfileInfo;
     return Scaffold(
-        body: Container(
+        //body: Container(
+        body: SingleChildScrollView (
             padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
             child: Column(children: <Widget>[
               Image.asset('assets/images/nerfgun1.jpg',
@@ -27,7 +37,9 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       decoration: InputDecoration(
                         hintText: 'Toy Name',
                       ),
-                      validator: (val) => val!.isEmpty ? 'Enter name' : null,
+                      validator: (val) => {
+                        toy.name = val!
+                      }.isEmpty ? 'Enter name' : null,
                     ),
                     SizedBox(height: 20.0),
                     TextFormField(
@@ -35,8 +47,9 @@ class _AddToyScreenState extends State<AddToyScreen> {
                         decoration: InputDecoration(
                           hintText: 'Description',
                         ),
-                        validator: (val) =>
-                            val!.length < 0 ? 'Enter description' : null),
+                        validator: (val) => {
+                          toy.description = val!
+                        }.length < 0 ? 'Enter description' : null),
                     DropdownButtonFormField<String>(
                       isExpanded: true,
                       value: conditionDropdownValue,
@@ -48,6 +61,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       onChanged: (String? newValue) {
                         setState(() {
                           conditionDropdownValue = newValue!;
+                          toy.condition = newValue;
                         });
                       },
                       items: <String>[
@@ -74,6 +88,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       onChanged: (String? newValue) {
                         setState(() {
                           categoryDropdownValue = newValue!;
+                          toy.categories = newValue;
                         });
                       },
                       items: <String>[
@@ -107,6 +122,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       onChanged: (String? newValue) {
                         setState(() {
                           ageRangeDropdownValue = newValue!;
+                          toy.ageRange = newValue;
                         });
                       },
                       items: <String>[
@@ -133,6 +149,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text("Sending Message"),
                           ));
+                          dbService.addToyData(toy, profileInfo, null);
                         }),
                   ],
                 ),

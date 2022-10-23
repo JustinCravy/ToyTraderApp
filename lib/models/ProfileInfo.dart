@@ -2,12 +2,12 @@ import 'Toy.dart';
 
 class ProfileInfo {
 
-  String userId;
-  String screenName;
-  String ageRange;
-  String interests;
-  List<Toy> toys;
-  String profileImageUrl;
+  String userId = '';
+  String screenName = '';
+  String ageRange = '';
+  String interests = '';
+  List<Toy> toys = <Toy>[];
+  String profileImageUrl = '';
 
  ProfileInfo({
    required this.userId,

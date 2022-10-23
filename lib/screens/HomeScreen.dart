@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
-import 'BottomNavBar.dart';
+import 'AddToyScreen.dart';
 import 'package:toy_trader/firebase_services/AuthService.dart';
+import 'BottomNavBar.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -34,6 +35,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(Icons.person, color: Colors.white),
                 label: Text('Logout', style: TextStyle(color: Colors.white),),
 
+          ),
+          FlatButton.icon(
+            onPressed: () {
+              Navigator.push(
+                  context,
+              MaterialPageRoute(
+                builder: (context) => AddToyScreen(),
+                settings: RouteSettings(
+                  arguments: user
+                  )
+              )
+              );
+            },
+            icon: Icon(Icons.person, color: Colors.white),
+            label: Text('Add Toy', style: TextStyle(color: Colors.white),),
           )
         ],
         title: const Text(

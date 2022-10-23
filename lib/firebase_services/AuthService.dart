@@ -1,9 +1,7 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:toy_trader/firebase_services/DatabaseService.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
-
 import '../models/Toy.dart';
 
 class AuthService{
