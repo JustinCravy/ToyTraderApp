@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
@@ -84,7 +83,7 @@ class DatabaseService {
         toys: <Toy>[],
         profileImageUrl: doc.get("profileImage")
     )).toList();
-    toyList = [];
+    List<Toy> toysList = [];
     /*r(var i = 0; i < profileInfoList.length; i++){
       var checkProfileInfo = profileInfoList[i];
       if(checkProfileInfo.userId == profileInfo.userId)
@@ -102,7 +101,7 @@ class DatabaseService {
         toysList.add(toy);
       }
     }
-   */return toyList;
+   */return toysList;
   }
 
   Future<bool> addToyData(Toy toy, ProfileInfo profileInfo, File? toyImage,) async {
@@ -128,4 +127,16 @@ class DatabaseService {
   }
 
 
+
+  Future deleteToy(String toyId) async{
+    try{
+      return await FirebaseFirestore.instance.collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid).collection('toys')
+          .doc(toyId).delete();
+    }
+    catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
 }
