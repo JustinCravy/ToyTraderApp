@@ -34,7 +34,7 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
             ),
             actions: <Widget>[
-              FlatButton.icon(
+              TextButton.icon(
                   onPressed: () {
                     widget.toggleView();
                   },
@@ -81,7 +81,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               setState(() => pw = val);
                             }),
                         SizedBox(height: 20.0),
-                        RaisedButton(
+                        TextButton(
                             child: Text('Sign in'),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {

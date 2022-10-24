@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:image_picker/image_picker.dart';
 import '../../../firebase_services/DatabaseService.dart';
 import '../../../models/ProfileInfo.dart';
 import '../../../models/Toy.dart';
+import 'package:uuid/uuid.dart';
+
 
 
 class AddToyScreen extends StatefulWidget {
@@ -15,29 +19,43 @@ class _AddToyScreenState extends State<AddToyScreen> {
   String? conditionDropdownValue;
   String? categoryDropdownValue;
   String? ageRangeDropdownValue;
-  String toyId = '';
-  String ownerId = '';
-  String name = '';
-  String description = '';
-  String condition = '';
-  String ageRange = '';
-  String categories = '';
-  String toyImageURL = '';
-  late Toy toy = Toy(toyId, ownerId, name, description, condition, ageRange, categories, toyImageURL);
+  String toyId = Uuid().v4();
 
+  Toy toy = Toy('', '', '', '', '', '', '', '');
 
   DatabaseService dbService = DatabaseService();
+  File? image;
+
+  Future pickImage(ImageSource source) async{
+    final image = await ImagePicker().pickImage(source: source);
+    if (image ==null) return;
+
+    final imageTemporary = File(image.path);
+    setState(() => this.image = imageTemporary);
+  }
 
   @override
   Widget build(BuildContext context) {
     var profileInfo = ModalRoute.of(context)!.settings.arguments as ProfileInfo;
+    print(profileInfo.uid);
+    toy.toyId = toyId;
+    toy.ownerId = profileInfo.uid;
     return Scaffold(
         //body: Container(
         body: SingleChildScrollView (
             padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
             child: Column(children: <Widget>[
-              Image.asset('assets/images/nerfgun1.jpg',
-                  width: 556, height: 250),
+              SizedBox(height: 30.0,),
+              InkWell(
+                onTap: () {
+                  pickImage(ImageSource.camera);
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Image.asset('assets/images/nerfgun1.jpg',
+                      width: double.infinity, height: 200),
+                ),
+              ),
               Form(
                 child: Column(
                   children: <Widget>[
@@ -45,9 +63,8 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       decoration: InputDecoration(
                         hintText: 'Toy Name',
                       ),
-                      validator: (val) => {
-                        toy.name = val!
-                      }.isEmpty ? 'Enter name' : null,
+                      validator: (val) => val!.isEmpty ? 'Enter name' : null,
+                      onChanged: (val) => toy.name = val,
                     ),
                     SizedBox(height: 20.0),
                     TextFormField(
@@ -55,9 +72,9 @@ class _AddToyScreenState extends State<AddToyScreen> {
                         decoration: InputDecoration(
                           hintText: 'Description',
                         ),
-                        validator: (val) => {
-                          toy.description = val!
-                        }.length < 0 ? 'Enter description' : null),
+                        validator: (val) => val!.length < 0 ? 'Enter description' : null,
+                      onChanged: (val) => toy.description = val,
+                    ),
                     DropdownButtonFormField<String>(
                       isExpanded: true,
                       value: conditionDropdownValue,
@@ -153,11 +170,11 @@ class _AddToyScreenState extends State<AddToyScreen> {
                         minimumSize: Size.fromHeight(40)
                       ),
                         child: Text('Add Toy'),
-                        onPressed: () {
+                        onPressed: () async {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text("Sending Message"),
                           ));
-                          dbService.addToyData(toy, profileInfo, null);
+                          await dbService.addToyData(toy, profileInfo, image);
                         }),
                   ],
                 ),

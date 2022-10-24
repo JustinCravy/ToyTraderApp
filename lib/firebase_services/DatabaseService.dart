@@ -25,19 +25,23 @@ class DatabaseService {
     toyList.add(toy2);
   }
 
-  Future setProfileInfo(ProfileInfo profileInfo, File? imageFile) async {
+  Future setProfileInfo(Map<String,dynamic> profileInfo, File? imageFile) async {
 
-    final storage = FirebaseStorage.instance.ref('users').child(profileInfo.userId);
-    await storage.putFile(imageFile!);
-    final profileImgUrl = (await storage.getDownloadURL()).toString();
-    profileInfo.profileImageUrl = profileImgUrl;
+    if(imageFile != null) {
+      final storage = FirebaseStorage.instance.ref('users').child(
+          profileInfo['uid']);
+      await storage.putFile(imageFile);
+      final profileImgUrl = (await storage.getDownloadURL()).toString();
+      profileInfo['profileImageUrl'] = profileImgUrl;
+    }
 
-    return await FirebaseFirestore.instance.collection('users').doc(profileInfo.userId).set({
-      'screenName': profileInfo.screenName,
-      'ageRange': profileInfo.ageRange,
-      'interests': profileInfo.interests,
-      'toys': profileInfo.toys,
-      'profileImage': profileInfo.profileImageUrl
+    return await FirebaseFirestore.instance.collection('users').doc(profileInfo['uid']).set({
+      'uid': profileInfo['uid'],
+      'screenName': profileInfo['screenName'],
+      'ageRange': profileInfo['ageRange'],
+      'interests': profileInfo['interests'],
+      'toys': profileInfo['toys'],
+      'profileImageUrl': profileInfo['profileImageUrl']
     });
   }
 
@@ -49,12 +53,12 @@ class DatabaseService {
           .where('uid', isEqualTo: user).get();
       var userData = query.docs.map((doc) => doc).toList();
 
-      final profileInfo = ProfileInfo(userId: userData[0].id,
+      final profileInfo = ProfileInfo(uid: userData[0].id,
           screenName: userData[0].get("screenName"),
           ageRange: userData[0].get("ageRange"),
           interests: userData[0].get("interests"),
-          toys: [],
-          profileImageUrl: userData[0].get("profileImage"));
+          toys: <Toy>[],
+          profileImageUrl: userData[0].get("profileImageUrl"));
 
       return profileInfo;
     }
@@ -63,12 +67,12 @@ class DatabaseService {
         .where('uid', isEqualTo: userId).get();
     var userData = query.docs.map((doc) => doc).toList();
 
-    final profileInfo = ProfileInfo(userId: userData[0].id,
+    final profileInfo = ProfileInfo(uid: userData[0].id,
         screenName: userData[0].get("screenName"),
         ageRange: userData[0].get("ageRange"),
         interests: userData[0].get("interests"),
-        toys: [],
-        profileImageUrl: userData[0].get("profileImage"));
+        toys: <Toy>[],
+        profileImageUrl: userData[0].get("profileImageUrl"));
 
     return profileInfo;
   }
@@ -76,12 +80,12 @@ class DatabaseService {
   Future<List<Toy>> getMainFeed() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
     final profileInfoList = querySnapshot.docs.map((doc) => ProfileInfo(
-        userId: doc.id,
+        uid: doc.id,
         screenName: doc.get("screenName"),
         ageRange: doc.get("ageRange"),
         interests: doc.get("interests"),
         toys: <Toy>[],
-        profileImageUrl: doc.get("profileImage")
+        profileImageUrl: doc.get("profileImageUrl")
     )).toList();
     List<Toy> toysList = [];
     /*r(var i = 0; i < profileInfoList.length; i++){
@@ -105,13 +109,17 @@ class DatabaseService {
   }
 
   Future<bool> addToyData(Toy toy, ProfileInfo profileInfo, File? toyImage,) async {
-    final storage = FirebaseStorage.instance.ref('users').child(profileInfo.userId).child('toys');
-    await storage.putFile(toyImage!);
-    final toyImgURL = (await storage.getDownloadURL()).toString();
-    toy.toyImageURL = toyImgURL;
+    if(toyImage != null) {
+      final storage = FirebaseStorage.instance.ref('users').child(
+          profileInfo.uid).child('toys');
+      await storage.putFile(toyImage);
+      final toyImgURL = (await storage.getDownloadURL()).toString();
+      toy.toyImageURL = toyImgURL;
+    }
     profileInfo.toys.add(toy);
+    print(profileInfo.toJson());
     try {
-      await setProfileInfo(profileInfo, null);
+      await setProfileInfo(profileInfo.toJson(), null);
       return true;
     }
     on Exception catch(_) {

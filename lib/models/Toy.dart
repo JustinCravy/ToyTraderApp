@@ -1,3 +1,8 @@
+
+import 'package:json_annotation/json_annotation.dart';
+part 'Toy.g.dart';
+
+@JsonSerializable(anyMap: true, explicitToJson: true)
 class Toy {
 
    String toyId = '';
@@ -20,6 +25,9 @@ class Toy {
       this.toyImageURL,
       );
 
+
+   factory Toy.fromJson(Map<String, dynamic> json) => _$ToyFromJson(json);
+   Map<String, dynamic> toJson() => _$ToyToJson(this);
   get id => toyId;
   
 }

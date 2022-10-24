@@ -37,7 +37,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           ),
         ),
         actions: <Widget>[
-          FlatButton.icon(
+          TextButton.icon(
               onPressed: () {
                 widget.toggleView();
               },
@@ -102,7 +102,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
 
                     SizedBox(height: 20.0),
-                    RaisedButton(
+                    TextButton(
                         child: Text('Register'),
                         onPressed: () {
                           args[0] = email;

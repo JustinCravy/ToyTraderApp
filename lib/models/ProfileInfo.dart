@@ -1,8 +1,11 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'Toy.dart';
+part 'ProfileInfo.g.dart';
 
+@JsonSerializable(anyMap: true, explicitToJson: true)
 class ProfileInfo {
 
-  String userId = '';
+  String uid = '';
   String screenName = '';
   String ageRange = '';
   String interests = '';
@@ -10,12 +13,15 @@ class ProfileInfo {
   String profileImageUrl = '';
 
  ProfileInfo({
-   required this.userId,
+   required this.uid,
    required this.screenName,
    required this.ageRange,
    required this.interests,
    required this.toys,
    required this.profileImageUrl
  });
+
+ factory ProfileInfo.fromJson(Map<String, dynamic> json) => _$ProfileInfoFromJson(json);
+ Map<String, dynamic> toJson() => _$ProfileInfoToJson(this);
 
 }

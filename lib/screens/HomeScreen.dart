@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:toy_trader/firebase_services/DatabaseService.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
 import 'AddToyScreen.dart';
 import 'package:toy_trader/firebase_services/AuthService.dart';
@@ -18,17 +19,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int screenIndex = 2;
   AuthService authService = AuthService();
+  DatabaseService dbService = DatabaseService();
 
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<ProfileInfo?>(context);
+    var user = Provider.of<ProfileInfo?>(context);
 
     return Scaffold(
       // backgroundColor: const Color(0xffC4DFCB),
       appBar: AppBar(
         actions: <Widget>[
-          FlatButton.icon(
+          TextButton.icon(
               onPressed: () async {
                 await authService.signOut();
               },
@@ -36,8 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 label: Text('Logout', style: TextStyle(color: Colors.white),),
 
           ),
-          FlatButton.icon(
-            onPressed: () {
+          TextButton.icon(
+            onPressed: () async {
+              user = await dbService.getProfileInfo(user!.uid);
               Navigator.push(
                   context,
               MaterialPageRoute(

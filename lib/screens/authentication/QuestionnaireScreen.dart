@@ -18,7 +18,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   String dropdownValue1 = 'Category One';
   String dropdownValue2 = '0 - 2';
   ProfileInfo profileInfo = ProfileInfo(
-      userId: '', screenName: '',
+      uid: '', screenName: '',
       ageRange: '', interests: '', toys: <Toy>[], profileImageUrl: '');
   final _formKey = GlobalKey<FormState>();
   AuthService authService = AuthService();
@@ -153,7 +153,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                     ])
                 )
             ),
-            RaisedButton(
+            TextButton(
                 child: const Text('Submit'),
                 onPressed: () async {
                   await authService.registerWithEmailAndPw(args[0], args[1], profileInfo, image!);
