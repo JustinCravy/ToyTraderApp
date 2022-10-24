@@ -56,7 +56,7 @@ class _ToyBoxState extends State<ToyBox> {
 
                            break;
                          case Menu.delete:
-                           dbS.deleteToy();
+                           dbS.deleteToy('test');
                            print("The Toybox thinks there are $toyList.length toys");
                            break;
                            default:

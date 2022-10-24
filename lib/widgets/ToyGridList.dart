@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../firebase_services/AuthService.dart';
 import '../firebase_services/DatabaseService.dart';
 import '../models/Toy.dart';
+import '../screens/AddToyScreen.dart';
 import 'ToyBox.dart';
 
 
@@ -19,6 +21,7 @@ class ToyGridList extends StatefulWidget {
 
 class  _ToyGridListState extends State<ToyGridList> {
   int _counter = 0;
+  AuthService authService = AuthService();
 
   void _incrementCounter(){
     setState(() {
@@ -90,7 +93,8 @@ class  _ToyGridListState extends State<ToyGridList> {
 
           alignment: Alignment.bottomRight,
         child: MaterialButton(
-          onPressed: () {},
+          onPressed: () {
+          },
           color: Colors.blue,
           textColor: Colors.white,
           child: Icon(

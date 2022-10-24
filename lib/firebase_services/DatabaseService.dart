@@ -122,13 +122,10 @@ class DatabaseService {
   getToyList(){
     return toyList;
   }
-  void deleteToy(){
-    toyList.removeWhere((item) => item.id == '0');
-  }
-
 
 
   Future deleteToy(String toyId) async{
+    toyList.removeWhere((item) => item.id == '0');
     try{
       return await FirebaseFirestore.instance.collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid).collection('toys')
