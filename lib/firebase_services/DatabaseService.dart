@@ -1,3 +1,4 @@
+
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
@@ -5,8 +6,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import '../../../models/Toy.dart';
 
-class DatabaseService {
 
+class DatabaseService {
+  static final DatabaseService _instance = DatabaseService._internal();
+
+  List<Toy> toyList = [];
+
+  Toy toy1 = Toy('0', '0', 'car',"this is discription", 'condition of toy','10-11','categories',"imageurl");
+  Toy toy2 = Toy('1', '1', 'Boat',"this is discription", 'condition of toy','10-11','categories',"imageurl");
+
+
+  factory DatabaseService(){
+    return _instance;
+  }
+
+  //Initialization of the Instance of the class
+  DatabaseService._internal(){
+    toyList.add(toy1);
+    toyList.add(toy2);
+  }
 
   Future setProfileInfo(ProfileInfo profileInfo, File? imageFile) async {
 
@@ -66,7 +84,7 @@ class DatabaseService {
         toys: <Toy>[],
         profileImageUrl: doc.get("profileImage")
     )).toList();
-    List<Toy> toysList = [];
+    toyList = [];
     /*r(var i = 0; i < profileInfoList.length; i++){
       var checkProfileInfo = profileInfoList[i];
       if(checkProfileInfo.userId == profileInfo.userId)
@@ -84,7 +102,7 @@ class DatabaseService {
         toysList.add(toy);
       }
     }
-   */return toysList;
+   */return toyList;
   }
 
   Future<bool> addToyData(Toy toy, ProfileInfo profileInfo, File? toyImage,) async {
@@ -101,4 +119,13 @@ class DatabaseService {
       return false;
     }
   }
+
+  getToyList(){
+    return toyList;
+  }
+  void deleteToy(){
+    toyList.removeWhere((item) => item.id == '0');
+  }
+
+
 }

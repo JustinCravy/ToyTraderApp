@@ -19,5 +19,7 @@ class Toy {
       this.categories,
       this.toyImageURL,
       );
+
+  get id => toyId;
   
 }

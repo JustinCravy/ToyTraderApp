@@ -2,18 +2,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:toy_trader/screens/ToyDetailsScreen.dart';
+import 'package:toy_trader/screens/BottomNavBar.dart';
+import 'package:toy_trader/widgets/ToyGridList.dart';
+
+import '../firebase_services/DatabaseService.dart';
+import '../models/Toy.dart';
+
+
 
 class ToyBox extends StatefulWidget {
+
   @override
   State<ToyBox> createState() => _ToyBoxState();
 
 }
 
 class _ToyBoxState extends State<ToyBox> {
-  String _selectedMenu = '';
-
   @override
     Widget build(BuildContext context) {
+      DatabaseService dbS = DatabaseService();
+      String _selectedMenu = '';
+      List<Toy> toyList = dbS.getToyList();
+
       return Container(
         padding: EdgeInsets.only(
           top: deviceHeight(context) * .04,
@@ -38,15 +48,17 @@ class _ToyBoxState extends State<ToyBox> {
                      onSelected: (Menu item) {
                        switch(item){
                          case Menu.edit:
-                           /*Navigator.push(
-                               context,
-                               MaterialPageRoute(builder: (context) => ())
-                           );
-
+                           print("edit Selected");
+                           /*
+                           Code to go to the edit Toy Screen such as editing the contents of toy
                             */
+
+
                            break;
                          case Menu.delete:
-
+                           dbS.deleteToy();
+                           print("The Toybox thinks there are $toyList.length toys");
+                           break;
                            default:
                            break;
                        }
@@ -58,7 +70,7 @@ class _ToyBoxState extends State<ToyBox> {
                        ),
                        const PopupMenuItem<Menu>(
                          value: Menu.delete,
-                         child: Text('Delete11  11'),
+                         child: Text('Delete'),
                        ),
                      ]),
                ),

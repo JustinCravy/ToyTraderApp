@@ -147,21 +147,10 @@ class MainScreen extends StatelessWidget{
 
                 Container(
                   width: deviceWidth(context),
-                 height: deviceHeight(context) *.58,
+                 height: deviceHeight(context) *.65,
                  alignment: Alignment.topLeft,
                  child: ToyGridList(),
                ),
-
-               SizedBox(height: 0.0),
-                RaisedButton(
-                    child: const Text('To Add Toys'),
-                    onPressed: () async {
-                      print("help me");
-                      var userProfile = await dbService.getProfileInfo("");
-                      print(userProfile.screenName);
-                    }
-                 //   }
-                ),
               ],
             )
         ),
