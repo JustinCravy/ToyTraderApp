@@ -15,7 +15,15 @@ class _AddToyScreenState extends State<AddToyScreen> {
   String? conditionDropdownValue;
   String? categoryDropdownValue;
   String? ageRangeDropdownValue;
-  late Toy toy;
+  String toyId = '';
+  String ownerId = '';
+  String name = '';
+  String description = '';
+  String condition = '';
+  String ageRange = '';
+  String categories = '';
+  String toyImageURL = '';
+  late Toy toy = Toy(toyId, ownerId, name, description, condition, ageRange, categories, toyImageURL);
 
 
   DatabaseService dbService = DatabaseService();

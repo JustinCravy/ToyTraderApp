@@ -101,4 +101,16 @@ class DatabaseService {
       return false;
     }
   }
+
+  Future deleteToy(String toyId) async{
+    try{
+      return await FirebaseFirestore.instance.collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid).collection('toys')
+          .doc(toyId).delete();
+    }
+    catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
 }
