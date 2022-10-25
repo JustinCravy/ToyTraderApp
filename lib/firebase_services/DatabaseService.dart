@@ -29,7 +29,7 @@ class DatabaseService {
 
     if(imageFile != null) {
       final storage = FirebaseStorage.instance.ref('users').child(
-          profileInfo['uid']);
+          profileInfo['uid']).child('profileImage');
       await storage.putFile(imageFile);
       final profileImgUrl = (await storage.getDownloadURL()).toString();
       profileInfo['profileImageUrl'] = profileImgUrl;
@@ -53,11 +53,18 @@ class DatabaseService {
           .where('uid', isEqualTo: user).get();
       var userData = query.docs.map((doc) => doc).toList();
 
+      var toys = <Toy>[];
+      for(var item in userData[0].get("toys")){
+        var _toy = Toy(item["toyId"], item["ownerId"], item["name"], item["description"], item["condition"], item["ageRange"], item["categories"], item["toyImageURL"]);
+        toys.add(_toy);
+      }
+
+
       final profileInfo = ProfileInfo(uid: userData[0].id,
           screenName: userData[0].get("screenName"),
           ageRange: userData[0].get("ageRange"),
           interests: userData[0].get("interests"),
-          toys: <Toy>[],
+          toys: toys,
           profileImageUrl: userData[0].get("profileImageUrl"));
 
       return profileInfo;
@@ -67,11 +74,16 @@ class DatabaseService {
         .where('uid', isEqualTo: userId).get();
     var userData = query.docs.map((doc) => doc).toList();
 
+    var toys = <Toy>[];
+    for(var item in userData[0].get("toys")){
+      var _toy = Toy(item["toyId"], item["ownerId"], item["name"], item["description"], item["condition"], item["ageRange"], item["categories"], item["toyImageURL"]);
+      toys.add(_toy);
+    }
     final profileInfo = ProfileInfo(uid: userData[0].id,
         screenName: userData[0].get("screenName"),
         ageRange: userData[0].get("ageRange"),
         interests: userData[0].get("interests"),
-        toys: <Toy>[],
+        toys: toys,
         profileImageUrl: userData[0].get("profileImageUrl"));
 
     return profileInfo;
@@ -111,11 +123,12 @@ class DatabaseService {
   Future<bool> addToyData(Toy toy, ProfileInfo profileInfo, File? toyImage,) async {
     if(toyImage != null) {
       final storage = FirebaseStorage.instance.ref('users').child(
-          profileInfo.uid).child('toys');
+          profileInfo.uid).child('toys').child(toy.toyId);
       await storage.putFile(toyImage);
       final toyImgURL = (await storage.getDownloadURL()).toString();
       toy.toyImageURL = toyImgURL;
     }
+    print(profileInfo.toys);
     profileInfo.toys.add(toy);
     print(profileInfo.toJson());
     try {

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -41,7 +40,17 @@ class _AddToyScreenState extends State<AddToyScreen> {
     toy.toyId = toyId;
     toy.ownerId = profileInfo.uid;
     return Scaffold(
-        //body: Container(
+      appBar: AppBar(
+        title: const Text(
+          "Toy Trader",
+          style: TextStyle(
+            // color: Theme.of(context).primaryColor,
+            fontSize: 25,
+            fontWeight: FontWeight.w600,
+          ),
+
+        ),
+      ),
         body: SingleChildScrollView (
             padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
             child: Column(children: <Widget>[
@@ -52,7 +61,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20.0),
-                  child: Image.asset('assets/images/nerfgun1.jpg',
+                  child: Image(image: image == null ? AssetImage('assets/images/click_to_add_img.png') : Image.file(image!).image,
                       width: double.infinity, height: 200),
                 ),
               ),
