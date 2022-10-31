@@ -16,10 +16,6 @@ class MessageDetailsScreen extends StatelessWidget{
                 Padding(
                     padding : EdgeInsets.symmetric(horizontal: 8, vertical: 16),
 
-                    // TODO: connect with firebase cloud messaging
-                    // TODO: add list containing the previous messages sent
-
-
                     child: TextField(
 
                       decoration: InputDecoration(

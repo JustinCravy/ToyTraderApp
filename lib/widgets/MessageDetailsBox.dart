@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:toy_trader/firebase_services/DatabaseService.dart';
+import 'package:toy_trader/models/TextMessage.dart';
 import 'package:toy_trader/widgets/MessageDetailsList.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MessageDetailsBox extends StatefulWidget {
   @override
@@ -56,6 +60,10 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
 
   @override
   Widget build(BuildContext context) {
+
+    DatabaseService dbService = DatabaseService();
+    var textMessage = TextMessage(Uuid().v4(), FirebaseAuth.instance.currentUser!.uid, 'kEurpmVqwfe7giyZC1PQfPSNZSW2', '', 'TEXT', '');
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -112,7 +120,14 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
                 contentPadding: EdgeInsets.all(12),
                 hintText: 'Type your message here...',
               ),
-              onSubmitted: (text){
+              onSubmitted: (text) async {
+
+                textMessage.message = text;
+                textMessage.time = DateTime.now().toString();
+                if(await dbService.sendTextMessage(textMessage)){
+                  print('Message sent');
+                } else print('failed to send message');
+
                 final message= MessageDetailsList
                   (text: text,
                     date: DateTime.now(),

@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:toy_trader/models/Conversation.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:toy_trader/models/TextMessage.dart';
 import '../../../models/Toy.dart';
+import 'package:uuid/uuid.dart';
 
 
 class DatabaseService {
@@ -155,6 +158,30 @@ class DatabaseService {
     catch(e){
       print(e.toString());
       return null;
+    }
+  }
+
+  Future<bool> sendTextMessage(TextMessage textMessage) async {
+    try{
+
+      var conversation = Conversation(Uuid().v4(), textMessage.receiverId, textMessage.message, textMessage.time);
+      await FirebaseFirestore.instance.collection('users')
+          .doc(textMessage.senderId).collection('conversations').doc(conversation.conversationId).set(conversation.toJson());
+
+      await FirebaseFirestore.instance.collection('users')
+          .doc(textMessage.receiverId).collection('conversations').doc(conversation.conversationId).set(conversation.toJson());
+
+      await FirebaseFirestore.instance.collection('users')
+          .doc(textMessage.senderId).collection('conversations').doc(conversation.conversationId).collection('messages').doc(textMessage.messageId).set(textMessage.toJson());
+
+      await FirebaseFirestore.instance.collection('users')
+          .doc(textMessage.receiverId).collection('conversations').doc(conversation.conversationId).collection('messages').doc(textMessage.messageId).set(textMessage.toJson());
+
+      return true;
+    }
+    catch(e){
+      print(e.toString());
+      return false;
     }
   }
 }
