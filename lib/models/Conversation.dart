@@ -3,13 +3,11 @@ part 'Conversation.g.dart';
 
 @JsonSerializable(anyMap: true, explicitToJson: true)
 class Conversation {
-  String conversationId = '';
   String otherUserId = '';
   String lastMessage = '';
   String time = '';
 
   Conversation (
-      this.conversationId,
       this.otherUserId,
       this.lastMessage,
       this.time,

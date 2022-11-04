@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:toy_trader/models/Toy.dart';
 import '../firebase_services/DatabaseService.dart';
 import 'package:toy_trader/widgets/MessageList.dart';
 import 'package:toy_trader/widgets/ToyGridList.dart';
 import '../models/ProfileInfo.dart';
-import 'AddToyScreen.dart';
 
 class ConversationsScreen extends StatelessWidget{
   @override

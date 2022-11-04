@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:toy_trader/screens/ToyDetailsScreen.dart';
-import 'package:toy_trader/screens/BottomNavBar.dart';
-import 'package:toy_trader/widgets/ToyGridList.dart';
+
 
 import '../firebase_services/DatabaseService.dart';
 import '../models/Toy.dart';
@@ -56,7 +55,7 @@ class _ToyBoxState extends State<ToyBox> {
 
                            break;
                          case Menu.delete:
-                           dbS.deleteToy('test');
+                           dbS.deleteToy(toyList[0]);
                            print("The Toybox thinks there are $toyList.length toys");
                            break;
                            default:

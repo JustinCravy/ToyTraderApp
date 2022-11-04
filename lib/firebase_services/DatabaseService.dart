@@ -131,9 +131,7 @@ class DatabaseService {
       final toyImgURL = (await storage.getDownloadURL()).toString();
       toy.toyImageURL = toyImgURL;
     }
-    print(profileInfo.toys);
     profileInfo.toys.add(toy);
-    print(profileInfo.toJson());
     try {
       await setProfileInfo(profileInfo.toJson(), null);
       return true;
@@ -148,12 +146,20 @@ class DatabaseService {
   }
 
 
-  Future deleteToy(String toyId) async{
-    toyList.removeWhere((item) => item.id == '0');
+  Future deleteToy(Toy toy) async{
     try{
-      return await FirebaseFirestore.instance.collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid).collection('toys')
-          .doc(toyId).delete();
+
+      var profileInfo = await getProfileInfo(FirebaseAuth.instance.currentUser!.uid);
+
+      // delete toy image from firebase storage
+      await FirebaseFirestore.instance.collection('users')
+          .doc(profileInfo.uid).collection('toys')
+          .doc(toy.toyId).delete();
+
+      // delete toy from user's profileInfo
+      profileInfo.toys.remove(toy);
+      setProfileInfo(profileInfo.toJson(), null);
+
     }
     catch(e){
       print(e.toString());
@@ -164,18 +170,18 @@ class DatabaseService {
   Future<bool> sendTextMessage(TextMessage textMessage) async {
     try{
 
-      var conversation = Conversation(Uuid().v4(), textMessage.receiverId, textMessage.message, textMessage.time);
+      var conversation = Conversation(textMessage.receiverId, textMessage.message, textMessage.time);
       await FirebaseFirestore.instance.collection('users')
-          .doc(textMessage.senderId).collection('conversations').doc(conversation.conversationId).set(conversation.toJson());
+          .doc(textMessage.senderId).collection('conversations').doc(textMessage.receiverId).set(conversation.toJson());
 
       await FirebaseFirestore.instance.collection('users')
-          .doc(textMessage.receiverId).collection('conversations').doc(conversation.conversationId).set(conversation.toJson());
+          .doc(textMessage.receiverId).collection('conversations').doc(textMessage.senderId).set(conversation.toJson());
 
       await FirebaseFirestore.instance.collection('users')
-          .doc(textMessage.senderId).collection('conversations').doc(conversation.conversationId).collection('messages').doc(textMessage.messageId).set(textMessage.toJson());
+          .doc(textMessage.senderId).collection('conversations').doc(textMessage.receiverId).collection('messages').doc(textMessage.messageId).set(textMessage.toJson());
 
       await FirebaseFirestore.instance.collection('users')
-          .doc(textMessage.receiverId).collection('conversations').doc(conversation.conversationId).collection('messages').doc(textMessage.messageId).set(textMessage.toJson());
+          .doc(textMessage.receiverId).collection('conversations').doc(textMessage.senderId).collection('messages').doc(textMessage.messageId).set(textMessage.toJson());
 
       return true;
     }
