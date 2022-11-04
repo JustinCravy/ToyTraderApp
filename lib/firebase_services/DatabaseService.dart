@@ -8,6 +8,7 @@ import 'package:toy_trader/models/TextMessage.dart';
 import '../../../models/Toy.dart';
 import 'package:uuid/uuid.dart';
 
+import '../models/Message.dart';
 
 class DatabaseService {
   static final DatabaseService _instance = DatabaseService._internal();
@@ -91,6 +92,26 @@ class DatabaseService {
 
     return profileInfo;
   }
+  /*
+  Future<QuerySnapshot> getConversations(String userId) async {
+    List<Conversation> convList = [];
+
+    var query = await FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: userId)
+        .get();
+
+    var userData = query.docs.map((doc) => doc).toList();
+
+    var userConv = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('conversations')
+        .get();
+
+  }
+
+   */
 
   Future<List<Toy>> getMainFeed() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
@@ -157,7 +178,15 @@ class DatabaseService {
           .doc(toy.toyId).delete();
 
       // delete toy from user's profileInfo
-      profileInfo.toys.remove(toy);
+      int len = profileInfo.toys.length;
+
+      for(var i =0; i < len;i++){
+        if(toy.toyId == profileInfo.toys[i]){
+          profileInfo.toys.removeAt(i);
+        }
+      }
+
+
       setProfileInfo(profileInfo.toJson(), null);
 
     }

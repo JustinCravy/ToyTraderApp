@@ -1,12 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:toy_trader/models/ProfileInfo.dart';
+import 'package:provider/provider.dart';
 import '../firebase_services/AuthService.dart';
 import '../firebase_services/DatabaseService.dart';
 import '../models/Toy.dart';
+import '../screens/AddToyScreen.dart';
 import 'ToyBox.dart';
 
 class ToyGridList extends StatefulWidget {
+  final List<Toy> toyList;
+
+  const ToyGridList(this.toyList, {super.key});
+
   @override
   _ToyGridListState createState() => _ToyGridListState();
 }
@@ -14,6 +20,7 @@ class ToyGridList extends StatefulWidget {
 class _ToyGridListState extends State<ToyGridList> {
   int _counter = 0;
   AuthService authService = AuthService();
+  DatabaseService dbS = DatabaseService();
 
   void _incrementCounter() {
     setState(() {
@@ -23,43 +30,59 @@ class _ToyGridListState extends State<ToyGridList> {
 
   @override
   Widget build(BuildContext context) {
-    DatabaseService dbS = DatabaseService();
-    List<Toy> toyList = dbS.getToyList();
+    List<Toy> toyList = widget.toyList;
     List<Widget> widgetList = [];
 
+    ProfileInfo? user = Provider.of<ProfileInfo?>(context);
+
     if (toyList.isEmpty) {
-      return showEmptyWidgets();
+      return showEmptyWidgets(dbS, user);
     } else {
       for (var i = 0; i < toyList.length; i++) {
-        widgetList.add(ToyBox());
+        widgetList.add(ToyBox(
+          toy: toyList[i],
+          left: i % 2,
+        ));
       }
 
-      return showPopulatedList(widgetList);
+      return showPopulatedList(widgetList, dbS, user);
     }
   }
 
-  Stack showEmptyWidgets() {
+  Stack showEmptyWidgets(dbS, user) {
     return Stack(
       children: [
         Container(
-          child: Text("You have no Toys"),
-        ),
-        MaterialButton(
-          onPressed: () {},
-          color: Colors.blue,
-          textColor: Colors.white,
-          child: Icon(
-            Icons.add,
-            size: 114,
+          child: Text(
+            "You have no Toys",
           ),
-          padding: EdgeInsets.all(0),
-          shape: CircleBorder(),
-        )
+        ),
+        Padding(
+            padding: EdgeInsets.all(10),
+            child: Align(
+                alignment: Alignment.bottomRight,
+                child: MaterialButton(
+                  onPressed: () async {
+                    user = await dbS.getProfileInfo(user!.uid);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddToyScreen()));
+                  },
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                  child: const Icon(
+                    Icons.add,
+                    size: 30,
+                  ),
+                  padding: EdgeInsets.all(5),
+                  shape: CircleBorder(),
+                )))
       ],
     );
   }
 
-  Stack showPopulatedList(List<Widget> widgetList) {
+  Stack showPopulatedList(List<Widget> widgetList, dbS, user) {
     return Stack(
       children: [
         Container(
@@ -71,7 +94,14 @@ class _ToyGridListState extends State<ToyGridList> {
             child: Align(
                 alignment: Alignment.bottomRight,
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    print("pressed add button");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddToyScreen(),
+                            settings: RouteSettings(arguments: user)));
+                  },
                   color: Colors.blue,
                   textColor: Colors.white,
                   child: Icon(

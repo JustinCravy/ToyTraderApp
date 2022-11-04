@@ -49,8 +49,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               return Column(
                 children: [
                   Container(
-                    width: 150,
-                    height: 150,
+                    width: 120,
+                    height: 120,
                     padding: const EdgeInsets.all(200),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -68,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   Container(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    child: const Text('Your Toys',
+                    child: const Text('My Toys',
                     style: TextStyle(fontSize: 30),)
                   ),
                   Flexible(
@@ -80,13 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             width: 2,
                           ),
                         ),
-                        child: GridView.builder(
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                          itemBuilder: (BuildContext context, int index) {
-                            return const Text("Toy test");
-                          },
-                        itemCount: 6,
-                      )
+                        child: ToyGridList(userProfile.toys)
                     )
                   )
                 ],
@@ -147,7 +141,7 @@ class MainScreen extends StatelessWidget{
                   width: deviceWidth(context),
                  height: deviceHeight(context) *.65,
                  alignment: Alignment.topLeft,
-                 child: ToyGridList(),
+                 child: Text("not yet implemented"),
                ),
               ],
             )

@@ -184,6 +184,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                             content: Text("Sending Message"),
                           ));
                           await dbService.addToyData(toy, profileInfo, image);
+                          Navigator.pop(context,true);
                         }),
                   ],
                 ),

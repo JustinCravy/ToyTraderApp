@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
             icon: Icon(Icons.person, color: Colors.white),
-            label: Text('Add Toy', style: TextStyle(color: Colors.white),),
+            label: Text('Add', style: TextStyle(color: Colors.white),),
           )
         ],
         title: const Text(
