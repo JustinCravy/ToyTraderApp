@@ -18,15 +18,9 @@ class ToyGridList extends StatefulWidget {
 }
 
 class _ToyGridListState extends State<ToyGridList> {
-  int _counter = 0;
   AuthService authService = AuthService();
   DatabaseService dbS = DatabaseService();
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +62,7 @@ class _ToyGridListState extends State<ToyGridList> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => AddToyScreen()));
+                            settings: RouteSettings(arguments: user);
                   },
                   color: Colors.blue,
                   textColor: Colors.white,
@@ -95,7 +90,7 @@ class _ToyGridListState extends State<ToyGridList> {
                 alignment: Alignment.bottomRight,
                 child: MaterialButton(
                   onPressed: () async {
-                    print("pressed add button");
+                    user = await dbS.getProfileInfo(user!.uid);
                     Navigator.push(
                         context,
                         MaterialPageRoute(

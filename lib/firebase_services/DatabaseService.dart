@@ -180,11 +180,15 @@ class DatabaseService {
       // delete toy from user's profileInfo
       int len = profileInfo.toys.length;
 
-      for(var i =0; i < len;i++){
-        if(toy.toyId == profileInfo.toys[i]){
+      print(profileInfo.toys);
+      for(var i =0; i < len-1;i++){
+        if(toy.toyId == profileInfo.toys[i].toyId){
           profileInfo.toys.removeAt(i);
+          print("we found a match");
+          break;
         }
       }
+      print(profileInfo.toys);
 
 
       setProfileInfo(profileInfo.toJson(), null);

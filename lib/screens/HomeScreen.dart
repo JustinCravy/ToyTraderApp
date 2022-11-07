@@ -38,22 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 label: Text('Logout', style: TextStyle(color: Colors.white),),
 
           ),
-          TextButton.icon(
-            onPressed: () async {
-              user = await dbService.getProfileInfo(user!.uid);
-              Navigator.push(
-                  context,
-              MaterialPageRoute(
-                builder: (context) => AddToyScreen(),
-                settings: RouteSettings(
-                  arguments: user
-                  )
-              )
-              );
-            },
-            icon: Icon(Icons.person, color: Colors.white),
-            label: Text('Add', style: TextStyle(color: Colors.white),),
-          )
         ],
         title: const Text(
           "Toy Trader",

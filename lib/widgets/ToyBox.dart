@@ -33,14 +33,14 @@ class _ToyBoxState extends State<ToyBox> {
       List<Toy> toyList = dbS.getToyList();
 
       if(widget.left == 0){
-        topInset =  deviceHeight(context) * .01;
-        leftInset = deviceWidth(context) * .02;
+        topInset =  deviceHeight(context) * .02;
+        leftInset = deviceWidth(context) * .01;
         rightInset =   deviceWidth(context) * .015;
     }
       else{
-        topInset =  deviceHeight(context) * .01;
+        topInset =  deviceHeight(context) * .02;
         leftInset = deviceWidth(context) * .015;
-        rightInset =   deviceWidth(context) * .02;
+        rightInset =   deviceWidth(context) * .01;
       }
 
       return Container(

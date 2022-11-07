@@ -9,14 +9,7 @@ class ConversationsScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: Column(
-          children: [
-            SingleChildScrollView(
-              child: MessageList(),
-            )
-          ],
-        ),
-      ),
+        child: MessageList())
     );
   }
 }
@@ -75,10 +68,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                         decoration: BoxDecoration(
-                          border: Border.all(
+                          /*border: Border.all(
                             color: Colors.blue,
                             width: 2,
                           ),
+
+                           */
                         ),
                         child: ToyGridList(userProfile.toys)
                     )

@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:toy_trader/widgets/MessageDetailsBox.dart';
 
+import '../models/Conversation.dart';
+
 
 class MessageBox extends StatefulWidget {
+  final Conversation convo;
+
+  const MessageBox ({Key? key, required this.convo}): super(key:key);
+
   @override
   State<MessageBox> createState() => _MessageBoxState();
 
@@ -13,6 +19,9 @@ class MessageBox extends StatefulWidget {
 class _MessageBoxState extends State<MessageBox>{
   @override
   Widget build(BuildContext context) {
+
+    String lastMessage = widget.convo.lastMessage;
+
     return Container(
       height: 100,
       width: double.infinity,
@@ -36,6 +45,7 @@ class _MessageBoxState extends State<MessageBox>{
               */
               const CircleAvatar(
                 backgroundImage: AssetImage('assets/images/profile.png'),
+                radius: 25,
               ),
              Container(
                  width: deviceWidth(context) * .75,
@@ -51,17 +61,18 @@ class _MessageBoxState extends State<MessageBox>{
                  child: Padding(
                  padding: EdgeInsets.only(
                    left: deviceWidth(context) *.05,
+                   right: deviceWidth(context) * .30,
                  ),
                  child: Column(
                    crossAxisAlignment: CrossAxisAlignment.start,
-                   children: const [
+                   children: [
                      SizedBox(height: 10),
-                     Text(
+                     const Text(
                          'Username',style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.w600),
                          textAlign: TextAlign.left),
-                     SizedBox(height: 10),
-                     Text('This will be the last message sent from another user if the message is too long is should cut off',
-                       style: TextStyle(fontSize: 14,color: Colors.black, fontWeight: FontWeight.w400),
+                     const SizedBox(height: 10),
+                     Text(lastMessage,
+                       style: const TextStyle(fontSize: 14,color: Colors.black, fontWeight: FontWeight.w400),
                        textAlign: TextAlign.left,
                        maxLines: 1,
                        overflow: TextOverflow.ellipsis,
