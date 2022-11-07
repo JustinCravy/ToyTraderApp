@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:toy_trader/firebase_services/DatabaseService.dart';
 import 'package:toy_trader/models/TextMessage.dart';
@@ -6,6 +8,9 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../models/Message.dart';
 
 class MessageDetailsBox extends StatefulWidget {
   @override
@@ -13,6 +18,9 @@ class MessageDetailsBox extends StatefulWidget {
 }
 
 class _MessageDetailsBoxState extends State<MessageDetailsBox> {
+
+
+
   List<MessageDetailsList> messages = [
 
     MessageDetailsList(
@@ -63,6 +71,15 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
 
     DatabaseService dbService = DatabaseService();
     var textMessage = TextMessage(Uuid().v4(), FirebaseAuth.instance.currentUser!.uid, 'kEurpmVqwfe7giyZC1PQfPSNZSW2', '', 'TEXT', '');
+    var imageMessage = ImageMessage(Uuid().v4(), FirebaseAuth.instance.currentUser!.uid, 'kEurpmVqwfe7giyZC1PQfPSNZSW2', '', 'IMAGE', '');
+
+    Future pickImage() async{
+      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedImage ==null) return;
+
+      imageMessage.image = pickedImage.path;
+      await dbService.sendImageMessage(imageMessage);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -116,8 +133,14 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
           Container(
             color: Colors.grey.shade300,
             child: TextField(
-              decoration: const InputDecoration(
+              decoration:  InputDecoration(
                 contentPadding: EdgeInsets.all(12),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.image_outlined),
+                  onPressed: () {
+                    pickImage();
+                  },
+                ),
                 hintText: 'Type your message here...',
               ),
               onSubmitted: (text) async {

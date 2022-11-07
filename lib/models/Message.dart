@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:json_annotation/json_annotation.dart';
 part 'Message.g.dart';
 
@@ -23,3 +25,16 @@ class Message {
   Map<String, dynamic> toJson() => _$MessageToJson(this);
 
 }
+
+class ImageMessage extends Message{
+  String image;
+  ImageMessage(
+      messageId,
+      senderId,
+      receiverId,
+      time,
+      type,
+      this.image) : super(messageId, senderId, receiverId, time, type);
+
+}
+

@@ -219,4 +219,28 @@ class DatabaseService {
       return false;
     }
   }
+
+  Future<bool> sendImageMessage(ImageMessage imageMessage) async{
+    try{
+      var conversation = Conversation(imageMessage.receiverId, imageMessage.image, imageMessage.time);
+      await FirebaseFirestore.instance.collection('users')
+          .doc(imageMessage.senderId).collection('conversations').doc(imageMessage.receiverId).set(conversation.toJson());
+
+      await FirebaseFirestore.instance.collection('users')
+          .doc(imageMessage.receiverId).collection('conversations').doc(imageMessage.senderId).set(conversation.toJson());
+
+      await FirebaseFirestore.instance.collection('users')
+          .doc(imageMessage.senderId).collection('conversations').doc(imageMessage.receiverId).collection('image').doc(imageMessage.messageId).set(imageMessage.toJson());
+
+      await FirebaseFirestore.instance.collection('users')
+          .doc(imageMessage.receiverId).collection('conversations').doc(imageMessage.senderId).collection('image').doc(imageMessage.messageId).set(imageMessage.toJson());
+
+      return true;
+    }
+    catch(e){
+      print(e.toString());
+      return false;
+    }
+  }
+
 }
