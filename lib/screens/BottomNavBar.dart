@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toy_trader/models/Toy.dart';
 import '../firebase_services/DatabaseService.dart';
 import 'package:toy_trader/widgets/MessageList.dart';
 import 'package:toy_trader/widgets/ToyGridList.dart';
@@ -102,11 +103,10 @@ class MainScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     final arg = ModalRoute.of(context)!.settings.arguments as ProfileInfo?;
     ProfileInfo? profileInfo;
+    dbService.getMainFeed();
     if(arg != null) {
       profileInfo = arg;
     }
-
-    print(profileInfo);
     return Scaffold(
       body: Container(
         // color: const Color(0xffC4DFCB),
@@ -133,10 +133,30 @@ class MainScreen extends StatelessWidget{
                 ),
 
                 Container(
+                  child: FutureBuilder<List<Toy>>(
+                    future: dbService.getMainFeed(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        List<Toy> toyList = snapshot.data!;
+
+                        return Column(
+                          children: [
+                            Flexible(
+                                child: ToyGridList(toyList)
+                          )
+                          ]
+
+                        );
+
+                      }
+                      else {
+                        return const CircularProgressIndicator();
+                      }
+                    },
+                  ),
                   width: deviceWidth(context),
                  height: deviceHeight(context) *.65,
                  alignment: Alignment.topLeft,
-                 child: Text("not yet implemented"),
                ),
               ],
             )

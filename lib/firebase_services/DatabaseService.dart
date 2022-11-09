@@ -115,15 +115,32 @@ class DatabaseService {
 
   Future<List<Toy>> getMainFeed() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
-    final profileInfoList = querySnapshot.docs.map((doc) => ProfileInfo(
-        uid: doc.id,
-        screenName: doc.get("screenName"),
-        ageRange: doc.get("ageRange"),
-        interests: doc.get("interests"),
-        toys: <Toy>[],
-        profileImageUrl: doc.get("profileImageUrl")
-    )).toList();
-    List<Toy> toysList = [];
+    var user = FirebaseAuth.instance.currentUser?.uid;
+    var profiles = querySnapshot.docs.map((doc) => doc).toList();
+
+    List<ProfileInfo> profileList = [];
+
+    profiles.removeWhere((element) => element.get("uid") == user);
+    for (var i = 0; i < profiles.length; i++) {
+      List<Toy> toyList = [];
+
+      for (var item in profiles[i].get("toys")) {
+        var _toy = Toy(item["toyId"], item["ownerId"], item["name"], item["description"], item["condition"], item["ageRange"], item["categories"], item["toyImageURL"]);
+        toyList.add(_toy);
+      }
+
+      profileList.add(ProfileInfo(
+          uid: profiles[i].get("uid"),
+          screenName: profiles[i].get("screenName"),
+          ageRange: profiles[i].get("ageRange"),
+          interests: profiles[i].get("interests"),
+          toys: toyList,
+          profileImageUrl: profiles[i].get("profileImageUrl")));
+
+    }
+
+    //profileList.removeWhere((element) => element.uid == user);
+
     /*r(var i = 0; i < profileInfoList.length; i++){
       var checkProfileInfo = profileInfoList[i];
       if(checkProfileInfo.userId == profileInfo.userId)
@@ -141,7 +158,14 @@ class DatabaseService {
         toysList.add(toy);
       }
     }
-   */return toysList;
+   */
+    List<Toy> toyList = [];
+    for (var i = 0; i < profileList.length; i++) {
+      for (var item in profileList[i].toys) {
+        toyList.add(item);
+      }
+    }
+    return toyList;
   }
 
   Future<bool> addToyData(Toy toy, ProfileInfo profileInfo, File? toyImage,) async {
