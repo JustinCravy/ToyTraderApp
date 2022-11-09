@@ -34,9 +34,9 @@ class _ToyGridListState extends State<ToyGridList> {
     } else {
       for (var i = 0; i < toyList.length; i++) {
         widgetList.add(ToyBox(
-          toy: toyList[i],
-          left: i % 2,
-          user: user
+            toy: toyList[i],
+            left: i % 2,
+            user: user
         ));
       }
 
@@ -53,7 +53,7 @@ class _ToyGridListState extends State<ToyGridList> {
           ),
         ),
         Padding(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.all(10),
             child: Align(
                 alignment: Alignment.bottomRight,
                 child: MaterialButton(
@@ -63,7 +63,7 @@ class _ToyGridListState extends State<ToyGridList> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => AddToyScreen()));
-                            settings: RouteSettings(arguments: user);
+                    settings: RouteSettings(arguments: user);
                   },
                   color: Colors.blue,
                   textColor: Colors.white,
@@ -111,3 +111,4 @@ class _ToyGridListState extends State<ToyGridList> {
     );
   }
 }
+
