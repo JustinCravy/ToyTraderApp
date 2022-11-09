@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:uuid/uuid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../models/ImageMessage.dart';
 import '../models/Message.dart';
 
 class MessageDetailsBox extends StatefulWidget {
@@ -19,57 +21,13 @@ class MessageDetailsBox extends StatefulWidget {
 
 class _MessageDetailsBoxState extends State<MessageDetailsBox> {
 
-
-
-  List<MessageDetailsList> messages = [
-
-    MessageDetailsList(
-      text: 'Sure lets trade!',
-      date: DateTime.now().subtract(
-        const Duration(days: 1, minutes: 30),
-      ),
-      isSentByMe: false,
-    ),
-    MessageDetailsList(
-        text: 'Would you like to trade?',
-        date: DateTime.now().subtract(
-          const Duration(days: 1, minutes: 50),
-        ),
-        isSentByMe: true
-    ),
-    MessageDetailsList(
-      text: 'Thanks I got my eye on that toy tractor.',
-      date: DateTime.now().subtract(
-        const Duration(days: 1, minutes: 55),
-      ),
-      isSentByMe: false,
-    ),
-    MessageDetailsList(
-        text: 'Here is my adress ... thanks for a good trade!',
-        date: DateTime.now().subtract(
-          const Duration(minutes: 60),
-        ),
-        isSentByMe: true
-    ),
-    MessageDetailsList(
-        text: 'You can send the toy here.. where should I send yours?',
-        date: DateTime.now().subtract(
-          const Duration(minutes: 50),
-        ),
-        isSentByMe: false
-    ),
-    MessageDetailsList(
-        text: 'Hey I like that Nerf gun you have.',
-        date: DateTime.now().subtract(
-          const Duration(days: 1, minutes: 70),
-        ),
-        isSentByMe: true)
-  ].reversed.toList();
+  DatabaseService dbService = DatabaseService();
+  List<Message> messages = [];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
+    getMessages(FirebaseAuth.instance.currentUser!.uid, 'kEurpmVqwfe7giyZC1PQfPSNZSW2');
 
-    DatabaseService dbService = DatabaseService();
     var textMessage = TextMessage(Uuid().v4(), FirebaseAuth.instance.currentUser!.uid, 'kEurpmVqwfe7giyZC1PQfPSNZSW2', '', 'TEXT', '');
     var imageMessage = ImageMessage(Uuid().v4(), FirebaseAuth.instance.currentUser!.uid, 'kEurpmVqwfe7giyZC1PQfPSNZSW2', '', 'IMAGE', '');
 
@@ -77,9 +35,10 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
       final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedImage ==null) return;
 
-      imageMessage.image = pickedImage.path;
-      await dbService.sendImageMessage(imageMessage);
+      final file = File (pickedImage.path);
+      await dbService.sendImageMessage(imageMessage, file);
     }
+
 
     return Scaffold(
       appBar: AppBar(
@@ -89,19 +48,15 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
       body: Column(
         children: [
           Expanded(
-            child: GroupedListView<MessageDetailsList, DateTime>(
+            child: GroupedListView<Message, DateTime>(
               padding: const EdgeInsets.all(8),
               reverse: true,
               order: GroupedListOrder.DESC,
               useStickyGroupSeparators: true,
               floatingHeader: true,
               elements: messages,
-              groupBy: (message) => DateTime(
-                message.date.year,
-                message.date.month,
-                message.date.day,
-              ),
-              groupHeaderBuilder: (MessageDetailsList message) => SizedBox(
+              groupBy: (message) => DateFormat("yyyy-MM-dd HH:mm:ss").parse(message.time),
+              groupHeaderBuilder: (Message message) => SizedBox(
                   height: 40,
                   child: Center(
                       child: Card(
@@ -109,22 +64,22 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
                           child: Padding(
                               padding: const EdgeInsets.all(8),
                               child: Text(
-                                DateFormat.yMMMd().format(message.date),
+                                message.time,
                                 style: const TextStyle(color: Colors.white),
                               )
                           )
                       )
                   )
               ),
-              itemBuilder: (context, MessageDetailsList message) => Align(
-                alignment: message.isSentByMe
+              itemBuilder: (context, Message message) => Align(
+                alignment: FirebaseAuth.instance.currentUser!.uid == message.senderId
                     ? Alignment.centerRight
                     : Alignment .centerLeft,
                 child: Card(
                   elevation: 8,
                   child: Padding(
                     padding: const EdgeInsets.all(12),
-                    child: Text(message.text),
+                    child: Text((message as TextMessage).message),
                   ),
                 ),
               ),
@@ -151,16 +106,17 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
                   print('Message sent');
                 } else print('failed to send message');
 
-                final message= MessageDetailsList
-                  (text: text,
-                    date: DateTime.now(),
-                    isSentByMe: true);
-                setState(()=> messages.add(message));
+
+                setState(()=> messages.add(textMessage));
               },
             ),
           ),
         ],
       ),
     );
+  }
+  getMessages(String userId, String otherUserId) async {
+    messages = await DatabaseService().getMessages(userId, otherUserId);
+    setState(() => messages);
   }
 }

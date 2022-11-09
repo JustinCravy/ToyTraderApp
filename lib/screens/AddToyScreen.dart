@@ -183,7 +183,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text("Sending Message"),
                           ));
-                          await dbService.addToyData(toy, profileInfo, image);
+                          await dbService.addToyData(toy, profileInfo, image!);
                           Navigator.pop(context,true);
                         }),
                   ],

@@ -8,6 +8,7 @@ import 'package:toy_trader/models/TextMessage.dart';
 import '../../../models/Toy.dart';
 import 'package:uuid/uuid.dart';
 
+import '../models/ImageMessage.dart';
 import '../models/Message.dart';
 
 class DatabaseService {
@@ -115,32 +116,15 @@ class DatabaseService {
 
   Future<List<Toy>> getMainFeed() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
-    var user = FirebaseAuth.instance.currentUser?.uid;
-    var profiles = querySnapshot.docs.map((doc) => doc).toList();
-
-    List<ProfileInfo> profileList = [];
-
-    profiles.removeWhere((element) => element.get("uid") == user);
-    for (var i = 0; i < profiles.length; i++) {
-      List<Toy> toyList = [];
-
-      for (var item in profiles[i].get("toys")) {
-        var _toy = Toy(item["toyId"], item["ownerId"], item["name"], item["description"], item["condition"], item["ageRange"], item["categories"], item["toyImageURL"]);
-        toyList.add(_toy);
-      }
-
-      profileList.add(ProfileInfo(
-          uid: profiles[i].get("uid"),
-          screenName: profiles[i].get("screenName"),
-          ageRange: profiles[i].get("ageRange"),
-          interests: profiles[i].get("interests"),
-          toys: toyList,
-          profileImageUrl: profiles[i].get("profileImageUrl")));
-
-    }
-
-    //profileList.removeWhere((element) => element.uid == user);
-
+    final profileList = querySnapshot.docs.map((doc) => ProfileInfo(
+        uid: doc.id,
+        screenName: doc.get("screenName"),
+        ageRange: doc.get("ageRange"),
+        interests: doc.get("interests"),
+        toys: <Toy>[],
+        profileImageUrl: doc.get("profileImageUrl")
+    )).toList();
+    List<Toy> toysList = [];
     /*r(var i = 0; i < profileInfoList.length; i++){
       var checkProfileInfo = profileInfoList[i];
       if(checkProfileInfo.userId == profileInfo.userId)
@@ -165,17 +149,16 @@ class DatabaseService {
         toyList.add(item);
       }
     }
-    return toyList;
+    return toysList;
   }
 
-  Future<bool> addToyData(Toy toy, ProfileInfo profileInfo, File? toyImage,) async {
-    if(toyImage != null) {
-      final storage = FirebaseStorage.instance.ref('users').child(
+  Future<bool> addToyData(Toy toy, ProfileInfo profileInfo, File toyImage,) async {
+    final storage = FirebaseStorage.instance.ref('users').child(
           profileInfo.uid).child('toys').child(toy.toyId);
-      await storage.putFile(toyImage);
-      final toyImgURL = (await storage.getDownloadURL()).toString();
-      toy.toyImageURL = toyImgURL;
-    }
+    await storage.putFile(toyImage);
+    final toyImgURL = (await storage.getDownloadURL()).toString();
+    toy.toyImageURL = toyImgURL;
+
     profileInfo.toys.add(toy);
     try {
       await setProfileInfo(profileInfo.toJson(), null);
@@ -248,20 +231,57 @@ class DatabaseService {
     }
   }
 
-  Future<bool> sendImageMessage(ImageMessage imageMessage) async{
+  Future<bool> sendImageMessage(ImageMessage imageMessage, File img) async{
     try{
-      var conversation = Conversation(imageMessage.receiverId, imageMessage.image, imageMessage.time);
-      await FirebaseFirestore.instance.collection('users')
-          .doc(imageMessage.senderId).collection('conversations').doc(imageMessage.receiverId).set(conversation.toJson());
 
-      await FirebaseFirestore.instance.collection('users')
-          .doc(imageMessage.receiverId).collection('conversations').doc(imageMessage.senderId).set(conversation.toJson());
+      //****************** sender ***********************
 
-      await FirebaseFirestore.instance.collection('users')
-          .doc(imageMessage.senderId).collection('conversations').doc(imageMessage.receiverId).collection('image').doc(imageMessage.messageId).set(imageMessage.toJson());
+      // upload image to storage
+      var storage = FirebaseStorage.instance.ref('users').child(imageMessage.senderId)
+          .child('conversations').child(imageMessage.receiverId).child('messages')
+          .child(imageMessage.messageId);
+      await storage.putFile(img);
 
+      //get and set download url
+      var imgURL = (await storage.getDownloadURL()).toString();
+      imageMessage.imageUrl = imgURL;
+
+      // upload conversation to Firestore
+      var conversation = Conversation(imageMessage.receiverId, 'Image', imageMessage.time);
       await FirebaseFirestore.instance.collection('users')
-          .doc(imageMessage.receiverId).collection('conversations').doc(imageMessage.senderId).collection('image').doc(imageMessage.messageId).set(imageMessage.toJson());
+          .doc(imageMessage.senderId).collection('conversations')
+          .doc(imageMessage.receiverId).set(conversation.toJson());
+
+      // upload message to Firestore
+      await FirebaseFirestore.instance.collection('users')
+          .doc(imageMessage.senderId).collection('conversations')
+          .doc(imageMessage.receiverId).collection('image')
+          .doc(imageMessage.messageId).set(imageMessage.toJson());
+
+
+      //****************** receiver ***********************
+
+      // upload image to storage for message sender
+      storage = FirebaseStorage.instance.ref('users').child(imageMessage.receiverId)
+          .child('conversations').child(imageMessage.senderId).child('messages')
+          .child(imageMessage.messageId);
+      await storage.putFile(img);
+      //get and set download url
+      imgURL = (await storage.getDownloadURL()).toString();
+      imageMessage.imageUrl = imgURL;
+
+
+      // upload conversation to Firestore for message sender
+      conversation = Conversation(imageMessage.senderId, 'Image', imageMessage.time);
+      await FirebaseFirestore.instance.collection('users')
+          .doc(imageMessage.receiverId).collection('conversations')
+          .doc(imageMessage.senderId).set(conversation.toJson());
+
+      // upload message to Firestore for message sender
+      await FirebaseFirestore.instance.collection('users')
+          .doc(imageMessage.receiverId).collection('conversations')
+          .doc(imageMessage.senderId).collection('image')
+          .doc(imageMessage.receiverId).set(imageMessage.toJson());
 
       return true;
     }
@@ -269,6 +289,31 @@ class DatabaseService {
       print(e.toString());
       return false;
     }
+  }
+
+  Future<List<Message>> getMessages(String userId, String otherUserId) async {
+    var result = await FirebaseFirestore.instance.collection('users').doc(userId).collection('conversations')
+        .doc(otherUserId).collection('messages').get();
+    List<Message> messages = [];
+
+    for(int i = 0; i < result.docs.length; i++){
+      if(result.docs[i].get("type") == "TEXT") {
+         var message = TextMessage.fromJson(result.docs[i].data());
+         messages.add(message);
+         print(message.message);
+      }
+
+
+      else if(result.docs[i].get("type") == "IMAGE") {
+        var message = ImageMessage.fromJson(result.docs[i].data());
+        messages.add(message);
+      }
+
+      // else message type = TRADE
+
+    }
+
+    return messages;
   }
 
 }
