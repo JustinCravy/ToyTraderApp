@@ -24,6 +24,8 @@ class ToyBox extends StatefulWidget {
 
 class _ToyBoxState extends State<ToyBox> {
   @override
+
+
   Widget build(BuildContext context) {
     double leftInset;
     double rightInset;
@@ -46,7 +48,7 @@ class _ToyBoxState extends State<ToyBox> {
       rightInset =   deviceWidth(context) * .01;
     }
 
-    if (widget.toy.ownerId == widget.user?.uid) {
+
       return Container(
           padding: EdgeInsets.only(
             top: topInset,
@@ -64,43 +66,21 @@ class _ToyBoxState extends State<ToyBox> {
                     ),
                   ),
                   Container(
-                    alignment: Alignment.topRight,
-                    child: PopupMenuButton<profileMenu>(
-                      // Callback that sets the selected popup menu item.
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-
-                        onSelected: (profileMenu item) {
-                          switch(item){
-                            case profileMenu.edit:
-                              print("edit Selected");
-                              /*
-                                 Code to go to the edit Toy Screen such as editing the contents of toy
-                                 */
-                              break;
-                            case profileMenu.delete:/*
-                                 Code to go to delete toys goes here
-                                 */
-                              dbS.deleteToy(widget.toy);
-                              break;
-                            default:
-                              break;
-                          }
-                        },
-
-                        itemBuilder: (BuildContext context) => <PopupMenuEntry<profileMenu>>[
-                          const PopupMenuItem<profileMenu>(
-                            value: profileMenu.edit,
-                            child: Text('Edit'),
-                          ),
-                          const PopupMenuItem<profileMenu>(
-                            value: profileMenu.delete,
-                            child: Text('Delete'),
-                          ),
-                        ]),
+                      padding: const EdgeInsets.all(200),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          border: Border.all(width: 6, color: Colors.greenAccent),
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(widget.toy.toyImageURL)
+                          )
+                      )
                   ),
+
+                  if(widget.toy.ownerId == widget.user?.uid)
+                    userMenu(dbS, widget.toy)
+                  else
+                    searchMenu(),
 
                   Container(
                       alignment: Alignment.bottomCenter,
@@ -125,88 +105,85 @@ class _ToyBoxState extends State<ToyBox> {
               }
           )
       );
-    }
 
-    else {
-      return Container(
-          padding: EdgeInsets.only(
-            top: topInset,
-            right: rightInset,
-            left: leftInset,
+
+  }
+
+  Widget userMenu(dbS, toy){
+    return Container(
+      alignment: Alignment.topRight,
+      child: PopupMenuButton<profileMenu>(
+        // Callback that sets the selected popup menu item.
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
           ),
-          child: InkWell(
-              child:Stack(
-                children: [
 
-                  //replace with the Image of the toy
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.greenAccent,
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.topRight,
-                    child: PopupMenuButton<toyMenu>(
-                      // Callback that sets the selected popup menu item.
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
+          onSelected: (profileMenu item) {
+            switch(item){
+              case profileMenu.edit:
+                print("edit Selected");
+                break;
+              case profileMenu.delete:
+                dbS.deleteToy(toy);
+                break;
+              default:
+                break;
+            }
+          },
 
-                        onSelected: (toyMenu item) {
-                          switch(item){
-                            case toyMenu.message:
-                              print("message owner");
-                              /*
+
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<profileMenu>>[
+            const PopupMenuItem<profileMenu>(
+              value: profileMenu.edit,
+              child: Text('Edit'),
+            ),
+            const PopupMenuItem<profileMenu>(
+              value: profileMenu.delete,
+              child: Text('Delete'),
+            ),
+          ]),
+    );
+  }
+
+  Widget searchMenu(){
+    return Container(
+      alignment: Alignment.topRight,
+      child: PopupMenuButton<toyMenu>(
+        // Callback that sets the selected popup menu item.
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+
+          onSelected: (toyMenu item) {
+            switch(item){
+              case toyMenu.message:
+                print("message owner");
+                /*
                                  Code to message owner of toy goes here
                                  */
-                              break;
-                            case toyMenu.offer:
+                break;
+              case toyMenu.offer:
 
 
-                              break;
-                            default:
-                              break;
-                          }
-                        },
+                break;
+              default:
+                break;
+            }
+          },
 
-                        itemBuilder: (BuildContext context) => <PopupMenuEntry<toyMenu>>[
-                          const PopupMenuItem<toyMenu>(
-                            value: toyMenu.message,
-                            child: Text('Message'),
-                          ),
-                          const PopupMenuItem<toyMenu>(
-                            value: toyMenu.offer,
-                            child: Text('Offer Trade'),
-                          ),
-                        ]),
-                  ),
-
-                  Container(
-                      alignment: Alignment.bottomCenter,
-                      padding: EdgeInsets.only(
-                        bottom: deviceHeight(context) * .01,
-                      ),
-                      child: Text(
-                        toyName,
-                        style: const TextStyle(fontSize: 20, color: Colors.black54),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      )
-                  ),
-
-                ],
-              ),
-              onTap:(){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ToyDetailsScreen())
-                );
-              }
-          )
-      );
-    }
-
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<toyMenu>>[
+            const PopupMenuItem<toyMenu>(
+              value: toyMenu.message,
+              child: Text('Message'),
+            ),
+            const PopupMenuItem<toyMenu>(
+              value: toyMenu.offer,
+              child: Text('Offer Trade'),
+            ),
+          ]),
+    );
   }
 
 
