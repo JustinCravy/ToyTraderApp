@@ -273,7 +273,7 @@ class DatabaseService {
       // upload message to Firestore
       await FirebaseFirestore.instance.collection('users')
           .doc(imageMessage.senderId).collection('conversations')
-          .doc(imageMessage.receiverId).collection('image')
+          .doc(imageMessage.receiverId).collection('messages')
           .doc(imageMessage.messageId).set(imageMessage.toJson());
 
 
@@ -298,7 +298,7 @@ class DatabaseService {
       // upload message to Firestore for message sender
       await FirebaseFirestore.instance.collection('users')
           .doc(imageMessage.receiverId).collection('conversations')
-          .doc(imageMessage.senderId).collection('image')
+          .doc(imageMessage.senderId).collection('messages')
           .doc(imageMessage.receiverId).set(imageMessage.toJson());
 
       return true;
