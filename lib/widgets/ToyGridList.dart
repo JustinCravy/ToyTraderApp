@@ -36,6 +36,7 @@ class _ToyGridListState extends State<ToyGridList> {
         widgetList.add(ToyBox(
           toy: toyList[i],
           left: i % 2,
+          user: user
         ));
       }
 
