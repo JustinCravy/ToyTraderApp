@@ -10,14 +10,14 @@ class ToyDetailsScreen extends StatelessWidget{
     Widget titleSection = Row(
         children: <Widget>[
           Expanded(
-              child: new Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   new Text("Toy Name: Nerf Gun", style: new TextStyle(fontSize: 25.0)),
                   new Text("Quality: Excellent", style: new TextStyle(fontSize: 25.0)),
                   new Text("Seller: James Smith", style: new TextStyle(fontSize: 25.0)),
                   new Text("Location: Sacramento, CA", style: new TextStyle(fontSize: 25.0)),
-                  new Row(
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       new Image.asset('assets/images/greenbutton.png',width:250,height:200),

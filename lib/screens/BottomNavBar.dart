@@ -126,7 +126,7 @@ class MainScreen extends StatelessWidget{
 
                               }//Need to be linked with search result
                           ),
-                          hintText: 'Search your toys',
+                          hintText: 'Search for toys',
                           border: OutlineInputBorder()
                       ),
                     )

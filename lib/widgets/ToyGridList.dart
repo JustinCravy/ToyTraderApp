@@ -53,7 +53,7 @@ class _ToyGridListState extends State<ToyGridList> {
           ),
         ),
         Padding(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(20),
             child: Align(
                 alignment: Alignment.bottomRight,
                 child: MaterialButton(
