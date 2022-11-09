@@ -52,12 +52,21 @@ class _ToyBoxState extends State<ToyBox> {
         child: InkWell(
              child:Stack(
                children: [
-
-                 //replace with the Image of the toy
                  Container(
-                    decoration: const BoxDecoration(
-                    color: Colors.greenAccent,
-                      ),
+                   decoration: const BoxDecoration(
+                     color: Colors.greenAccent,
+                   ),
+                 ),
+                 Container(
+                     decoration: BoxDecoration(
+                         shape: BoxShape.rectangle,
+                         border: Border.all(width: 5, color: Colors.greenAccent),
+                         image: DecorationImage(
+                             fit: BoxFit.fill,
+                             image: NetworkImage(widget.toy.toyImageURL)
+                         )
+                     )
+
                  ),
                   Container(
                     alignment: Alignment.topRight,
@@ -76,9 +85,7 @@ class _ToyBoxState extends State<ToyBox> {
                                  Code to go to the edit Toy Screen such as editing the contents of toy
                                  */
                                 break;
-                                case Menu.delete:/*
-                                 Code to go to delete toys goes here
-                                 */
+                                case Menu.delete:
                                   dbS.deleteToy(widget.toy);
                                   break;
                               default:
@@ -97,7 +104,6 @@ class _ToyBoxState extends State<ToyBox> {
                       ),
                     ]),
                   ),
-
                  Container(
                      alignment: Alignment.bottomCenter,
                    padding: EdgeInsets.only(
