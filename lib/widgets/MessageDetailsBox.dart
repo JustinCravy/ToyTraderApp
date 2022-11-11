@@ -23,10 +23,14 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
 
   DatabaseService dbService = DatabaseService();
   List<Message> messages = [];
-
+  int i = 0;
   @override
   Widget build(BuildContext context)  {
-    getMessages(FirebaseAuth.instance.currentUser!.uid, 'kEurpmVqwfe7giyZC1PQfPSNZSW2');
+    if(i == 0) {
+      getMessages(FirebaseAuth.instance.currentUser!.uid,
+          'kEurpmVqwfe7giyZC1PQfPSNZSW2');
+      i++;
+    }
 
     var textMessage = TextMessage(Uuid().v4(), FirebaseAuth.instance.currentUser!.uid, 'kEurpmVqwfe7giyZC1PQfPSNZSW2', '', 'TEXT', '');
     var imageMessage = ImageMessage(Uuid().v4(), FirebaseAuth.instance.currentUser!.uid, 'kEurpmVqwfe7giyZC1PQfPSNZSW2', '', 'IMAGE', '');
