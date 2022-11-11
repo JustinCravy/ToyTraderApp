@@ -4,11 +4,15 @@ part 'Conversation.g.dart';
 @JsonSerializable(anyMap: true, explicitToJson: true)
 class Conversation {
   String otherUserId = '';
+  String otherScreenName = '';
+  String otherProfileImgUrl = '';
   String lastMessage = '';
   String time = '';
 
   Conversation (
       this.otherUserId,
+      this.otherScreenName,
+      this.otherProfileImgUrl,
       this.lastMessage,
       this.time,
       );

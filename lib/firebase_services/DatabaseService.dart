@@ -94,26 +94,27 @@ class DatabaseService {
     return profileInfo;
   }
 
-  /*
-  Future<QuerySnapshot> getConversations(String userId) async {
-    List<Conversation> convList = [];
+
+  Future<List<Conversation>> getConversations(String userId) async {
+
+    print("getting conversations");
 
     var query = await FirebaseFirestore.instance
         .collection('users')
-        .where('uid', isEqualTo: userId)
+        .doc(userId)
+        .collection("conversations")
         .get();
 
-    var userData = query.docs.map((doc) => doc).toList();
+    var conversations = query.docs.map((doc) => Conversation.fromJson(doc.data())).toList();
 
-    var userConv = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('conversations')
-        .get();
+    for(var c in conversations){
+      print(c.lastMessage);
+    }
 
+    return conversations;
   }
 
-   */
+
 
   Future<List<Toy>> getMainFeed() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
@@ -227,11 +228,14 @@ class DatabaseService {
 
   Future<bool> sendTextMessage(TextMessage textMessage) async {
     try{
+      var senderProfileInfo = await getProfileInfo(textMessage.senderId);
+      var receiverProfileInfo = await getProfileInfo(textMessage.receiverId);
 
-      var conversation = Conversation(textMessage.receiverId, textMessage.message, textMessage.time);
+      var conversation = Conversation(receiverProfileInfo.uid, receiverProfileInfo.screenName, receiverProfileInfo.profileImageUrl, textMessage.message, textMessage.time);
       await FirebaseFirestore.instance.collection('users')
           .doc(textMessage.senderId).collection('conversations').doc(textMessage.receiverId).set(conversation.toJson());
 
+      conversation = Conversation(senderProfileInfo.uid, senderProfileInfo.screenName, senderProfileInfo.profileImageUrl, textMessage.message, textMessage.time);
       await FirebaseFirestore.instance.collection('users')
           .doc(textMessage.receiverId).collection('conversations').doc(textMessage.senderId).set(conversation.toJson());
 
@@ -252,6 +256,9 @@ class DatabaseService {
   Future<bool> sendImageMessage(ImageMessage imageMessage, File img) async{
     try{
 
+      var senderProfileInfo = await getProfileInfo(imageMessage.senderId);
+      var receiverProfileInfo = await getProfileInfo(imageMessage.receiverId);
+
       //****************** sender ***********************
 
       // upload image to storage
@@ -265,7 +272,7 @@ class DatabaseService {
       imageMessage.imageUrl = imgURL;
 
       // upload conversation to Firestore
-      var conversation = Conversation(imageMessage.receiverId, 'Image', imageMessage.time);
+      var conversation = Conversation(receiverProfileInfo.uid, receiverProfileInfo.screenName, receiverProfileInfo.profileImageUrl, 'Image', imageMessage.time);
       await FirebaseFirestore.instance.collection('users')
           .doc(imageMessage.senderId).collection('conversations')
           .doc(imageMessage.receiverId).set(conversation.toJson());
@@ -290,7 +297,7 @@ class DatabaseService {
 
 
       // upload conversation to Firestore for message sender
-      conversation = Conversation(imageMessage.senderId, 'Image', imageMessage.time);
+      conversation = Conversation(senderProfileInfo.uid, senderProfileInfo.screenName, senderProfileInfo.profileImageUrl, 'Image', imageMessage.time);
       await FirebaseFirestore.instance.collection('users')
           .doc(imageMessage.receiverId).collection('conversations')
           .doc(imageMessage.senderId).set(conversation.toJson());
