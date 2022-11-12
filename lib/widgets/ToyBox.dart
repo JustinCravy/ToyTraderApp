@@ -35,16 +35,17 @@ class _ToyBoxState extends State<ToyBox> {
     DatabaseService dbS = DatabaseService();
     String _selectedMenu = '';
     List<Toy> toyList = dbS.getToyList();
+    Radius boxCurve    = const Radius.circular(10);
 
     if(widget.left == 0){
-      topInset =  deviceHeight(context) * .02;
+      topInset =  deviceHeight(context) * .01;
       leftInset = deviceWidth(context) * .01;
-      rightInset =   deviceWidth(context) * .015;
+      rightInset =   deviceWidth(context) * .010;
     }
 
     else{
-      topInset =  deviceHeight(context) * .02;
-      leftInset = deviceWidth(context) * .015;
+      topInset =  deviceHeight(context) * .01;
+      leftInset = deviceWidth(context) * .010;
       rightInset =   deviceWidth(context) * .01;
     }
 
@@ -61,15 +62,16 @@ class _ToyBoxState extends State<ToyBox> {
 
                   //replace with the Image of the toy
                   Container(
-                    decoration: const BoxDecoration(
+                    decoration:  BoxDecoration(
                       color: Colors.greenAccent,
+                      borderRadius: BorderRadius.all(boxCurve),
                     ),
                   ),
                   Container(
                       padding: const EdgeInsets.all(200),
                       decoration: BoxDecoration(
                           shape: BoxShape.rectangle,
-                          border: Border.all(width: 5, color: Colors.greenAccent),
+                          borderRadius: BorderRadius.all(boxCurve),
                           image: DecorationImage(
                               fit: BoxFit.fill,
                               image: NetworkImage(widget.toy.toyImageURL)
@@ -151,9 +153,10 @@ class _ToyBoxState extends State<ToyBox> {
       alignment: Alignment.topRight,
       child: PopupMenuButton<toyMenu>(
         // Callback that sets the selected popup menu item.
+          icon: const Icon(Icons.more_vert,color: Colors.black87),
           color: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(15),
           ),
 
           onSelected: (toyMenu item) {
