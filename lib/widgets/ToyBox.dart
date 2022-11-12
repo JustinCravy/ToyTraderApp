@@ -69,7 +69,7 @@ class _ToyBoxState extends State<ToyBox> {
                       padding: const EdgeInsets.all(200),
                       decoration: BoxDecoration(
                           shape: BoxShape.rectangle,
-                          border: Border.all(width: 6, color: Colors.greenAccent),
+                          border: Border.all(width: 5, color: Colors.greenAccent),
                           image: DecorationImage(
                               fit: BoxFit.fill,
                               image: NetworkImage(widget.toy.toyImageURL)

@@ -21,7 +21,10 @@ class _MessageBoxState extends State<MessageBox> {
   @override
   Widget build(BuildContext context) {
     String lastMessage = widget.convo.lastMessage;
-    String time = widget.convo.time;
+    String time        = widget.convo.time;
+    String name        = widget.convo.otherScreenName;
+    String profileImg  = widget.convo.otherProfileImgUrl;
+
     double height      = deviceHeight(context) * .13; //controls height of message box
     Radius boxCurve    = const Radius.circular(15);
 
@@ -48,10 +51,10 @@ class _MessageBoxState extends State<MessageBox> {
 
             //Creates an Inkwell so that the profile Image can be clickable.
              InkWell(
-               customBorder: const CircleBorder(),
-               child: const CircleAvatar(
-                 backgroundImage: AssetImage('assets/images/profile.png'),
-                 radius: 20,
+               //customBorder: const CircleBorder(),
+               child:  CircleAvatar(
+                 backgroundImage: NetworkImage(profileImg),
+                 radius: 25,
                ),
 
               onTap: (){},
@@ -85,8 +88,8 @@ class _MessageBoxState extends State<MessageBox> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           const SizedBox(height: 10),
-                          const Text('Username',
-                              style: TextStyle(
+                           Text(name,
+                              style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600),
@@ -115,9 +118,9 @@ class _MessageBoxState extends State<MessageBox> {
                                 padding: EdgeInsets.only(
                                   right: deviceWidth(context) * .045,
                                 ),
-                                child: const Text(
-                                  "3d",
-                                  style: TextStyle(
+                                child:  Text(
+                                  time,
+                                  style: const TextStyle(
                                       fontSize: 14,
                                       color: Colors.black,
                                       fontWeight: FontWeight.w400),
