@@ -8,6 +8,8 @@ import 'package:toy_trader/widgets/ToyGridList.dart';
 import '../firebase_services/DatabaseService.dart';
 import '../models/ProfileInfo.dart';
 import '../models/Toy.dart';
+import '../models/Trade.dart';
+import 'ToyOfferList.dart';
 
 class ToyBox extends StatefulWidget {
   final Toy toy;
@@ -19,7 +21,6 @@ class ToyBox extends StatefulWidget {
 
   @override
   State<ToyBox> createState() => _ToyBoxState();
-
 }
 
 class _ToyBoxState extends State<ToyBox> {
@@ -50,63 +51,63 @@ class _ToyBoxState extends State<ToyBox> {
     }
 
 
-      return Container(
-          padding: EdgeInsets.only(
-            top: topInset,
-            right: rightInset,
-            left: leftInset,
-          ),
-          child: InkWell(
-              child:Stack(
-                children: [
+    return Container(
+        padding: EdgeInsets.only(
+          top: topInset,
+          right: rightInset,
+          left: leftInset,
+        ),
+        child: InkWell(
+            child:Stack(
+              children: [
 
-                  //replace with the Image of the toy
-                  Container(
-                    decoration:  BoxDecoration(
-                      color: Colors.greenAccent,
-                      borderRadius: BorderRadius.all(boxCurve),
+                //replace with the Image of the toy
+                Container(
+                  decoration:  BoxDecoration(
+                    color: Colors.greenAccent,
+                    borderRadius: BorderRadius.all(boxCurve),
+                  ),
+                ),
+                Container(
+                    padding: const EdgeInsets.all(200),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.all(boxCurve),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(widget.toy.toyImageURL)
+                        )
+                    )
+                ),
+
+                if(widget.toy.ownerId == widget.user?.uid)
+                  userMenu(dbS, widget.toy)
+                else
+                  searchMenu(dbS, widget.toy),
+
+                Container(
+                    alignment: Alignment.bottomCenter,
+                    padding: EdgeInsets.only(
+                      bottom: deviceHeight(context) * .01,
                     ),
-                  ),
-                  Container(
-                      padding: const EdgeInsets.all(200),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.all(boxCurve),
-                          image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: NetworkImage(widget.toy.toyImageURL)
-                          )
-                      )
-                  ),
+                    child: Text(
+                      toyName,
+                      style: const TextStyle(fontSize: 20, color: Colors.black54),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )
+                ),
 
-                  if(widget.toy.ownerId == widget.user?.uid)
-                    userMenu(dbS, widget.toy)
-                  else
-                    searchMenu(),
-
-                  Container(
-                      alignment: Alignment.bottomCenter,
-                      padding: EdgeInsets.only(
-                        bottom: deviceHeight(context) * .01,
-                      ),
-                      child: Text(
-                        toyName,
-                        style: const TextStyle(fontSize: 20, color: Colors.black54),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      )
-                  ),
-
-                ],
-              ),
-              onTap:(){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ToyDetailsScreen())
-                );
-              }
-          )
-      );
+              ],
+            ),
+            onTap:(){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ToyDetailsScreen())
+              );
+            }
+        )
+    );
 
 
   }
@@ -148,7 +149,7 @@ class _ToyBoxState extends State<ToyBox> {
     );
   }
 
-  Widget searchMenu(){
+  Widget searchMenu(DatabaseService dbS, Toy toy){
     return Container(
       alignment: Alignment.topRight,
       child: PopupMenuButton<toyMenu>(
@@ -159,16 +160,27 @@ class _ToyBoxState extends State<ToyBox> {
             borderRadius: BorderRadius.circular(15),
           ),
 
-          onSelected: (toyMenu item) {
+          onSelected: (toyMenu item) async {
             switch(item){
               case toyMenu.message:
                 print("message owner");
                 /*
-                                 Code to message owner of toy goes here
-                                 */
+                  Code to message owner of toy goes here
+                */
                 break;
               case toyMenu.offer:
+                Trade tradeOffer;
+                var userToys = await dbS.getUserToys("");
+                var receiverToys = await dbS.getUserToys(toy.ownerId);
 
+                int userTest = userToys.length;
+                int receiverTest = receiverToys.length;
+
+                await selectToysToTrade(userToys, receiverToys, context);
+
+                if (userTest != userToys.length && receiverTest != receiverToys.length) {
+                  tradeOffer = Trade(userToys, receiverToys, 'Pending');
+                }
 
                 break;
               default:
@@ -181,7 +193,7 @@ class _ToyBoxState extends State<ToyBox> {
               value: toyMenu.message,
               child: Text('Message'),
             ),
-            const PopupMenuItem<toyMenu>(
+            const PopupMenuItem(
               value: toyMenu.offer,
               child: Text('Offer Trade'),
             ),
@@ -189,6 +201,13 @@ class _ToyBoxState extends State<ToyBox> {
     );
   }
 
+  Future<void> selectToysToTrade(List<Toy> userToys, List<Toy> recieverToys, BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ToyOfferList(
+          userToys, recieverToys)),
+    );
+  }
 
 }
 double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;

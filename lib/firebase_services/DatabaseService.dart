@@ -6,8 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:toy_trader/models/TextMessage.dart';
 import '../../../models/Toy.dart';
-import 'package:uuid/uuid.dart';
-
 import '../models/ImageMessage.dart';
 import '../models/Message.dart';
 
@@ -50,6 +48,42 @@ class DatabaseService {
     });
   }
 
+  Future<List<Toy>> getUserToys(String userId) async {
+    if (userId.isEmpty) {
+      var user = FirebaseAuth.instance.currentUser?.uid;
+      var query = await FirebaseFirestore.instance.collection('users')
+          .where('uid', isEqualTo: user).get();
+      var userData = query.docs.map((doc) => doc).toList();
+
+      var toys = <Toy>[];
+      for (var item in userData[0].get("toys")) {
+        var _toy = Toy(
+            item["toyId"],
+            item["ownerId"],
+            item["name"],
+            item["description"],
+            item["condition"],
+            item["ageRange"],
+            item["categories"],
+            item["toyImageURL"]);
+        toys.add(_toy);
+      }
+      return toys;
+    }
+
+    else {
+      var query = await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: userId).get();
+      var userData = query.docs.map((doc) => doc).toList();
+      var toys = <Toy> [];
+
+      for(var item in userData[0].get("toys")){
+        var _toy = Toy(item["toyId"], item["ownerId"], item["name"], item["description"], item["condition"], item["ageRange"], item["categories"], item["toyImageURL"]);
+        toys.add(_toy);
+      }
+
+      return toys;
+    }
+  }
 
   Future<ProfileInfo> getProfileInfo(String userId) async {
     if (userId.isEmpty) {
@@ -173,7 +207,7 @@ class DatabaseService {
 
   Future<bool> addToyData(Toy toy, ProfileInfo profileInfo, File toyImage,) async {
     final storage = FirebaseStorage.instance.ref('users').child(
-          profileInfo.uid).child('toys').child(toy.toyId);
+        profileInfo.uid).child('toys').child(toy.toyId);
     await storage.putFile(toyImage);
     final toyImgURL = (await storage.getDownloadURL()).toString();
     toy.toyImageURL = toyImgURL;
@@ -323,9 +357,9 @@ class DatabaseService {
 
     for(int i = 0; i < result.docs.length; i++){
       if(result.docs[i].get("type") == "TEXT") {
-         var message = TextMessage.fromJson(result.docs[i].data());
-         messages.add(message);
-         print(message.message);
+        var message = TextMessage.fromJson(result.docs[i].data());
+        messages.add(message);
+        print(message.message);
       }
 
 
@@ -342,3 +376,4 @@ class DatabaseService {
   }
 
 }
+
