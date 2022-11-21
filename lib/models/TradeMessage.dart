@@ -8,6 +8,7 @@ part 'TradeMessage.g.dart';
 @JsonSerializable(anyMap: true, explicitToJson: true)
 class TradeMessage extends Message {
 
+  String tradeUrl = '';
   Trade trade = Trade([], [], 'OPEN');
 
   TradeMessage (
