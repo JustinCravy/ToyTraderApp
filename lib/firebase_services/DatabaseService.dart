@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:toy_trader/models/TextMessage.dart';
 import '../../../models/Toy.dart';
 import '../models/ImageMessage.dart';
+import '../models/TradeMessage.dart';
 import '../models/Message.dart';
 
 class DatabaseService {
@@ -341,6 +342,69 @@ class DatabaseService {
           .doc(imageMessage.receiverId).collection('conversations')
           .doc(imageMessage.senderId).collection('messages')
           .doc(imageMessage.receiverId).set(imageMessage.toJson());
+
+      return true;
+    }
+    catch(e){
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> sendTradeMessage(TradeMessage tradeMessage, File trade) async{
+    try{
+
+      var senderProfileInfo = await getProfileInfo(tradeMessage.senderId);
+      var receiverProfileInfo = await getProfileInfo(tradeMessage.receiverId);
+
+      //****************** sender ***********************
+
+      // upload trade to storage
+      var storage = FirebaseStorage.instance.ref('users').child(tradeMessage.senderId)
+          .child('conversations').child(tradeMessage.receiverId).child('messages')
+          .child(tradeMessage.messageId);
+      await storage.putFile(trade);
+
+      //get and set download url
+      var tradeURL = (await storage.getDownloadURL()).toString();
+      tradeMessage.tradeUrl = tradeURL;
+
+      // upload conversation to Firestore
+      var conversation = Conversation(receiverProfileInfo.uid, receiverProfileInfo.screenName, receiverProfileInfo.profileImageUrl, 'Image', tradeMessage.time);
+      await FirebaseFirestore.instance.collection('users')
+          .doc(tradeMessage.senderId).collection('conversations')
+          .doc(tradeMessage.receiverId).set(conversation.toJson());
+
+      // upload message to Firestore
+      await FirebaseFirestore.instance.collection('users')
+          .doc(tradeMessage.senderId).collection('conversations')
+          .doc(tradeMessage.receiverId).collection('messages')
+          .doc(tradeMessage.messageId).set(tradeMessage.toJson());
+
+
+      //****************** receiver ***********************
+
+      // upload image to storage for message sender
+      storage = FirebaseStorage.instance.ref('users').child(tradeMessage.receiverId)
+          .child('conversations').child(tradeMessage.senderId).child('messages')
+          .child(tradeMessage.messageId);
+      await storage.putFile(trade);
+      //get and set download url
+      tradeURL = (await storage.getDownloadURL()).toString();
+      tradeMessage.tradeUrl = tradeURL;
+
+
+      // upload conversation to Firestore for message sender
+      conversation = Conversation(senderProfileInfo.uid, senderProfileInfo.screenName, senderProfileInfo.profileImageUrl, 'Image', tradeMessage.time);
+      await FirebaseFirestore.instance.collection('users')
+          .doc(tradeMessage.receiverId).collection('conversations')
+          .doc(tradeMessage.senderId).set(conversation.toJson());
+
+      // upload message to Firestore for message sender
+      await FirebaseFirestore.instance.collection('users')
+          .doc(tradeMessage.receiverId).collection('conversations')
+          .doc(tradeMessage.senderId).collection('messages')
+          .doc(tradeMessage.receiverId).set(tradeMessage.toJson());
 
       return true;
     }
