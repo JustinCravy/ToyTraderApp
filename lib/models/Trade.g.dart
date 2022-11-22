@@ -7,17 +7,31 @@ part of 'Trade.dart';
 // **************************************************************************
 
 Trade _$TradeFromJson(Map json) => Trade(
+      json['tradeId'] as String,
+      json['senderId'] as String,
+      json['senderName'] as String,
+      json['receiverId'] as String,
+      json['receiverName'] as String,
+      json['receiverProfileImgUrl'] as String,
       (json['senderToys'] as List<dynamic>)
           .map((e) => Toy.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
-      (json['recieverToys'] as List<dynamic>)
+      (json['receiverToys'] as List<dynamic>)
           .map((e) => Toy.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
       json['tradeStatus'] as String,
+      json['date'] as String,
     );
 
 Map<String, dynamic> _$TradeToJson(Trade instance) => <String, dynamic>{
+      'tradeId': instance.tradeId,
+      'senderId': instance.senderId,
+      'senderName': instance.senderName,
+      'receiverId': instance.receiverId,
+      'receiverName': instance.receiverName,
+      'receiverProfileImgUrl': instance.receiverProfileImgUrl,
       'senderToys': instance.senderToys.map((e) => e.toJson()).toList(),
-      'recieverToys': instance.recieverToys.map((e) => e.toJson()).toList(),
+      'receiverToys': instance.receiverToys.map((e) => e.toJson()).toList(),
       'tradeStatus': instance.tradeStatus,
+      'date': instance.date,
     };

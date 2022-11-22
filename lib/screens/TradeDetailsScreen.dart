@@ -15,7 +15,6 @@ class TradeDetailsScreen extends StatefulWidget {
 class _TradeDetailsScreenState extends State<TradeDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    var thisTrade = widget.trade;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
