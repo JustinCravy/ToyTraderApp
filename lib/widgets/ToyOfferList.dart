@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:toy_trader/firebase_services/DatabaseService.dart';
 
 import '../models/Toy.dart';
+import '../models/Trade.dart';
 
 class ToyOfferList extends StatefulWidget {
   late List<Toy> userToys;
@@ -142,6 +144,7 @@ class _ToyOfferListState extends State<ToyOfferList> {
             });
       }
       else {
+
         for (var i = 0; i < receiverToys.length; i++) {
           if (selectedFlag[i] == true) {
             widget.recieverToys.removeAt(i);

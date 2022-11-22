@@ -8,6 +8,7 @@ import 'package:toy_trader/models/TextMessage.dart';
 import '../../../models/Toy.dart';
 import '../models/ImageMessage.dart';
 import '../models/Message.dart';
+import '../models/Trade.dart';
 
 class DatabaseService {
   static final DatabaseService _instance = DatabaseService._internal();
@@ -373,6 +374,30 @@ class DatabaseService {
     }
 
     return messages;
+  }
+
+  Future<bool> sendTradeOffer(Trade trade) async {
+    try {
+
+      // add trade to database under trade sender
+      await FirebaseFirestore.instance.collection('users').doc(trade.senderId)
+          .collection('trades').doc(trade.tradeId).set(trade.toJson());
+
+      // add trade to database under trade receiver
+      await FirebaseFirestore.instance.collection('users').doc(trade.senderId)
+          .collection('trades').doc(trade.tradeId).set(trade.toJson());
+      return true;
+    } catch (e){
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<List<Trade>>getTrades() async {
+    var result = await FirebaseFirestore.instance.collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid).collection('trades').get();
+    var trades = result.docs.map((doc) => Trade.fromJson(doc.data())).toList();
+    return trades;
   }
 
 }

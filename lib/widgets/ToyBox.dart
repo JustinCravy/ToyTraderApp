@@ -2,14 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:toy_trader/screens/ToyDetailsScreen.dart';
-import 'package:toy_trader/screens/BottomNavBar.dart';
-import 'package:toy_trader/widgets/ToyGridList.dart';
-
 import '../firebase_services/DatabaseService.dart';
 import '../models/ProfileInfo.dart';
 import '../models/Toy.dart';
 import '../models/Trade.dart';
 import 'ToyOfferList.dart';
+import 'package:uuid/uuid.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ToyBox extends StatefulWidget {
   final Toy toy;
@@ -179,7 +178,22 @@ class _ToyBoxState extends State<ToyBox> {
                 await selectToysToTrade(userToys, receiverToys, context);
 
                 if (userTest != userToys.length && receiverTest != receiverToys.length) {
-                  tradeOffer = Trade(userToys, receiverToys, 'Pending');
+                  ProfileInfo profileInfo = await DatabaseService().getProfileInfo(FirebaseAuth.instance.currentUser!.uid);
+                  ProfileInfo otherProfileInfo = await DatabaseService().getProfileInfo(receiverToys[0].ownerId);
+                  tradeOffer = Trade(
+                      Uuid().v4(),
+                      profileInfo.uid,
+                      profileInfo.screenName,
+                      otherProfileInfo.uid,
+                      otherProfileInfo.screenName,
+                      otherProfileInfo.profileImageUrl,
+                      userToys,
+                      receiverToys,
+                      'Pending',
+                      DateTime.now().toString()
+                  );
+
+                  DatabaseService().sendTradeOffer(tradeOffer);
                 }
 
                 break;

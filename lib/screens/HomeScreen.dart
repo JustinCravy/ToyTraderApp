@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toy_trader/firebase_services/DatabaseService.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
+import 'package:toy_trader/screens/TradeHistoryScreen.dart';
 import 'AddToyScreen.dart';
 import 'package:toy_trader/firebase_services/AuthService.dart';
 import 'BottomNavBar.dart';
@@ -30,13 +31,16 @@ class _HomeScreenState extends State<HomeScreen> {
       // backgroundColor: const Color(0xffC4DFCB),
       appBar: AppBar(
         actions: <Widget>[
-          TextButton.icon(
-              onPressed: () async {
-                await authService.signOut();
-              },
-                icon: Icon(Icons.person, color: Colors.white),
-                label: Text('Logout', style: TextStyle(color: Colors.white),),
-
+          PopupMenuButton<String>(
+            onSelected: handleClick,
+            itemBuilder: (BuildContext context) {
+              return {'Trade History', 'Logout'}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
           ),
         ],
         title: const Text(
@@ -132,5 +136,18 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+  void handleClick(String value) async {
+    switch (value) {
+      case 'Logout':
+        await authService.signOut();
+        break;
+      case 'Trade History':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const TradeHistory()),
+        );
+        break;
+    }
   }
 }
