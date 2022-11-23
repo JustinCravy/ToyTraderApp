@@ -20,6 +20,7 @@ class ToyBox extends StatefulWidget {
 
   @override
   State<ToyBox> createState() => _ToyBoxState();
+
 }
 
 class _ToyBoxState extends State<ToyBox> {
@@ -102,7 +103,7 @@ class _ToyBoxState extends State<ToyBox> {
             onTap:(){
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ToyDetailsScreen())
+                  MaterialPageRoute(builder: (context) => ToyDetailsScreen(toy: widget.toy))
               );
             }
         )

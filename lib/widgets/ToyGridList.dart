@@ -100,7 +100,7 @@ class _ToyGridListState extends State<ToyGridList> {
                   },
                   color: Colors.blue,
                   textColor: Colors.white,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 30,
                   ),

@@ -144,8 +144,6 @@ class _MessageBoxState extends State<MessageBox> {
     );
   }
 
-  double deviceHeight(BuildContext context) =>
-      MediaQuery.of(context).size.height;
-
+  double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;
   double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
 }
