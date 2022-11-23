@@ -19,7 +19,8 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   String dropdownValue2 = '0 - 2';
   ProfileInfo profileInfo = ProfileInfo(
       uid: '', screenName: '',
-      ageRange: '', interests: '', toys: <Toy>[], profileImageUrl: '');
+      ageRange: '', interests: '', toys: <Toy>[], profileImageUrl: '',userRating: 0,
+    totalRates: 0,);
   final _formKey = GlobalKey<FormState>();
   AuthService authService = AuthService();
   File? image;

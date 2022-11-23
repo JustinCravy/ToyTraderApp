@@ -105,7 +105,10 @@ class DatabaseService {
           ageRange: userData[0].get("ageRange"),
           interests: userData[0].get("interests"),
           toys: toys,
-          profileImageUrl: userData[0].get("profileImageUrl"));
+          profileImageUrl: userData[0].get("profileImageUrl"),
+          userRating: userData[0].get("userRating"),
+          totalRates: userData[0].get("totalRates")
+      );
 
       return profileInfo;
     }
@@ -124,7 +127,10 @@ class DatabaseService {
         ageRange: userData[0].get("ageRange"),
         interests: userData[0].get("interests"),
         toys: toys,
-        profileImageUrl: userData[0].get("profileImageUrl"));
+        profileImageUrl: userData[0].get("profileImageUrl"),
+        userRating: userData[0].get("userRating"),
+        totalRates: userData[0].get("totalRates")
+    );
 
     return profileInfo;
   }
@@ -171,8 +177,10 @@ class DatabaseService {
           ageRange: profiles[i].get("ageRange"),
           interests: profiles[i].get("interests"),
           toys: toyList,
-          profileImageUrl: profiles[i].get("profileImageUrl")));
-
+          profileImageUrl: profiles[i].get("profileImageUrl"),
+          userRating: profiles[0].get("userRating"),
+          totalRates: profiles[0].get("totalRates")),
+      );
     }
 
     List<Toy> toyList = [];

@@ -20,7 +20,9 @@ class ProfileInfo {
    required this.ageRange,
    required this.interests,
    required this.toys,
-   required this.profileImageUrl
+   required this.profileImageUrl,
+   required this.userRating,
+   required this.totalRates
  });
 
  factory ProfileInfo.fromJson(Map<String, dynamic> json) => _$ProfileInfoFromJson(json);

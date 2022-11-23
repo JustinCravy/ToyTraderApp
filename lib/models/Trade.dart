@@ -16,8 +16,6 @@ class Trade {
   List<Toy> receiverToys;
   String tradeStatus;
   String date;
-  bool ratedTradeSender = false;
-  bool ratedTradeReceiver = false;
 
   Trade(
       this.tradeId,
