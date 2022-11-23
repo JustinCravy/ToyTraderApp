@@ -16,6 +16,8 @@ class Trade {
   List<Toy> receiverToys;
   String tradeStatus;
   String date;
+  bool ratedTradeSender = false;
+  bool ratedTradeReceiver = false;
 
   Trade(
       this.tradeId,
@@ -27,7 +29,7 @@ class Trade {
       this.senderToys,
       this.receiverToys,
       this.tradeStatus,
-      this.date
+      this.date,
       );
 
   factory Trade.fromJson(Map<String, dynamic> json) => _$TradeFromJson(json);

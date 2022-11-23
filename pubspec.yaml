@@ -36,6 +36,7 @@ dependencies:
   firebase: ^9.0.3
   firebase_storage: ^10.3.9
   json_annotation: ^4.7.0
+  flutter_rating_bar: ^4.0.1
 
 
 

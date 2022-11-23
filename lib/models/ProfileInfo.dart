@@ -11,6 +11,8 @@ class ProfileInfo {
   String interests = '';
   List<Toy> toys = <Toy>[];
   String profileImageUrl = '';
+  double userRating = 0;
+  int totalRates = 0;
 
  ProfileInfo({
    required this.uid,
