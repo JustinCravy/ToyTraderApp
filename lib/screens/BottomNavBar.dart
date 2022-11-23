@@ -93,22 +93,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
 
-class MainScreen extends StatelessWidget{
-   MainScreen({Key? key}) : super(key: key);
+class MainScreen extends StatefulWidget {
+  MainScreen({Key? key}) : super(key: key);
 
-   DatabaseService dbService = DatabaseService();
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
 
+class _MainScreenState extends State<MainScreen> {
+  DatabaseService dbService = DatabaseService();
+  final myController = TextEditingController();
+  String searchText = "";
 
   @override
   Widget build(BuildContext context) {
     final arg = ModalRoute.of(context)!.settings.arguments as ProfileInfo?;
     ProfileInfo? profileInfo;
-    dbService.getMainFeed();
     if(arg != null) {
       profileInfo = arg;
     }
     return Scaffold(
-      body: Container(
+      resizeToAvoidBottomInset: false,
+      body: SingleChildScrollView(
         // color: const Color(0xffC4DFCB),
         child: Center(
             child: Column(
@@ -117,14 +123,19 @@ class MainScreen extends StatelessWidget{
                 Padding(
                     padding : EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextField(
-
+                      controller: myController,
+                      onSubmitted: (value) {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        setState(() {});
+                      },
                       decoration: InputDecoration(
 
                           suffixIcon: IconButton(
                               icon: Icon(Icons.search),
                               onPressed: () {
-
-                              }//Need to be linked with search result
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                setState(() {});
+                              } //Need to be linked with search result
                           ),
                           hintText: 'Search for toys',
                           border: OutlineInputBorder()
@@ -134,7 +145,7 @@ class MainScreen extends StatelessWidget{
 
                 Container(
                   child: FutureBuilder<List<Toy>>(
-                    future: dbService.getMainFeed(),
+                    future: dbService.getMainFeed(myController.text),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         List<Toy> toyList = snapshot.data!;
@@ -143,7 +154,7 @@ class MainScreen extends StatelessWidget{
                           children: [
                             Flexible(
                                 child: ToyGridList(toyList)
-                          )
+                            )
                           ]
 
                         );
@@ -164,6 +175,7 @@ class MainScreen extends StatelessWidget{
       ),
     );
   }
+
 }
 
 //longlist, need to get data from data base and covert

@@ -149,9 +149,7 @@ class DatabaseService {
     return conversations;
   }
 
-
-
-  Future<List<Toy>> getMainFeed() async {
+  Future<List<Toy>> getMainFeed(String searchText) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
     var user = FirebaseAuth.instance.currentUser?.uid;
     var profiles = querySnapshot.docs.map((doc) => doc).toList();
@@ -177,33 +175,29 @@ class DatabaseService {
 
     }
 
-    //profileList.removeWhere((element) => element.uid == user);
-
-    /*r(var i = 0; i < profileInfoList.length; i++){
-      var checkProfileInfo = profileInfoList[i];
-      if(checkProfileInfo.userId == profileInfo.userId)
-        continue;
-      for(var j =0; j < checkProfileInfo.toys.length; j++){
-        var toy = checkProfileInfo.toys[j];
-        for (var k =0; k < toy.categories.length; k++){
-          var toyCategory = toy.categories[k];
-          if (profileInfo.interests.contains(toyCategory)){
-            toysList.add(toy);
-            break;
-          }
-        }
-      if(toy.ageRange == profileInfo.ageRange)
-        toysList.add(toy);
-      }
-    }
-   */
     List<Toy> toyList = [];
     for (var i = 0; i < profileList.length; i++) {
       for (var item in profileList[i].toys) {
         toyList.add(item);
       }
     }
-    return toyList;
+
+    toyList.shuffle();
+
+    if (searchText.isEmpty) {
+      return toyList;
+    }
+
+    else {
+      List<Toy> newToyList = [];
+      for (var i = 0; i < toyList.length; i++) {
+        String toyString = toyList[i].name.toLowerCase();
+        if (toyString.contains(searchText.toLowerCase())) {
+          newToyList.add(toyList[i]);
+        }
+      }
+      return newToyList;
+    }
   }
 
   Future<bool> addToyData(Toy toy, ProfileInfo profileInfo, File toyImage,) async {

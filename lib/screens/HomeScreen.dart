@@ -43,6 +43,17 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ],
+        title: IconButton(
+          color: Colors.white,
+          icon: Image.asset('assets/images/logo.png'),
+          onPressed: () {
+            setState(() {
+              screenIndex = 2;
+            });
+          },
+          iconSize: deviceHeight(context) / 4,
+        )
+      /*
         title: const Text(
           "Toy Trader",
           style: TextStyle(
@@ -52,6 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
         ),
+        
+         */
         // centerTitle: true,
         // backgroundColor: Colors.white,
       ),
@@ -151,3 +164,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 }
+
+double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;
+double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
