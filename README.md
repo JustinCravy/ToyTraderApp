@@ -22,5 +22,7 @@ Toys are rarely used for the entire duration of their lifespan. This contributes
 
 ## Credits
 
+
+
 Toy Trader app is being created by students as a Senior Project at California State University - Sacramento. 
 

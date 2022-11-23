@@ -364,9 +364,6 @@ class DatabaseService {
         var message = ImageMessage.fromJson(result.docs[i].data());
         messages.add(message);
       }
-
-      // else message type = TRADE
-
     }
 
     return messages;
