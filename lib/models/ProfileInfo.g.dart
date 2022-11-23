@@ -15,6 +15,8 @@ ProfileInfo _$ProfileInfoFromJson(Map json) => ProfileInfo(
           .map((e) => Toy.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
       profileImageUrl: json['profileImageUrl'] as String,
+      userRating: (json['userRating'] as num).toDouble(),
+      totalRates: json['totalRates'] as int,
     );
 
 Map<String, dynamic> _$ProfileInfoToJson(ProfileInfo instance) =>
@@ -25,4 +27,6 @@ Map<String, dynamic> _$ProfileInfoToJson(ProfileInfo instance) =>
       'interests': instance.interests,
       'toys': instance.toys.map((e) => e.toJson()).toList(),
       'profileImageUrl': instance.profileImageUrl,
+      'userRating': instance.userRating,
+      'totalRates': instance.totalRates,
     };
