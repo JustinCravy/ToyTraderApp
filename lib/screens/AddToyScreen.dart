@@ -10,6 +10,10 @@ import 'package:uuid/uuid.dart';
 
 
 class AddToyScreen extends StatefulWidget {
+
+  final ProfileInfo profileInfo;
+  const AddToyScreen({Key? key, required this.profileInfo}) : super(key: key);
+
   @override
   _AddToyScreenState createState() => _AddToyScreenState();
 }
@@ -35,10 +39,8 @@ class _AddToyScreenState extends State<AddToyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var profileInfo = ModalRoute.of(context)!.settings.arguments as ProfileInfo;
-    print(profileInfo.uid);
-    toy.toyId = toyId;
-    toy.ownerId = profileInfo.uid;
+      toy.toyId = toyId;
+      toy.ownerId = widget.profileInfo.uid;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -183,7 +185,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text("Sending Message"),
                           ));
-                          await dbService.addToyData(toy, profileInfo, image!);
+                          await dbService.addToyData(toy, widget.profileInfo, image!);
                           Navigator.pop(context,true);
                         }),
                   ],

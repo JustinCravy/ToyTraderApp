@@ -62,8 +62,7 @@ class _ToyGridListState extends State<ToyGridList> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AddToyScreen()));
-                    settings: RouteSettings(arguments: user);
+                            builder: (context) => AddToyScreen(profileInfo: user,)));
                   },
                   color: Colors.blue,
                   textColor: Colors.white,
@@ -93,10 +92,11 @@ class _ToyGridListState extends State<ToyGridList> {
                   onPressed: () async {
                     user = await dbS.getProfileInfo(user!.uid);
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AddToyScreen(),
-                            settings: RouteSettings(arguments: user)));
+                        context, MaterialPageRoute(
+                        builder: (context) => AddToyScreen(profileInfo: user,)
+                    )
+                    );
+
                   },
                   color: Colors.blue,
                   textColor: Colors.white,
