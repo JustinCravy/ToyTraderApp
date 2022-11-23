@@ -74,11 +74,7 @@ class _TradeDetailsScreenState extends State<TradeDetailsScreen> {
                       title: Text(widget.trade.senderToys[i].name),
                       subtitle: Text(widget.trade.senderToys[i].description),
                       onTap: () => {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => const TradeDetailsScreen()),
-                            // )
+
                           });
                 },
               ),

@@ -11,7 +11,7 @@ class ProfileInfo {
   String interests = '';
   List<Toy> toys = <Toy>[];
   String profileImageUrl = '';
-  double userRating = 0;
+  double userRating = 0.0;
   int totalRates = 0;
 
  ProfileInfo({

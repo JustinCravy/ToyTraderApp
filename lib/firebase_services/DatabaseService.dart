@@ -29,24 +29,19 @@ class DatabaseService {
     toyList.add(toy2);
   }
 
-  Future setProfileInfo(Map<String,dynamic> profileInfo, File? imageFile) async {
+  Future setProfileInfo(ProfileInfo profileInfo, File? imageFile) async {
 
     if(imageFile != null) {
       final storage = FirebaseStorage.instance.ref('users').child(
-          profileInfo['uid']).child('profileImage');
+          profileInfo.uid).child('profileImage');
       await storage.putFile(imageFile);
       final profileImgUrl = (await storage.getDownloadURL()).toString();
-      profileInfo['profileImageUrl'] = profileImgUrl;
+      profileInfo.profileImageUrl = profileImgUrl;
     }
 
-    return await FirebaseFirestore.instance.collection('users').doc(profileInfo['uid']).set({
-      'uid': profileInfo['uid'],
-      'screenName': profileInfo['screenName'],
-      'ageRange': profileInfo['ageRange'],
-      'interests': profileInfo['interests'],
-      'toys': profileInfo['toys'],
-      'profileImageUrl': profileInfo['profileImageUrl']
-    });
+    return await FirebaseFirestore.instance.collection('users').doc(profileInfo.uid).set(
+      profileInfo.toJson()
+    );
   }
 
   Future<List<Toy>> getUserToys(String userId) async {
@@ -217,7 +212,7 @@ class DatabaseService {
 
     profileInfo.toys.add(toy);
     try {
-      await setProfileInfo(profileInfo.toJson(), null);
+      await setProfileInfo(profileInfo, null);
       return true;
     }
     on Exception catch(_) {
@@ -254,7 +249,7 @@ class DatabaseService {
       print(profileInfo.toys);
 
 
-      setProfileInfo(profileInfo.toJson(), null);
+      setProfileInfo(profileInfo, null);
 
     }
     catch(e){
@@ -406,7 +401,7 @@ class DatabaseService {
       var otherUserProfile = await getProfileInfo(otherUserId);
       otherUserProfile.userRating = otherUserProfile.userRating + rating;
       otherUserProfile.totalRates += 1;
-      setProfileInfo(otherUserProfile.toJson(), null);
+      await setProfileInfo(otherUserProfile, null);
       return true;
     }
     catch(e){
