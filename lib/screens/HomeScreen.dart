@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:toy_trader/firebase_services/DatabaseService.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
 import 'package:toy_trader/screens/TradeHistoryScreen.dart';
-import 'AddToyScreen.dart';
 import 'package:toy_trader/firebase_services/AuthService.dart';
 import 'BottomNavBar.dart';
+import 'dart:ui';
 
 
 class HomeScreen extends StatefulWidget {
@@ -45,13 +45,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         title: IconButton(
           color: Colors.white,
+          iconSize: physicalHeight / 10,
           icon: Image.asset('assets/images/logo.png'),
           onPressed: () {
             setState(() {
               screenIndex = 2;
             });
           },
-          iconSize: deviceHeight(context) / 4,
+          //iconSize: deviceHeight(context) / 4,
         )
       /*
         title: const Text(
@@ -164,6 +165,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 }
+var physicalScreenSize = window.physicalSize;
+var physicalWidth = physicalScreenSize.width;
+var physicalHeight = physicalScreenSize.height;
 
 double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;
 double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;

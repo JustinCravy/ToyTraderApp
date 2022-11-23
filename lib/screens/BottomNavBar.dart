@@ -113,7 +113,6 @@ class _MainScreenState extends State<MainScreen> {
       profileInfo = arg;
     }
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         // color: const Color(0xffC4DFCB),
         child: Center(
@@ -125,11 +124,9 @@ class _MainScreenState extends State<MainScreen> {
                     child: TextField(
                       controller: myController,
                       onSubmitted: (value) {
-                        FocusManager.instance.primaryFocus?.unfocus();
                         setState(() {});
                       },
                       decoration: InputDecoration(
-
                           suffixIcon: IconButton(
                               icon: Icon(Icons.search),
                               onPressed: () {
