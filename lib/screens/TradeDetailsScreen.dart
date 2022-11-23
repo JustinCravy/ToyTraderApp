@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../models/Trade.dart';
+import 'RateUserScreen.dart';
 
 class TradeDetailsScreen extends StatefulWidget {
   final Trade trade;
@@ -116,7 +117,19 @@ class _TradeDetailsScreenState extends State<TradeDetailsScreen> {
                           });
                 },
               ),
-            )
+            ),
+            TextButton(
+                child: const Text('Rate the user'),
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder:(context)=> RateUserScreen(
+                          id:widget.trade.receiverId,
+                        )
+                    )
+                  );
+                }),
           ]),
     );
   }

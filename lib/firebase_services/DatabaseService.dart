@@ -396,5 +396,18 @@ class DatabaseService {
     return trades;
   }
 
+  Future<bool> rateUser(double rating, String otherUserId) async{
+    try{
+      var otherUserProfile = await getProfileInfo(otherUserId);
+      otherUserProfile.userRating = otherUserProfile.userRating + rating;
+      otherUserProfile.totalRates += 1;
+      setProfileInfo(otherUserProfile.toJson(), null);
+      return true;
+    }
+    catch(e){
+      print(e.toString());
+      return false;
+    }
+  }
 }
 
