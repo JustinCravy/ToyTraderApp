@@ -15,6 +15,10 @@ import '../models/ImageMessage.dart';
 import '../models/Message.dart';
 
 class MessageDetailsBox extends StatefulWidget {
+  final String otherUserId;
+
+  const MessageDetailsBox({Key? key, required this.otherUserId}) : super(key: key);
+
   @override
   State<MessageDetailsBox> createState() => _MessageDetailsBoxState();
 }
@@ -28,12 +32,12 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
   Widget build(BuildContext context)  {
     if(i == 0) {
       getMessages(FirebaseAuth.instance.currentUser!.uid,
-          'kEurpmVqwfe7giyZC1PQfPSNZSW2');
+          widget.otherUserId);
       i++;
     }
 
-    var textMessage = TextMessage(Uuid().v4(), FirebaseAuth.instance.currentUser!.uid, 'kEurpmVqwfe7giyZC1PQfPSNZSW2', '', 'TEXT', '');
-    var imageMessage = ImageMessage(Uuid().v4(), FirebaseAuth.instance.currentUser!.uid, 'kEurpmVqwfe7giyZC1PQfPSNZSW2', '', 'IMAGE', '');
+    var textMessage = TextMessage(Uuid().v4(), FirebaseAuth.instance.currentUser!.uid, widget.otherUserId, '', 'TEXT', '');
+    var imageMessage = ImageMessage(Uuid().v4(), FirebaseAuth.instance.currentUser!.uid, widget.otherUserId, '', 'IMAGE', '');
 
     Future pickImage() async{
       final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);

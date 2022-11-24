@@ -137,7 +137,7 @@ class _MessageBoxState extends State<MessageBox> {
                 ),
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MessageDetailsBox()));
+                      MaterialPageRoute(builder: (context) => MessageDetailsBox(otherUserId: widget.convo.otherUserId,)));
                 }
                 ),
           ],),
