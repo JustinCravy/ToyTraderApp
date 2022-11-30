@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:toy_trader/models/Toy.dart';
-import '../firebase_services/DatabaseService.dart';
 import 'package:toy_trader/widgets/MessageList.dart';
 import 'package:toy_trader/widgets/ToyGridList.dart';
+
+import '../firebase_services/DatabaseService.dart';
 import '../models/ProfileInfo.dart';
 
-class ConversationsScreen extends StatelessWidget{
+class ConversationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: MessageList())
-    );
+    return Scaffold(body: Container(child: MessageList()));
   }
 }
-
-
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -43,46 +39,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
               return Column(
                 children: [
                   Container(
-                    width: 120,
-                    height: 120,
-                    padding: const EdgeInsets.all(200),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(width: 3, color: Colors.blue),
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: NetworkImage(userProfile.profileImageUrl)
-                      )
-                    )
-                  ),
+                      width: 120,
+                      height: 120,
+                      padding: const EdgeInsets.all(200),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(width: 3, color: Colors.blue),
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image:
+                                  NetworkImage(userProfile.profileImageUrl)))),
                   Container(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    alignment: Alignment.centerLeft,
-                    child: Text('Name: ' + userProfile.screenName, style: const TextStyle(fontSize: 20))
-                  ),
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      alignment: Alignment.centerLeft,
+                      child: Text('Name: ' + userProfile.screenName,
+                          style: const TextStyle(fontSize: 20))),
                   Container(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    child: const Text('My Toys',
-                    style: TextStyle(fontSize: 30),)
-                  ),
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: const Text(
+                        'My Toys',
+                        style: TextStyle(fontSize: 30),
+                      )),
                   Flexible(
                       child: Container(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        decoration: BoxDecoration(
-                          /*border: Border.all(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          decoration: BoxDecoration(
+                              /*border: Border.all(
                             color: Colors.blue,
                             width: 2,
                           ),
 
                            */
-                        ),
-                        child: ToyGridList(userProfile.toys)
-                    )
-                  )
+                              ),
+                          child: ToyGridList(userProfile.toys)))
                 ],
               );
-            }
-            else {
+            } else {
               return const CircularProgressIndicator();
             }
           },
@@ -91,7 +83,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key? key}) : super(key: key);
@@ -109,92 +100,75 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final arg = ModalRoute.of(context)!.settings.arguments as ProfileInfo?;
     ProfileInfo? profileInfo;
-    if(arg != null) {
+    if (arg != null) {
       profileInfo = arg;
     }
     return Scaffold(
       body: SingleChildScrollView(
         // color: const Color(0xffC4DFCB),
-        child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                    padding : EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                    child: TextField(
-                      controller: myController,
-                      onSubmitted: (value) {
-                        setState(() {});
-                      },
-                      decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                              icon: Icon(Icons.search),
-                              onPressed: () {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                setState(() {});
-                              } //Need to be linked with search result
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: TextField(
+                  controller: myController,
+                  onSubmitted: (value) {
+                    setState(() {});
+                  },
+                  decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            setState(() {});
+                          } //Need to be linked with search result
                           ),
-                          hintText: 'Search for toys',
-                          border: OutlineInputBorder()
-                      ),
-                    )
-                ),
+                      hintText: 'Search for toys',
+                      border: OutlineInputBorder()),
+                )),
+            Container(
+              width: deviceWidth(context),
+              height: deviceHeight(context) * .7,
+              alignment: Alignment.topLeft,
+              child: FutureBuilder<List<Toy>>(
+                future: dbService.getMainFeed(myController.text),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Toy> toyList = snapshot.data!;
 
-                Container(
-                  child: FutureBuilder<List<Toy>>(
-                    future: dbService.getMainFeed(myController.text),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        List<Toy> toyList = snapshot.data!;
-
-                        return Column(
-                          children: [
-                            Flexible(
-                                child: ToyGridList(toyList)
-                            )
-                          ]
-
-                        );
-
-                      }
-                      else {
-                        return const CircularProgressIndicator();
-                      }
-                    },
-                  ),
-                  width: deviceWidth(context),
-                 height: deviceHeight(context) *.65,
-                 alignment: Alignment.topLeft,
-               ),
-              ],
-            )
+                    return Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [Flexible(child: ToyGridList(toyList))]);
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
-
 }
 
 //longlist, need to get data from data base and covert
 //into widget data type
 //will be moved into SearchToyScreen and rebuild framework.
-List<String> getList(){
-  var items=List<String>.generate(10,(counter)=>"Toy $counter");
+List<String> getList() {
+  var items = List<String>.generate(10, (counter) => "Toy $counter");
   return items;
 }
 
-Widget getListView(){
+Widget getListView() {
   var listitems = getList();
-  var listView = ListView.builder(
-      itemBuilder:(context, index){
-        return ListTile(
-          title: Text(listitems[index])
-        );
-      }
-  );
+  var listView = ListView.builder(itemBuilder: (context, index) {
+    return ListTile(title: Text(listitems[index]));
+  });
   return listView;
 }
+
 double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;
+
 double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
-
-

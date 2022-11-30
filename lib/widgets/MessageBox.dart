@@ -114,21 +114,21 @@ class _MessageBoxState extends State<MessageBox> {
                                   softWrap: true,
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  right: deviceWidth(context) * .045,
+                              Flexible(
+                                  child: Container(
+                                    padding: EdgeInsets.only(right: (deviceWidth(context) * .045)),
+                                child: Text(
+                                time,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400),
+                                textAlign: TextAlign.right,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 ),
-                                child:  Text(
-                                  time,
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.right,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
+                              )
+                              )
                             ],
                           )
                         ],

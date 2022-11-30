@@ -16,15 +16,18 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return StreamProvider<ProfileInfo?>.value(
       value: AuthService().user,
       initialData: null,
-      child: const MaterialApp(
+      child: MaterialApp(
         title: 'Toy Trader',
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(primarySwatch: Colors.blue),
+
         home:  AuthWrapper()
       ),
     );

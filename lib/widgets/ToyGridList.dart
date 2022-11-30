@@ -96,9 +96,8 @@ class _ToyGridListState extends State<ToyGridList> {
                         builder: (context) => AddToyScreen(profileInfo: user,)
                     )
                     );
-
                   },
-                  color: Colors.blue,
+                  color: Colors.cyanAccent,
                   textColor: Colors.white,
                   child: const Icon(
                     Icons.add,

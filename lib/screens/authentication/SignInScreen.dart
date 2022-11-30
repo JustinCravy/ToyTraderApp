@@ -34,23 +34,29 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
             ),
             actions: <Widget>[
-              TextButton.icon(
-                  onPressed: () {
-                    widget.toggleView();
-                  },
-                  icon: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                  ),
-                  label: Text(
-                    'Register',
-                    style: TextStyle(color: Colors.white),
-                  ))
+              Directionality(
+                  textDirection: TextDirection.rtl,
+                  child:
+                  TextButton.icon(
+                      onPressed: () {
+                        widget.toggleView();
+                      },
+                      icon: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                        'Register',
+                        style: TextStyle(color: Colors.white),
+                      ))
+              )
+
             ]
             // backgroundColor: Colors.white,
             ),
         body: SingleChildScrollView(
             child: Container(
+                alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
                 child: Column(children: <Widget>[
                   Image.asset('assets/images/logo.png',
@@ -60,14 +66,14 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: Column(
                       children: <Widget>[
                         TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Email',
-                          ),
-                          validator: (val) => val!.isEmpty ? 'Email must not be empty' : null,
+                            decoration: InputDecoration(
+                              hintText: 'Email',
+                            ),
+                            validator: (val) =>
+                                val!.isEmpty ? 'Email must not be empty' : null,
                             onChanged: (val) {
                               setState(() => email = val);
-                            }
-                        ),
+                            }),
                         SizedBox(height: 20.0),
                         TextFormField(
                             decoration: InputDecoration(
@@ -80,9 +86,15 @@ class _SignInScreenState extends State<SignInScreen> {
                             onChanged: (val) {
                               setState(() => pw = val);
                             }),
-                        SizedBox(height: 20.0),
-                        TextButton(
-                            child: Text('Sign in'),
+                        SizedBox(height: 60.0),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.fromLTRB(50, 10, 50, 10),
+                                elevation: 12.0,
+                                textStyle: const TextStyle(
+                                    color: Colors.white, fontSize: 16)),
+                            child: const Text('Sign in'),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 dynamic result =

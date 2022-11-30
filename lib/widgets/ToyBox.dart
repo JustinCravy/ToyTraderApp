@@ -92,7 +92,7 @@ class _ToyBoxState extends State<ToyBox> {
                     ),
                     child: Text(
                       toyName,
-                      style: const TextStyle(fontSize: 20, color: Colors.black54),
+                      style: const TextStyle(fontSize: 20, color: Colors.cyanAccent),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     )
@@ -154,7 +154,7 @@ class _ToyBoxState extends State<ToyBox> {
       alignment: Alignment.topRight,
       child: PopupMenuButton<toyMenu>(
         // Callback that sets the selected popup menu item.
-          icon: const Icon(Icons.more_vert,color: Colors.black87),
+          icon: const Icon(Icons.more_vert,color: Colors.cyanAccent),
           color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),

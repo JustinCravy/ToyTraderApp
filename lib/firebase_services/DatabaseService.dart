@@ -181,6 +181,7 @@ class DatabaseService {
     List<Toy> toyList = [];
     for (var i = 0; i < profileList.length; i++) {
       for (var item in profileList[i].toys) {
+        print(item.toString());
         toyList.add(item);
       }
     }
