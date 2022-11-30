@@ -65,7 +65,7 @@ class _TradeDetailsScreenState extends State<TradeDetailsScreen> {
                   margin: const EdgeInsets.all(15.0),
                   padding: const EdgeInsets.all(3.0),
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.cyanAccent, width: 2),
+                      border: Border.all(color: Colors.black, width: 1),
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
                   child: ListView.builder(
@@ -99,7 +99,7 @@ class _TradeDetailsScreenState extends State<TradeDetailsScreen> {
                   margin: const EdgeInsets.all(15.0),
                   padding: const EdgeInsets.all(3.0),
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.cyanAccent, width: 2),
+                      border: Border.all(color: Colors.black, width: 1),
                   borderRadius: BorderRadius.all(Radius.circular(20))),
                   child: ListView.builder(
                     itemCount: widget.trade.receiverToys.length,

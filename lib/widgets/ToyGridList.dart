@@ -64,7 +64,7 @@ class _ToyGridListState extends State<ToyGridList> {
                         MaterialPageRoute(
                             builder: (context) => AddToyScreen(profileInfo: user,)));
                   },
-                  color: Colors.blue,
+                  color: Colors.lightGreenAccent,
                   textColor: Colors.white,
                   child: const Icon(
                     Icons.add,
@@ -97,7 +97,7 @@ class _ToyGridListState extends State<ToyGridList> {
                     )
                     );
                   },
-                  color: Colors.cyanAccent,
+                  color: Colors.lightGreenAccent,
                   textColor: Colors.white,
                   child: const Icon(
                     Icons.add,
