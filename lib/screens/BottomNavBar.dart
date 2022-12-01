@@ -63,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Flexible(
                       child: Container(
                           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               /*border: Border.all(
                             color: Colors.blue,
                             width: 2,
@@ -71,8 +71,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                            */
                               ),
-                          child: ToyGridList(userProfile.toys)))
+                          child: ToyGridList(userProfile.toys))),
                 ],
+
               );
             } else {
               return const CircularProgressIndicator();
@@ -129,7 +130,7 @@ class _MainScreenState extends State<MainScreen> {
                 )),
             Container(
               width: deviceWidth(context),
-              height: deviceHeight(context) * .7,
+              height: deviceHeight(context) * .66,
               alignment: Alignment.topLeft,
               child: FutureBuilder<List<Toy>>(
                 future: dbService.getMainFeed(myController.text),
@@ -139,7 +140,9 @@ class _MainScreenState extends State<MainScreen> {
 
                     return Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [Flexible(child: ToyGridList(toyList))]);
+                        children: [
+                          Flexible(child: ToyGridList(toyList)),
+                        ]);
                   } else {
                     return const Center(child: CircularProgressIndicator());
                   }
