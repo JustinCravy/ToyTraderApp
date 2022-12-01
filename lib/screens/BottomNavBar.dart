@@ -100,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Container(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: const Text(
-                        'My Toys',
+                        'Toys',
                         style: TextStyle(fontSize: 30),
                       )),
                   Flexible(
