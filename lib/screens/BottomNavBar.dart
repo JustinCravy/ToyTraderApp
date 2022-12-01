@@ -71,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                            */
                               ),
-                          child: ToyGridList(userProfile.toys))),
+                          child: ToyGridList(userProfile.toys)))
                 ],
 
               );
@@ -141,7 +141,7 @@ class _MainScreenState extends State<MainScreen> {
                     return Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Flexible(child: ToyGridList(toyList)),
+                          Flexible(child: ToyGridList(toyList),)
                         ]);
                   } else {
                     return const Center(child: CircularProgressIndicator());

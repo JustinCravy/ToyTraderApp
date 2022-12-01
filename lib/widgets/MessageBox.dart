@@ -28,6 +28,9 @@ class _MessageBoxState extends State<MessageBox> {
     double height      = deviceHeight(context) * .13; //controls height of message box
     Radius boxCurve    = const Radius.circular(15);
 
+
+    var displayTime = getTimeDifference(time);
+
     return Container(
       //Sets the height and width of the Row With will be locked to list while
       height: height,
@@ -75,6 +78,7 @@ class _MessageBoxState extends State<MessageBox> {
                           topLeft: boxCurve,
                           topRight: boxCurve,
                           bottomRight: boxCurve,
+                          bottomLeft: boxCurve
                         )),
                     child: Padding(
                       padding: EdgeInsets.only(
@@ -115,11 +119,11 @@ class _MessageBoxState extends State<MessageBox> {
                                 ),
                               ),
                               Flexible(
-                                  child: Container(
-                                    padding: EdgeInsets.only(right: (deviceWidth(context) * .045)),
-                                child: Text(
-                                time,
-                                style: const TextStyle(
+                                child: Container(
+                                  padding: EdgeInsets.only(right: (deviceWidth(context) * .045)),
+                                  child: Text(
+                                    displayTime,
+                                  style: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w400),
@@ -146,4 +150,28 @@ class _MessageBoxState extends State<MessageBox> {
 
   double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;
   double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
+
+  getTimeDifference(String time) {
+    DateTime received  = DateTime.parse(time);
+    DateTime now       = DateTime.now();
+
+    var timeDiffDays = now.difference(received).inDays;
+    var timeDiffHours = now.difference(received).inHours;
+    var timeDiffMinutes = now.difference(received).inMinutes;
+    var timeDiffSeconds = now.difference(received).inSeconds;
+
+    if(timeDiffDays > 0){
+      return "$timeDiffDays days ago";
+    }
+    else if(timeDiffMinutes > 59){
+      return "$timeDiffHours hours ago";
+    }
+    else if(timeDiffMinutes > 0){
+      return "$timeDiffMinutes min ago";
+    }else{
+      return "$timeDiffSeconds sec ago";
+    }
+
+
+  }
 }

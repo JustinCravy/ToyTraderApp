@@ -45,7 +45,7 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
                   decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
                       image: DecorationImage(
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                           image: NetworkImage(toy.toyImageURL)))),
               Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -202,8 +202,7 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
     );
   }
 
-  double deviceHeight(BuildContext context) =>
-      MediaQuery.of(context).size.height;
+  double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;
 
   double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
 }

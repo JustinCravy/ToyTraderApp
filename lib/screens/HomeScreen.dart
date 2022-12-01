@@ -168,6 +168,3 @@ class _HomeScreenState extends State<HomeScreen> {
 var physicalScreenSize = window.physicalSize;
 var physicalWidth = physicalScreenSize.width;
 var physicalHeight = physicalScreenSize.height;
-
-double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;
-double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;

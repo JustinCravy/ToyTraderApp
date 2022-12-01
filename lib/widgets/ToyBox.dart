@@ -1,7 +1,11 @@
+import 'dart:ui';
+
+import 'package:blur/blur.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:toy_trader/screens/ToyDetailsScreen.dart';
+import 'package:toy_trader/widgets/ToyGridList.dart';
 import '../firebase_services/DatabaseService.dart';
 import '../models/ProfileInfo.dart';
 import '../models/Toy.dart';
@@ -14,8 +18,8 @@ class ToyBox extends StatefulWidget {
   final Toy toy;
   final int left;
   final ProfileInfo? user;
-
-  const ToyBox ({Key? key, required this.toy, required this.left, required this.user}): super(key:key);
+  final VoidCallback onClick;
+  const ToyBox ({Key? key, required this.toy, required this.left,required this.user, required this.onClick,}): super(key:key);
 
 
   @override
@@ -36,7 +40,7 @@ class _ToyBoxState extends State<ToyBox> {
     DatabaseService dbS = DatabaseService();
     String _selectedMenu = '';
     List<Toy> toyList = dbS.getToyList();
-    Radius boxCurve    = const Radius.circular(10);
+    Radius boxCurve    = const Radius.circular(15);
 
     if(widget.left == 0){
       topInset =  deviceHeight(context) * .01;
@@ -74,7 +78,7 @@ class _ToyBoxState extends State<ToyBox> {
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.all(boxCurve),
                         image: DecorationImage(
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                             image: NetworkImage(widget.toy.toyImageURL)
                         )
                     )
@@ -87,16 +91,20 @@ class _ToyBoxState extends State<ToyBox> {
 
                 Container(
                     alignment: Alignment.bottomCenter,
-                    padding: EdgeInsets.only(
-                      bottom: deviceHeight(context) * .01,
-                    ),
                     child: Stack(
-                      children: [Text(
+                      children: [
+                        Text(
                         toyName,
-                        style: const TextStyle(fontSize: 20, color: Colors.cyanAccent),
+                        style: const TextStyle(fontSize: 16, color: Colors.white,fontWeight: FontWeight.w500,fontFamily: 'OpenSans'),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                      ),]
+                      ).frosted(
+                          blur: 2,
+                          frostColor: Colors.black,
+                          borderRadius: BorderRadius.all(boxCurve),
+                          height: 45,
+                          width: 200,
+                        )]
                     )
                       ),
 
@@ -131,6 +139,7 @@ class _ToyBoxState extends State<ToyBox> {
                 break;
               case profileMenu.delete:
                 dbS.deleteToy(toy);
+                widget.onClick();
                 break;
               default:
                 break;
@@ -156,7 +165,7 @@ class _ToyBoxState extends State<ToyBox> {
       alignment: Alignment.topRight,
       child: PopupMenuButton<toyMenu>(
         // Callback that sets the selected popup menu item.
-          icon: const Icon(Icons.more_vert,color: Colors.cyanAccent),
+          icon: const Icon(Icons.more_vert,color: Colors.black),
           color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),

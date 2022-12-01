@@ -2,10 +2,14 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:toy_trader/screens/BottomNavBar.dart';
+import 'package:toy_trader/screens/HomeScreen.dart';
 import '../../../firebase_services/DatabaseService.dart';
 import '../../../models/ProfileInfo.dart';
 import '../../../models/Toy.dart';
 import 'package:uuid/uuid.dart';
+
+import '../widgets/CustomButton.dart';
 
 
 
@@ -54,9 +58,8 @@ class _AddToyScreenState extends State<AddToyScreen> {
         ),
       ),
         body: SingleChildScrollView (
-            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+            padding: EdgeInsets.symmetric(vertical:  deviceHeight(context) *.02, horizontal: deviceWidth(context) * .08),
             child: Column(children: <Widget>[
-              SizedBox(height: 30.0,),
               InkWell(
                 onTap: () {
                   pickImage(ImageSource.camera);
@@ -66,6 +69,11 @@ class _AddToyScreenState extends State<AddToyScreen> {
                   child: Image(image: image == null ? AssetImage('assets/images/click_to_add_img.png') : Image.file(image!).image,
                       width: double.infinity, height: 200),
                 ),
+              ),
+              CustomButton(
+                title: 'Pick from Gallery',
+                icon: Icons.camera,
+                onClick: () => pickImage(ImageSource.gallery),
               ),
               Form(
                 child: Column(
@@ -77,9 +85,9 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       validator: (val) => val!.isEmpty ? 'Enter name' : null,
                       onChanged: (val) => toy.name = val,
                     ),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 5.0),
                     TextFormField(
-                        maxLines: 7,
+                        maxLines: 4,
                         decoration: InputDecoration(
                           hintText: 'Description',
                         ),
@@ -101,11 +109,10 @@ class _AddToyScreenState extends State<AddToyScreen> {
                         });
                       },
                       items: <String>[
-                        'Barely works',
-                        'Bad',
-                        'Ok',
+                        'Acceptable',
                         'Good',
-                        'Great'
+                        'Very Good',
+                        'Like New',
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -130,7 +137,6 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       items: <String>[
                         'Action Figures',
                         'Animals',
-                        'Remote Controlled',
                         'Construction Toys',
                         'Creative Toys',
                         'Dolls',
@@ -138,8 +144,11 @@ class _AddToyScreenState extends State<AddToyScreen> {
                         'Food related toys',
                         'Games',
                         'Model Building Toys',
+                        'Musical Toys',
                         'Puzzle',
-                        'Muscial Toys'
+                        'Plush',
+                        'Remote Controlled',
+
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -182,12 +191,23 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       ),
                         child: Text('Add Toy'),
                         onPressed: () async {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Sending Message"),
+                        if(!toy.checkNullValue()){
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text("Adding Toy"),
                           ));
                           await dbService.addToyData(toy, widget.profileInfo, image!);
-                          Navigator.pop(context,true);
-                        }),
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => HomeScreen())
+                          );
+                        }
+                        else{
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text("Incomplete"),
+                            duration: Duration(seconds: 1),
+                          ));
+                        }
+                      }),
                   ],
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toy_trader/models/Conversation.dart';
+import 'package:toy_trader/widgets/MyBehavior.dart';
 
 import '../firebase_services/AuthService.dart';
 import '../firebase_services/DatabaseService.dart';
@@ -21,7 +22,9 @@ class _MessageListState extends State<MessageList> {
   Widget build(BuildContext context) {
     List<Widget> widgetList = [];
 
-    for (var c in conversations) {
+    conversations.sort((a,b) => a.time.compareTo(b.time));
+
+    for (var c in conversations.reversed) {
       widgetList.add(MessageBox(
         convo: c,
       ));
@@ -34,6 +37,7 @@ class _MessageListState extends State<MessageList> {
       getConversations();
       i++;
     }
+
 
     return Container(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -52,7 +56,13 @@ class _MessageListState extends State<MessageList> {
               ).createShader(rect);
             },
             blendMode: BlendMode.dstOut,
-            child: ListView(shrinkWrap: true, children: widgetList)));
+            child: ScrollConfiguration(
+                behavior: MyBehavior(),
+                child: ListView(shrinkWrap: true, children: widgetList)
+            )
+
+        )
+    );
   }
 
   getConversations() async {
