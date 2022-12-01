@@ -29,47 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var user = Provider.of<ProfileInfo?>(context);
 
     return Scaffold(
-      // backgroundColor: const Color(0xffC4DFCB),
-      appBar: AppBar(
-        actions: <Widget>[
-          PopupMenuButton<String>(
-            onSelected: handleClick,
-            itemBuilder: (BuildContext context) {
-              return {'Trade History', 'Logout'}.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
-            },
-          ),
-        ],
-        title: IconButton(
-          color: Colors.white,
-          iconSize: physicalHeight / 10,
-          icon: Image.asset('assets/images/logo.png'),
-          onPressed: () {
-            setState(() {
-              screenIndex = 2;
-            });
-          },
-          //iconSize: deviceHeight(context) / 4,
-        )
-      /*
-        title: const Text(
-          "Toy Trader",
-          style: TextStyle(
-            // color: Theme.of(context).primaryColor,
-            fontSize: 25,
-            fontWeight: FontWeight.w600,
-          ),
 
-        ),
-        
-         */
-        // centerTitle: true,
-        // backgroundColor: Colors.white,
-      ),
       body: (() {
         if(screenIndex == 0) {
           return ConversationsScreen();

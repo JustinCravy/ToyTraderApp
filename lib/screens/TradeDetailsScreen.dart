@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/Trade.dart';
+import 'HomeScreen.dart';
 import 'RateUserScreen.dart';
+import 'TradeHistoryScreen.dart';
 
 class TradeDetailsScreen extends StatefulWidget {
   final Trade trade;
@@ -17,16 +19,33 @@ class _TradeDetailsScreenState extends State<TradeDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Trade Details",
-          style: TextStyle(
-            // color: Theme.of(context).primaryColor,
-            fontSize: 25,
-            fontWeight: FontWeight.w600,
-          ),
+        appBar: AppBar(
+            actions: <Widget>[
+              PopupMenuButton<String>(
+                onSelected: handleClick,
+                itemBuilder: (BuildContext context) {
+                  return {'Trade History', 'Logout'}.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
+            title: IconButton(
+              color: Colors.white,
+              iconSize: physicalHeight / 11,
+              icon: Image.asset('assets/images/logo.png'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                );
+              },
+            )
         ),
-      ),
+
       body: Container(
         alignment: Alignment.center, //Set container alignment  then wrap the column with singleChildScrollView
         child: SingleChildScrollView(
@@ -142,5 +161,18 @@ class _TradeDetailsScreenState extends State<TradeDetailsScreen> {
       )
       )
     );
+  }
+  void handleClick(String value) async {
+    switch (value) {
+      case 'Logout':
+        await FirebaseAuth.instance.signOut();
+        break;
+      case 'Trade History':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const TradeHistory()),
+        );
+        break;
+    }
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,6 +11,7 @@ import '../../../models/Toy.dart';
 import 'package:uuid/uuid.dart';
 
 import '../widgets/CustomButton.dart';
+import 'TradeHistoryScreen.dart';
 
 
 
@@ -46,17 +48,33 @@ class _AddToyScreenState extends State<AddToyScreen> {
       toy.toyId = toyId;
       toy.ownerId = widget.profileInfo.uid;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Toy Trader",
-          style: TextStyle(
-            // color: Theme.of(context).primaryColor,
-            fontSize: 25,
-            fontWeight: FontWeight.w600,
-          ),
-
+        appBar: AppBar(
+            actions: <Widget>[
+              PopupMenuButton<String>(
+                onSelected: handleClick,
+                itemBuilder: (BuildContext context) {
+                  return {'Trade History', 'Logout'}.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
+            title: IconButton(
+              color: Colors.white,
+              iconSize: physicalHeight / 11,
+              icon: Image.asset('assets/images/logo.png'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                );
+              },
+            )
         ),
-      ),
+
         body: SingleChildScrollView (
             padding: EdgeInsets.symmetric(vertical:  deviceHeight(context) *.02, horizontal: deviceWidth(context) * .08),
             child: Column(children: <Widget>[
@@ -212,5 +230,18 @@ class _AddToyScreenState extends State<AddToyScreen> {
                 ),
               ),
             ])));
+  }
+  void handleClick(String value) async {
+    switch (value) {
+      case 'Logout':
+        await FirebaseAuth.instance.signOut();
+        break;
+      case 'Trade History':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const TradeHistory()),
+        );
+        break;
+    }
   }
 }

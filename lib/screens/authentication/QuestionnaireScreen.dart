@@ -44,16 +44,10 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as List<String>;
     return Scaffold(
-      // backgroundColor: const Color(0xffC4DFCB),
       appBar: AppBar(
-        title: const Text(
-          "Toy Trader",
-          style: TextStyle(
-            // color: Theme.of(context).primaryColor,
-            fontSize: 25,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        title: Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 90, 0),
+            child: Image.asset('assets/images/logo.png')),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

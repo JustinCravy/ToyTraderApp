@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toy_trader/screens/TradeDetailsScreen.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase_services/DatabaseService.dart';
 import '../models/Trade.dart';
+import 'HomeScreen.dart';
 
 class TradeHistory extends StatefulWidget {
   const TradeHistory({Key? key}) : super(key: key);
@@ -21,15 +22,32 @@ class _TradeHistoryState extends State<TradeHistory> {
     return Scaffold(
       // backgroundColor: const Color(0xffC4DFCB),
       appBar: AppBar(
-        title: const Text(
-          "Trade History",
-          style: TextStyle(
-            // color: Theme.of(context).primaryColor,
-            fontSize: 25,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              onSelected: handleClick,
+              itemBuilder: (BuildContext context) {
+                return {'Trade History', 'Logout'}.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+            ),
+          ],
+          title: IconButton(
+            color: Colors.white,
+            iconSize: physicalHeight / 11,
+            icon: Image.asset('assets/images/logo.png'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+              );
+            },
+          )
       ),
+
       body: Container(
         child: ListView.builder(
           itemCount: trades.length,
@@ -53,6 +71,20 @@ class _TradeHistoryState extends State<TradeHistory> {
         ),
       ),
     );
+  }
+
+  void handleClick(String value) async {
+    switch (value) {
+      case 'Logout':
+        await FirebaseAuth.instance.signOut();
+        break;
+      case 'Trade History':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const TradeHistory()),
+        );
+        break;
+    }
   }
 
   getTrades() async {

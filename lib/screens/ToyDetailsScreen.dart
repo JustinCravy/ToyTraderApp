@@ -50,33 +50,18 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
             ],
             title: IconButton(
               color: Colors.white,
-              iconSize: physicalHeight / 10,
+              iconSize: physicalHeight / 11,
               icon: Image.asset('assets/images/logo.png'),
               onPressed: () {
-                setState(() {
-                  // screenIndex = 2;
-                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                );
               },
-              //iconSize: deviceHeight(context) / 4,
             )
-          /*
-        title: const Text(
-          "Toy Trader",
-          style: TextStyle(
-            // color: Theme.of(context).primaryColor,
-            fontSize: 25,
-            fontWeight: FontWeight.w600,
-          ),
-
         ),
 
-         */
-          // centerTitle: true,
-          // backgroundColor: Colors.white,
-        ),
         body: _body);
-
-
   }
 
   Widget titleSection(toy, context) {

@@ -2,8 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase_services/DatabaseService.dart';
+import 'HomeScreen.dart';
+import 'TradeHistoryScreen.dart';
 
 class RateUserScreen extends StatefulWidget{
   final String id;
@@ -19,13 +21,36 @@ class _RatingState extends State<RateUserScreen>{
   double rating=0;
   @override
   Widget build(BuildContext context) =>Scaffold(
-    appBar: AppBar(
-      title: Text("Rate this User"),
-      centerTitle: true,
-    ),
-    body: Center(
-        child: Column(
-          children:<Widget> [
+      appBar: AppBar(
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              onSelected: handleClick,
+              itemBuilder: (BuildContext context) {
+                return {'Trade History', 'Logout'}.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+            ),
+          ],
+          title: IconButton(
+            color: Colors.white,
+            iconSize: physicalHeight / 11,
+            icon: Image.asset('assets/images/logo.png'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+              );
+            },
+          )
+      ),
+
+      body: Center(
+          child: Column(
+              children:<Widget> [
             SizedBox(
               height:200,
             ),
@@ -55,4 +80,17 @@ class _RatingState extends State<RateUserScreen>{
       )
     )
   );
+  void handleClick(String value) async {
+    switch (value) {
+      case 'Logout':
+        await FirebaseAuth.instance.signOut();
+        break;
+      case 'Trade History':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const TradeHistory()),
+        );
+        break;
+    }
+  }
 }

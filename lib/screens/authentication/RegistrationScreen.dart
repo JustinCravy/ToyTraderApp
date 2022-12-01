@@ -26,14 +26,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Scaffold(
         // backgroundColor: const Color(0xffC4DFCB),
         appBar: AppBar(
-          title: const Text(
-            "Toy Trader",
-            style: TextStyle(
-              // color: Theme.of(context).primaryColor,
-              fontSize: 25,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+          title: Container(
+              padding: EdgeInsets.fromLTRB(10, 0, 50, 0),
+              child: Image.asset('assets/images/logo.png')),
+
           actions: <Widget>[
             Directionality(
                 textDirection: TextDirection.rtl,
