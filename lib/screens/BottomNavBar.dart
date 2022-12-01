@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:toy_trader/models/Toy.dart';
 import 'package:toy_trader/widgets/MessageList.dart';
 import 'package:toy_trader/widgets/ToyGridList.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase_services/DatabaseService.dart';
 import '../models/ProfileInfo.dart';
+import 'HomeScreen.dart';
+import 'TradeHistoryScreen.dart';
 
 class ConversationsScreen extends StatelessWidget {
   @override
@@ -14,7 +16,8 @@ class ConversationsScreen extends StatelessWidget {
 }
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final String userId;
+  const ProfileScreen({Key? key, required this.userId}) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -28,11 +31,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     ProfileInfo userProfile;
     return Scaffold(
+      appBar: AppBar(
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              onSelected: handleClick,
+              itemBuilder: (BuildContext context) {
+                return {'Trade History', 'Logout'}.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+            ),
+          ],
+          title: IconButton(
+            color: Colors.white,
+            iconSize: physicalHeight / 10,
+            icon: Image.asset('assets/images/logo.png'),
+            onPressed: () {
+              setState(() {
+                // screenIndex = 2;
+              });
+            },
+            //iconSize: deviceHeight(context) / 4,
+          )
+        /*
+        title: const Text(
+          "Toy Trader",
+          style: TextStyle(
+            // color: Theme.of(context).primaryColor,
+            fontSize: 25,
+            fontWeight: FontWeight.w600,
+          ),
+
+        ),
+
+         */
+        // centerTitle: true,
+        // backgroundColor: Colors.white,
+      ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
         alignment: Alignment.topCenter,
         child: FutureBuilder<ProfileInfo?>(
-          future: dbService.getProfileInfo(""),
+          future: dbService.getProfileInfo(widget.userId),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               userProfile = snapshot.data!;
@@ -82,6 +125,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+  void handleClick(String value) async {
+    switch (value) {
+      case 'Logout':
+        await FirebaseAuth.instance.signOut();
+        break;
+      case 'Trade History':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const TradeHistory()),
+        );
+        break;
+    }
   }
 }
 
@@ -154,6 +210,8 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
+
+
 }
 
 //longlist, need to get data from data base and covert

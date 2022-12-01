@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toy_trader/firebase_services/DatabaseService.dart';
@@ -73,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if(screenIndex == 0) {
           return ConversationsScreen();
         } else if( screenIndex == 1) {
-          return ProfileScreen();
+          return ProfileScreen(userId: FirebaseAuth.instance.currentUser!.uid);
         } else {
           return MainScreen();
         }
