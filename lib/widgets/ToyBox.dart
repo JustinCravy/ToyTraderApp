@@ -90,13 +90,15 @@ class _ToyBoxState extends State<ToyBox> {
                     padding: EdgeInsets.only(
                       bottom: deviceHeight(context) * .01,
                     ),
-                    child: Text(
-                      toyName,
-                      style: const TextStyle(fontSize: 20, color: Colors.cyanAccent),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    child: Stack(
+                      children: [Text(
+                        toyName,
+                        style: const TextStyle(fontSize: 20, color: Colors.cyanAccent),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),]
                     )
-                ),
+                      ),
 
               ],
             ),
