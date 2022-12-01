@@ -29,5 +29,8 @@ class Toy {
    factory Toy.fromJson(Map<String, dynamic> json) => _$ToyFromJson(json);
    Map<String, dynamic> toJson() => _$ToyToJson(this);
   get id => toyId;
-  
+
+  bool checkNullValue() {
+    return [name,description,condition,ageRange,categories].contains('');
+  }
 }

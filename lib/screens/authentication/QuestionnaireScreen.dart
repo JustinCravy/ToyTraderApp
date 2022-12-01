@@ -6,6 +6,7 @@ import 'package:toy_trader/models/ProfileInfo.dart';
 
 import '../../firebase_services/AuthService.dart';
 import '../../models/Toy.dart';
+import '../../widgets/CustomButton.dart';
 
 class QuestionnaireScreen extends StatefulWidget {
   const QuestionnaireScreen({Key? key}) : super(key: key);
@@ -66,7 +67,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                         const SizedBox(height: 20,),
                         InkWell(
                           onTap: () {
-                            pickImage(ImageSource.gallery);
+                            pickImage(ImageSource.camera);
                           },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20.0),
@@ -80,9 +81,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                           ),
                         ),
                         CustomButton(
-                          title: 'Pick from Camera',
+                          title: 'Pick from Gallery',
                           icon: Icons.camera,
-                          onClick: () => pickImage(ImageSource.camera),
+                          onClick: () => pickImage(ImageSource.gallery),
                         ),
                         SizedBox(height: 30),
                         TextFormField(
@@ -191,24 +192,4 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   }
 }
 
-Widget CustomButton({
-  required String title,
-  required IconData icon,
-  required VoidCallback onClick,
-}) {
-  return Container(
-    width: 280,
-    child: ElevatedButton(
-      onPressed: onClick,
-      child: Row(
-        children: [
-          Icon(icon),
-          SizedBox(
-            width: 20,
-          ),
-          Text(title)
-        ],
-      ),
-    ),
-  );
-}
+

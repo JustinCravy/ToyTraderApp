@@ -63,7 +63,7 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
               useStickyGroupSeparators: true,
               floatingHeader: true,
               elements: messages,
-              groupBy: (message) => DateFormat("yyyy-MM-dd HH:mm:ss").parse(message.time),
+              groupBy: (message) => DateFormat("yyyy-MM-dd").parse(message.time),
               groupHeaderBuilder: (Message message) => SizedBox(
                   height: 40,
                   child: Center(
@@ -72,7 +72,7 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
                           child: Padding(
                               padding: const EdgeInsets.all(8),
                               child: Text(
-                                message.time,
+                                message.time.substring(0,16),
                                 style: const TextStyle(color: Colors.white),
                               )
                           )

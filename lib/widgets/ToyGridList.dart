@@ -97,7 +97,7 @@ class _ToyGridListState extends State<ToyGridList> {
                     )
                     );
                   },
-                  color: Colors.cyanAccent,
+                  color: Colors.blueAccent,
                   textColor: Colors.white,
                   child: const Icon(
                     Icons.add,

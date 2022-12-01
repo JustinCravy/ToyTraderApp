@@ -15,9 +15,6 @@ class DatabaseService {
 
   List<Toy> toyList = [];
 
-  Toy toy1 = Toy('0', '0', 'car',"this is discription", 'condition of toy','10-11','categories',"imageurl");
-  Toy toy2 = Toy('1', '1', 'Boat',"this is discription", 'condition of toy','10-11','categories',"imageurl");
-
 
   factory DatabaseService(){
     return _instance;
@@ -25,8 +22,6 @@ class DatabaseService {
 
   //Initialization of the Instance of the class
   DatabaseService._internal(){
-    toyList.add(toy1);
-    toyList.add(toy2);
   }
 
   Future setProfileInfo(ProfileInfo profileInfo, File? imageFile) async {
@@ -231,23 +226,17 @@ class DatabaseService {
 
       var profileInfo = await getProfileInfo(FirebaseAuth.instance.currentUser!.uid);
 
-      // delete toy image from firebase storage
-      await FirebaseFirestore.instance.collection('users')
-          .doc(profileInfo.uid).collection('toys')
-          .doc(toy.toyId).delete();
+      print("Toy Id = ${toy.toyId}");
 
       // delete toy from user's profileInfo
       int len = profileInfo.toys.length;
-
-      print(profileInfo.toys);
-      for(var i =0; i < len-1;i++){
+      for(var i =0; i < len;i++){
         if(toy.toyId == profileInfo.toys[i].toyId){
           profileInfo.toys.removeAt(i);
           print("we found a match");
           break;
         }
       }
-      print(profileInfo.toys);
 
 
       setProfileInfo(profileInfo, null);
