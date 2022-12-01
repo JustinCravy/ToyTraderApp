@@ -6,9 +6,11 @@ import 'package:toy_trader/models/Toy.dart';
 import 'package:toy_trader/screens/BottomNavBar.dart';
 import 'package:toy_trader/widgets/MessageDetailsBox.dart';
 import 'package:toy_trader/widgets/MyBehavior.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase_services/DatabaseService.dart';
 import '../models/ProfileInfo.dart';
+import 'HomeScreen.dart';
+import 'TradeHistoryScreen.dart';
 
 class ToyDetailsScreen extends StatefulWidget {
   final Toy toy;
@@ -33,10 +35,48 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          automaticallyImplyLeading: false,
-          toolbarHeight: 0,
+            actions: <Widget>[
+              PopupMenuButton<String>(
+                onSelected: handleClick,
+                itemBuilder: (BuildContext context) {
+                  return {'Trade History', 'Logout'}.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
+            title: IconButton(
+              color: Colors.white,
+              iconSize: physicalHeight / 10,
+              icon: Image.asset('assets/images/logo.png'),
+              onPressed: () {
+                setState(() {
+                  // screenIndex = 2;
+                });
+              },
+              //iconSize: deviceHeight(context) / 4,
+            )
+          /*
+        title: const Text(
+          "Toy Trader",
+          style: TextStyle(
+            // color: Theme.of(context).primaryColor,
+            fontSize: 25,
+            fontWeight: FontWeight.w600,
+          ),
+
+        ),
+
+         */
+          // centerTitle: true,
+          // backgroundColor: Colors.white,
         ),
         body: _body);
+
+
   }
 
   Widget titleSection(toy, context) {
@@ -186,6 +226,20 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
         )
       ],
     );
+  }
+
+  void handleClick(String value) async {
+    switch (value) {
+      case 'Logout':
+        await FirebaseAuth.instance.signOut();
+        break;
+      case 'Trade History':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const TradeHistory()),
+        );
+        break;
+    }
   }
 
   getOwnerProfileImg_setStateWhenDone(ProfileInfo? ownerProfileInfo) async {
