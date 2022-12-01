@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:toy_trader/screens/BottomNavBar.dart';
+import 'package:toy_trader/screens/HomeScreen.dart';
 import '../../../firebase_services/DatabaseService.dart';
 import '../../../models/ProfileInfo.dart';
 import '../../../models/Toy.dart';
@@ -57,7 +58,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
         ),
       ),
         body: SingleChildScrollView (
-            padding: EdgeInsets.symmetric(vertical: deviceHeight(context) *.02, horizontal: deviceWidth(context) * .08),
+            padding: EdgeInsets.symmetric(vertical:  deviceHeight(context) *.02, horizontal: deviceWidth(context) * .08),
             child: Column(children: <Widget>[
               InkWell(
                 onTap: () {
@@ -195,7 +196,10 @@ class _AddToyScreenState extends State<AddToyScreen> {
                             content: Text("Adding Toy"),
                           ));
                           await dbService.addToyData(toy, widget.profileInfo, image!);
-                          Navigator.pop(context,true);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => HomeScreen())
+                          );
                         }
                         else{
                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

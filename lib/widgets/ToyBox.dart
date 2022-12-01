@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:toy_trader/screens/ToyDetailsScreen.dart';
+import 'package:toy_trader/widgets/ToyGridList.dart';
 import '../firebase_services/DatabaseService.dart';
 import '../models/ProfileInfo.dart';
 import '../models/Toy.dart';
@@ -17,8 +18,8 @@ class ToyBox extends StatefulWidget {
   final Toy toy;
   final int left;
   final ProfileInfo? user;
-
-  const ToyBox ({Key? key, required this.toy, required this.left, required this.user}): super(key:key);
+  final VoidCallback onClick;
+  const ToyBox ({Key? key, required this.toy, required this.left,required this.user, required this.onClick,}): super(key:key);
 
 
   @override
@@ -138,6 +139,7 @@ class _ToyBoxState extends State<ToyBox> {
                 break;
               case profileMenu.delete:
                 dbS.deleteToy(toy);
+                widget.onClick();
                 break;
               default:
                 break;

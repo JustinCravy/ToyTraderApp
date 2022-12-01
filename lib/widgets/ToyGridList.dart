@@ -11,10 +11,11 @@ import 'ToyBox.dart';
 class ToyGridList extends StatefulWidget {
   final List<Toy> toyList;
 
-  const ToyGridList(this.toyList, {super.key});
+  const ToyGridList(this.toyList, {super.key,});
 
   @override
   _ToyGridListState createState() => _ToyGridListState();
+
 }
 
 class _ToyGridListState extends State<ToyGridList> {
@@ -36,7 +37,9 @@ class _ToyGridListState extends State<ToyGridList> {
         widgetList.add(ToyBox(
             toy: toyList[i],
             left: i % 2,
-            user: user
+            user: user, onClick: () {setState(() {
+              toyList.removeAt(i);
+            });},
         ));
       }
 
@@ -48,6 +51,7 @@ class _ToyGridListState extends State<ToyGridList> {
     return Stack(
       children: [
         Container(
+          alignment: Alignment.center,
           child: Text(
             "You have no Toys",
           ),
@@ -82,7 +86,7 @@ class _ToyGridListState extends State<ToyGridList> {
       children: [
         Container(
           child: GridView.count(
-              shrinkWrap: true, crossAxisCount: 2, children: widgetList),
+              shrinkWrap: true, crossAxisCount: 2, children: [...widgetList]),
         ),
         Padding(
             padding: EdgeInsets.all(10),
