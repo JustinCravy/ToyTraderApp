@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:toy_trader/models/Toy.dart';
 import 'package:toy_trader/widgets/MessageList.dart';
 import 'package:toy_trader/widgets/ToyGridList.dart';
@@ -49,6 +50,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               fit: BoxFit.fill,
                               image:
                                   NetworkImage(userProfile.profileImageUrl)))),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RatingBarIndicator(
+                          itemBuilder: (BuildContext context, int index) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          rating: userProfile.userRating,
+                        ),
+                        Text('(' + userProfile.totalRates.toString() + ')')
+                      ],
+                    )
+                    /*
+                    child: RatingBarIndicator(
+                      itemBuilder: (BuildContext context, int index) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      rating: userProfile.userRating,
+                    ),
+
+                     */
+                  ),
                   Container(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       alignment: Alignment.centerLeft,

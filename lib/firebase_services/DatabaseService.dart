@@ -400,8 +400,9 @@ class DatabaseService {
   Future<bool> rateUser(double rating, String otherUserId) async{
     try{
       var otherUserProfile = await getProfileInfo(otherUserId);
-      otherUserProfile.userRating = otherUserProfile.userRating + rating;
       otherUserProfile.totalRates += 1;
+      otherUserProfile.ratingTotal += rating;
+      otherUserProfile.userRating = otherUserProfile.ratingTotal / otherUserProfile.totalRates;
       await setProfileInfo(otherUserProfile, null);
       return true;
     }

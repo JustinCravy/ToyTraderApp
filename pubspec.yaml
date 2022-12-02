@@ -67,6 +67,7 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   assets:
+    - assets/fonts/
     - assets/images/
     - assets/images/click_to_add_img.png
   # The following line ensures that the Material Icons font is

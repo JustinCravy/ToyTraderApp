@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
 import 'package:provider/provider.dart';
+import 'package:toy_trader/screens/HomeScreen.dart';
 import '../firebase_services/AuthService.dart';
 import '../firebase_services/DatabaseService.dart';
 import '../models/Toy.dart';
@@ -48,8 +49,28 @@ class _ToyGridListState extends State<ToyGridList> {
     return Stack(
       children: [
         Container(
-          child: Text(
-            "You have no Toys",
+          alignment: Alignment.center,
+          child: Container(
+            child: Column(
+              //mainAxisAlignment: MainAxisAlignment.end,
+              //crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  child: Icon(
+                      Icons.thunderstorm,
+                      color: Colors.black,
+                      size: physicalScreenSize.width / 8
+                  ),
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                ),
+                const Text('There are no toys to display!',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'assets/fonts/YanoneKaffeesatz-Regular.ttf'
+                    ),
+                )
+              ],
+            )
           ),
         ),
         Padding(
