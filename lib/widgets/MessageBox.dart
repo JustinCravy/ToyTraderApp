@@ -74,7 +74,7 @@ class _MessageBoxState extends State<MessageBox> {
                     width: deviceWidth(context) * .75,
                     height: height,
                     decoration: BoxDecoration(
-                        color: AppColors.celadonBlue,
+                        color: AppColors.carolinaBlue,
                         borderRadius: BorderRadius.only(
                           topLeft: boxCurve,
                           topRight: boxCurve,
@@ -99,7 +99,7 @@ class _MessageBoxState extends State<MessageBox> {
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600),
                               textAlign: TextAlign.left),
-                          const SizedBox(height: 10),
+                           SizedBox(height: deviceHeight(context) * .02),
 
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -115,17 +115,16 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
                         color: AppColors.richBlack,
                         fontWeight: FontWeight.w500)),
                 TextSpan(
-                    text: "${toy.categories}\n",
+                    text: "${toy.categories}",
                     style: TextStyle(
                         fontSize: 20.0,
                         color: AppColors.celadonBlue,
-                        fontWeight: FontWeight.w500)),
-                WidgetSpan(
-                  child: SizedBox(height: deviceHeight(context) * .035),
-                ),
-              ],
-            ),
-          ),
+                        fontWeight: FontWeight.w500,
+                      fontFamily: 'OpenSans'
+                    )
+                ),])),
+          SizedBox(height: deviceHeight(context) * .025),
+          Divider(thickness: 3, color: AppColors.richBlack),
           Padding(
             padding: EdgeInsets.only(top: 0),
             child: Text(
@@ -148,6 +147,7 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
                 style: TextStyle(
                   fontSize: 20.0,
                   color: AppColors.celadonBlue,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ),
@@ -156,6 +156,7 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
         ],
       ),
     );
+
   }
 
   toyInteractions(context) {
