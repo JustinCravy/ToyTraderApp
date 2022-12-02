@@ -52,7 +52,7 @@ class _MessageListState extends State<MessageList> {
                   Colors.transparent,
                   Colors.blueAccent
                 ],
-                stops: [0.0, 0.05, 0.95, 1.0],
+                stops: [0.0, 0.05, 2.0, 1.0],
               ).createShader(rect);
             },
             blendMode: BlendMode.dstOut,

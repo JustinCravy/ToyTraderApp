@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:toy_trader/models/AppColors.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
 import 'package:provider/provider.dart';
 import '../firebase_services/AuthService.dart';
@@ -68,7 +69,7 @@ class _ToyGridListState extends State<ToyGridList> {
                         MaterialPageRoute(
                             builder: (context) => AddToyScreen(profileInfo: user,)));
                   },
-                  color: Colors.blue,
+                  color: AppColors.carolinaBlue,
                   textColor: Colors.white,
                   child: const Icon(
                     Icons.add,
@@ -101,7 +102,7 @@ class _ToyGridListState extends State<ToyGridList> {
                     )
                     );
                   },
-                  color: Colors.blueAccent,
+                  color: AppColors.carolinaBlue,
                   textColor: Colors.white,
                   child: const Icon(
                     Icons.add,

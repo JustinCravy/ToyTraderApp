@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:toy_trader/widgets/MessageDetailsBox.dart';
 
+import '../models/AppColors.dart';
 import '../models/Conversation.dart';
 
 
@@ -73,7 +74,7 @@ class _MessageBoxState extends State<MessageBox> {
                     width: deviceWidth(context) * .75,
                     height: height,
                     decoration: BoxDecoration(
-                        color: Colors.black12,
+                        color: AppColors.celadonBlue,
                         borderRadius: BorderRadius.only(
                           topLeft: boxCurve,
                           topRight: boxCurve,
@@ -95,7 +96,7 @@ class _MessageBoxState extends State<MessageBox> {
                            Text(name,
                               style: const TextStyle(
                                   fontSize: 16,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.w600),
                               textAlign: TextAlign.left),
                           const SizedBox(height: 10),
@@ -109,7 +110,7 @@ class _MessageBoxState extends State<MessageBox> {
                                   lastMessage,
                                   style: const TextStyle(
                                       fontSize: 14,
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.w400
                                   ),
                                   textAlign: TextAlign.left,
@@ -125,7 +126,7 @@ class _MessageBoxState extends State<MessageBox> {
                                     displayTime,
                                   style: const TextStyle(
                                     fontSize: 14,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w400),
                                 textAlign: TextAlign.right,
                                 maxLines: 1,

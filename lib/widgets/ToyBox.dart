@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:toy_trader/screens/ToyDetailsScreen.dart';
 import 'package:toy_trader/widgets/ToyGridList.dart';
 import '../firebase_services/DatabaseService.dart';
+import '../models/AppColors.dart';
 import '../models/ProfileInfo.dart';
 import '../models/Toy.dart';
 import '../models/Trade.dart';
@@ -68,7 +69,7 @@ class _ToyBoxState extends State<ToyBox> {
                 //replace with the Image of the toy
                 Container(
                   decoration:  BoxDecoration(
-                    color: Colors.greenAccent,
+                    color: AppColors.celadonBlue,
                     borderRadius: BorderRadius.all(boxCurve),
                   ),
                 ),

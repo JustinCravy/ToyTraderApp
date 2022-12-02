@@ -10,6 +10,7 @@ import '../../../models/ProfileInfo.dart';
 import '../../../models/Toy.dart';
 import 'package:uuid/uuid.dart';
 
+import '../models/AppColors.dart';
 import '../widgets/CustomButton.dart';
 import 'TradeHistoryScreen.dart';
 
@@ -119,7 +120,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       iconSize: 24,
                       elevation: 16,
                       hint: Text("Select Toy Condition"),
-                      style: const TextStyle(color: Colors.deepPurple),
+                      style: TextStyle(color: AppColors.prussianBlue),
                       onChanged: (String? newValue) {
                         setState(() {
                           conditionDropdownValue = newValue!;
@@ -145,7 +146,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       iconSize: 24,
                       elevation: 16,
                       hint: Text("Select Toy Category"),
-                      style: const TextStyle(color: Colors.deepPurple),
+                      style: TextStyle(color: AppColors.prussianBlue),
                       onChanged: (String? newValue) {
                         setState(() {
                           categoryDropdownValue = newValue!;
@@ -181,7 +182,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       iconSize: 24,
                       elevation: 16,
                       hint: Text("Select Age Range"),
-                      style: const TextStyle(color: Colors.deepPurple),
+                      style: TextStyle(color: AppColors.prussianBlue),
                       onChanged: (String? newValue) {
                         setState(() {
                           ageRangeDropdownValue = newValue!;

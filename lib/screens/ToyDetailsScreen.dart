@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
+import 'package:toy_trader/models/AppColors.dart';
 import 'package:toy_trader/models/Toy.dart';
 import 'package:toy_trader/screens/BottomNavBar.dart';
 import 'package:toy_trader/widgets/MessageDetailsBox.dart';
@@ -71,54 +72,53 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Divider(thickness: 3, color: Colors.blueAccent),
+          Divider(thickness: 3, color: AppColors.richBlack),
           RichText(
             text: TextSpan(
               children: [
                 WidgetSpan(
                   child: SizedBox(height: deviceHeight(context) * .045),
-                ),
-                const TextSpan(
+                ), TextSpan(
                     text: "Quality             ",
                     style: TextStyle(
                         fontSize: 20.0,
-                        color: Colors.black87,
+                        color: AppColors.richBlack,
                         fontWeight: FontWeight.w500)),
                 TextSpan(
                     text: "${toy.condition}\n",
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 20.0,
-                        color: Colors.black54,
+                        color: AppColors.celadonBlue,
                         fontWeight: FontWeight.w500)),
                 WidgetSpan(
                   child: SizedBox(height: deviceHeight(context) * .045),
                 ),
-                const TextSpan(
+                TextSpan(
                     text: "Ages                 ",
                     style: TextStyle(
                         fontSize: 20.0,
-                        color: Colors.black87,
+                        color: AppColors.richBlack,
                         fontWeight: FontWeight.w500)),
                 TextSpan(
                     text: "${toy.ageRange}\n",
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 20.0,
-                        color: Colors.black54,
+                        color: AppColors.celadonBlue,
                         fontWeight: FontWeight.w500)),
                 WidgetSpan(
                   child: SizedBox(height: deviceHeight(context) * .045),
                 ),
-                const TextSpan(
+                TextSpan(
                     text: "Category          ",
                     style: TextStyle(
                         fontSize: 20.0,
-                        color: Colors.black87,
+                        color: AppColors.richBlack,
                         fontWeight: FontWeight.w500)),
                 TextSpan(
                     text: "${toy.categories}\n",
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 20.0,
-                        color: Colors.black54,
+                        color: AppColors.celadonBlue,
                         fontWeight: FontWeight.w500)),
                 WidgetSpan(
                   child: SizedBox(height: deviceHeight(context) * .035),
@@ -126,13 +126,13 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
               ],
             ),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 0),
             child: Text(
               "Description",
               style: TextStyle(
                   fontSize: 22,
-                  color: Colors.black87,
+                  color: AppColors.richBlack,
                   fontWeight: FontWeight.w500),
               textAlign: TextAlign.left,
             ),
@@ -146,7 +146,8 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
                 textAlign: TextAlign.justify,
                 trimMode: TrimMode.Line,
                 style: TextStyle(
-                  fontSize: 16.0,
+                  fontSize: 20.0,
+                  color: AppColors.celadonBlue,
                 ),
               ),
             ),
@@ -167,9 +168,9 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
             margin: EdgeInsets.only(top: 10),
             height: deviceHeight(context) * .07,
             width: deviceWidth(context) * .40,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.rectangle,
-              color: Colors.blueAccent,
+              color: AppColors.prussianBlue,
               borderRadius: BorderRadius.all(Radius.circular(30)),
             ),
             child: Center(
@@ -196,9 +197,9 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
             margin: const EdgeInsets.only(top: 10),
             height: deviceHeight(context) * .07,
             width: deviceWidth(context) * .40,
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               shape: BoxShape.rectangle,
-              color: Colors.blueAccent,
+              color: AppColors.prussianBlue,
               borderRadius: BorderRadius.all(Radius.circular(30)),
             ),
             child: Center(

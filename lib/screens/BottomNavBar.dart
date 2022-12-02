@@ -250,7 +250,7 @@ class _MainScreenState extends State<MainScreen> {
                 )),
             Container(
               width: deviceWidth(context),
-              height: deviceHeight(context) * .66,
+              height: deviceHeight(context) * .80 - 85,
               alignment: Alignment.topLeft,
               child: FutureBuilder<List<Toy>>(
                 future: dbService.getMainFeed(myController.text),
