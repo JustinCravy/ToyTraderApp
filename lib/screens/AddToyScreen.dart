@@ -13,6 +13,7 @@ import 'package:uuid/uuid.dart';
 import '../models/AppColors.dart';
 import '../widgets/CustomButton.dart';
 import 'TradeHistoryScreen.dart';
+import 'authentication/SignInScreen.dart';
 
 
 
@@ -35,6 +36,11 @@ class _AddToyScreenState extends State<AddToyScreen> {
 
   DatabaseService dbService = DatabaseService();
   File? image;
+
+  bool showSignIn = true;
+  void toggleView() {
+    setState(() => showSignIn = !showSignIn);
+  }
 
   Future pickImage(ImageSource source) async{
     final image = await ImagePicker().pickImage(source: source);
@@ -236,6 +242,10 @@ class _AddToyScreenState extends State<AddToyScreen> {
     switch (value) {
       case 'Logout':
         await FirebaseAuth.instance.signOut();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SignInScreen(toggleView: toggleView,)),
+        );
         break;
       case 'Trade History':
         Navigator.push(

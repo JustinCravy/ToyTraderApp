@@ -12,6 +12,7 @@ import '../firebase_services/DatabaseService.dart';
 import '../models/ProfileInfo.dart';
 import 'HomeScreen.dart';
 import 'TradeHistoryScreen.dart';
+import 'authentication/SignInScreen.dart';
 
 class ToyDetailsScreen extends StatefulWidget {
   final Toy toy;
@@ -25,6 +26,10 @@ class ToyDetailsScreen extends StatefulWidget {
 class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
   Widget _body = CircularProgressIndicator();
   ProfileInfo? ownerProfileInfo;
+  bool showSignIn = true;
+  void toggleView() {
+    setState(() => showSignIn = !showSignIn);
+  }
 
   @override
   void initState() {
@@ -219,6 +224,10 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
     switch (value) {
       case 'Logout':
         await FirebaseAuth.instance.signOut();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SignInScreen(toggleView: toggleView,)),
+        );
         break;
       case 'Trade History':
         Navigator.push(

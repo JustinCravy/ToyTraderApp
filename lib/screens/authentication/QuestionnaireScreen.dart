@@ -27,6 +27,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
     profileImageUrl: '',
     userRating: 0,
     totalRates: 0,
+    blockedUsers: <String>[]
   );
   final _formKey = GlobalKey<FormState>();
   AuthService authService = AuthService();

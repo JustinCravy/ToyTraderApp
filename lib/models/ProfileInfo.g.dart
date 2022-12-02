@@ -17,6 +17,9 @@ ProfileInfo _$ProfileInfoFromJson(Map json) => ProfileInfo(
       profileImageUrl: json['profileImageUrl'] as String,
       userRating: (json['userRating'] as num).toDouble(),
       totalRates: json['totalRates'] as int,
+      blockedUsers: (json['blockedUsers'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$ProfileInfoToJson(ProfileInfo instance) =>
@@ -29,4 +32,5 @@ Map<String, dynamic> _$ProfileInfoToJson(ProfileInfo instance) =>
       'profileImageUrl': instance.profileImageUrl,
       'userRating': instance.userRating,
       'totalRates': instance.totalRates,
+      'blockedUsers': instance.blockedUsers,
     };

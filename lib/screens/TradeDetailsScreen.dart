@@ -5,6 +5,7 @@ import '../models/Trade.dart';
 import 'HomeScreen.dart';
 import 'RateUserScreen.dart';
 import 'TradeHistoryScreen.dart';
+import 'authentication/SignInScreen.dart';
 
 class TradeDetailsScreen extends StatefulWidget {
   final Trade trade;
@@ -16,6 +17,10 @@ class TradeDetailsScreen extends StatefulWidget {
 }
 
 class _TradeDetailsScreenState extends State<TradeDetailsScreen> {
+  bool showSignIn = true;
+  void toggleView() {
+    setState(() => showSignIn = !showSignIn);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -166,6 +171,10 @@ class _TradeDetailsScreenState extends State<TradeDetailsScreen> {
     switch (value) {
       case 'Logout':
         await FirebaseAuth.instance.signOut();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SignInScreen(toggleView: toggleView,)),
+        );
         break;
       case 'Trade History':
         Navigator.push(

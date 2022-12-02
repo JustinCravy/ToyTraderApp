@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toy_trader/firebase_services/DatabaseService.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
-import 'package:toy_trader/screens/TradeHistoryScreen.dart';
 import 'package:toy_trader/firebase_services/AuthService.dart';
 import 'BottomNavBar.dart';
 import 'dart:ui';
@@ -111,19 +110,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-  void handleClick(String value) async {
-    switch (value) {
-      case 'Logout':
-        await authService.signOut();
-        break;
-      case 'Trade History':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const TradeHistory()),
-        );
-        break;
-    }
   }
 }
 var physicalScreenSize = window.physicalSize;

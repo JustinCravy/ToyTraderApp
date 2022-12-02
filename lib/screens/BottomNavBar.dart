@@ -1,12 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:toy_trader/models/Toy.dart';
 import 'package:toy_trader/widgets/MessageList.dart';
 import 'package:toy_trader/widgets/ToyGridList.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import '../firebase_services/DatabaseService.dart';
 import '../models/ProfileInfo.dart';
 import 'HomeScreen.dart';
 import 'TradeHistoryScreen.dart';
+import 'authentication/SignInScreen.dart';
 
 class ConversationsScreen extends StatefulWidget {
   const ConversationsScreen({Key? key}) : super(key: key);
@@ -16,12 +18,17 @@ class ConversationsScreen extends StatefulWidget {
 }
 
 class _ConversationsScreenState extends State<ConversationsScreen> {
+  bool showSignIn = true;
+
+  void toggleView() {
+    setState(() => showSignIn = !showSignIn);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
-      // backgroundColor: const Color(0xffC4DFCB),
+        // backgroundColor: const Color(0xffC4DFCB),
         appBar: AppBar(
             actions: <Widget>[
               PopupMenuButton<String>(
@@ -46,8 +53,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                   MaterialPageRoute(builder: (context) => const HomeScreen()),
                 );
               },
-            )
-        ),
+            )),
         body: Container(child: MessageList()));
   }
 
@@ -55,6 +61,13 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     switch (value) {
       case 'Logout':
         await FirebaseAuth.instance.signOut();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SignInScreen(
+                    toggleView: toggleView,
+                  )),
+        );
         break;
       case 'Trade History':
         Navigator.push(
@@ -68,6 +81,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
 class ProfileScreen extends StatefulWidget {
   final String userId;
+
   const ProfileScreen({Key? key, required this.userId}) : super(key: key);
 
   @override
@@ -76,98 +90,62 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   DatabaseService dbService = DatabaseService();
-  late ProfileInfo userProfile;
+  ProfileInfo? otherUserProfile;
+  ProfileInfo? myProfileInfo;
+  Widget _body = CircularProgressIndicator();
+  bool showSignIn = true;
+
+  void toggleView() {
+    setState(() => showSignIn = !showSignIn);
+  }
+
+  @override
+  void initState() {
+    getProfileInfo_setStateWhenDone();
+  }
 
   @override
   Widget build(BuildContext context) {
-    ProfileInfo userProfile;
     return Scaffold(
-      appBar: AppBar(
-          actions: <Widget>[
-            PopupMenuButton<String>(
-              onSelected: handleClick,
-              itemBuilder: (BuildContext context) {
-                return {'Trade History', 'Logout'}.map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
+        appBar: AppBar(
+            actions: <Widget>[
+              PopupMenuButton<String>(
+                onSelected: handleClick,
+                itemBuilder: (BuildContext context) {
+                  return {'Trade History', 'Logout'}.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
+            title: IconButton(
+              color: Colors.white,
+              iconSize: physicalHeight / 11,
+              icon: Image.asset('assets/images/logo.png'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                );
               },
-            ),
-          ],
-          title: IconButton(
-            color: Colors.white,
-            iconSize: physicalHeight / 11,
-            icon: Image.asset('assets/images/logo.png'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()),
-              );
-            },
-
-          )
-      ),
-      body: Container(
-        padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
-        alignment: Alignment.topCenter,
-        child: FutureBuilder<ProfileInfo?>(
-          future: dbService.getProfileInfo(widget.userId),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              userProfile = snapshot.data!;
-              return Column(
-                children: [
-                  Container(
-                      width: 120,
-                      height: 120,
-                      padding: const EdgeInsets.all(200),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(width: 3, color: Colors.blue),
-                          image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image:
-                                  NetworkImage(userProfile.profileImageUrl)))),
-                  Container(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      alignment: Alignment.centerLeft,
-                      child: Text('Name: ' + userProfile.screenName,
-                          style: const TextStyle(fontSize: 20))),
-                  Container(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: const Text(
-                        'Toys',
-                        style: TextStyle(fontSize: 30),
-                      )),
-                  Flexible(
-                      child: Container(
-                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          decoration: const BoxDecoration(
-                              /*border: Border.all(
-                            color: Colors.blue,
-                            width: 2,
-                          ),
-
-                           */
-                              ),
-                          child: ToyGridList(userProfile.toys)))
-                ],
-
-              );
-            } else {
-              return const CircularProgressIndicator();
-            }
-          },
-        ),
-      ),
-    );
+            )),
+        body: _body);
   }
+
   void handleClick(String value) async {
     switch (value) {
       case 'Logout':
         await FirebaseAuth.instance.signOut();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SignInScreen(
+                    toggleView: toggleView,
+                  )),
+        );
         break;
       case 'Trade History':
         Navigator.push(
@@ -176,6 +154,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
         break;
     }
+  }
+
+  void getProfileInfo_setStateWhenDone() async {
+    otherUserProfile = await DatabaseService().getProfileInfo(widget.userId);
+    await DatabaseService()
+        .getProfileInfo(FirebaseAuth.instance.currentUser!.uid)
+        .then((value) {
+      myProfileInfo = value;
+      setState(() => _body = Stack(children: [
+            Container(
+                padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
+                alignment: Alignment.topCenter,
+                child: Column(
+                  children: [
+                    Container(
+                        width: 120,
+                        height: 120,
+                        padding: const EdgeInsets.all(200),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(width: 3, color: Colors.blue),
+                            image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: NetworkImage(
+                                    otherUserProfile!.profileImageUrl)))),
+                    Container(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        alignment: Alignment.centerLeft,
+                        child: Text('Name: ' + otherUserProfile!.screenName,
+                            style: const TextStyle(fontSize: 20))),
+                    Container(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        child: const Text(
+                          'Toys',
+                          style: TextStyle(fontSize: 30),
+                        )),
+                    Flexible(
+                        child: Container(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            decoration: const BoxDecoration(),
+                            child: ToyGridList(otherUserProfile!.toys))),
+                  ],
+                )),
+            Positioned(
+                left: 10.0,
+                top: 5.0,
+                    child: Visibility(
+                        visible: (myProfileInfo!.uid != otherUserProfile!.uid),
+                        child: TextButton.icon(
+                          icon: Icon(
+                            Icons.block,
+                            color: Colors.red,
+                          ),
+                          label: Text(
+                            (myProfileInfo!.blockedUsers
+                                    .contains(otherUserProfile!.uid))
+                                ? 'Unblock User'
+                                : 'Block User',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          onPressed: () async {
+                            print("blocking user");
+                            if (!myProfileInfo!.blockedUsers
+                                .contains(otherUserProfile!.uid)) {
+                              await dbService.blockUser(
+                                  myProfileInfo!, otherUserProfile!);
+                            } else {
+                              await dbService.unblockUser(
+                                  myProfileInfo!, otherUserProfile!);
+                            }
+                          },
+                        ))),
+          ]));
+    });
   }
 }
 
@@ -190,6 +242,11 @@ class _MainScreenState extends State<MainScreen> {
   DatabaseService dbService = DatabaseService();
   final myController = TextEditingController();
   String searchText = "";
+  bool showSignIn = true;
+
+  void toggleView() {
+    setState(() => showSignIn = !showSignIn);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -223,8 +280,7 @@ class _MainScreenState extends State<MainScreen> {
                 MaterialPageRoute(builder: (context) => const HomeScreen()),
               );
             },
-          )
-      ),
+          )),
       body: SingleChildScrollView(
         // color: const Color(0xffC4DFCB),
         child: Column(
@@ -252,7 +308,7 @@ class _MainScreenState extends State<MainScreen> {
               width: deviceWidth(context),
               height: deviceHeight(context) * .80 - 85,
               alignment: Alignment.topLeft,
-              child: FutureBuilder<List<Toy>>(
+              child: FutureBuilder<List<Toy>?>(
                 future: dbService.getMainFeed(myController.text),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -261,7 +317,9 @@ class _MainScreenState extends State<MainScreen> {
                     return Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Flexible(child: ToyGridList(toyList),)
+                          Flexible(
+                            child: ToyGridList(toyList),
+                          )
                         ]);
                   } else {
                     return const Center(child: CircularProgressIndicator());
@@ -279,6 +337,13 @@ class _MainScreenState extends State<MainScreen> {
     switch (value) {
       case 'Logout':
         await FirebaseAuth.instance.signOut();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SignInScreen(
+                    toggleView: toggleView,
+                  )),
+        );
         break;
       case 'Trade History':
         Navigator.push(
@@ -288,7 +353,6 @@ class _MainScreenState extends State<MainScreen> {
         break;
     }
   }
-
 }
 
 //longlist, need to get data from data base and covert

@@ -19,6 +19,7 @@ class AuthService{
         profileImageUrl: '',
         userRating: 0,
         totalRates: 0,
+        blockedUsers: <String>[]
     ) : null;
   }
 

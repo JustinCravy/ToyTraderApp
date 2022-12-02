@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase_services/DatabaseService.dart';
 import '../models/Trade.dart';
 import 'HomeScreen.dart';
+import 'authentication/SignInScreen.dart';
 
 class TradeHistory extends StatefulWidget {
   const TradeHistory({Key? key}) : super(key: key);
@@ -15,6 +16,10 @@ class TradeHistory extends StatefulWidget {
 
 class _TradeHistoryState extends State<TradeHistory> {
   List<Trade> trades = [];
+  bool showSignIn = true;
+  void toggleView() {
+    setState(() => showSignIn = !showSignIn);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +82,10 @@ class _TradeHistoryState extends State<TradeHistory> {
     switch (value) {
       case 'Logout':
         await FirebaseAuth.instance.signOut();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SignInScreen(toggleView: toggleView,)),
+        );
         break;
       case 'Trade History':
         Navigator.push(

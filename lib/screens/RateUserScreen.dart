@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase_services/DatabaseService.dart';
 import 'HomeScreen.dart';
 import 'TradeHistoryScreen.dart';
+import 'authentication/SignInScreen.dart';
 
 class RateUserScreen extends StatefulWidget{
   final String id;
@@ -17,6 +18,10 @@ class RateUserScreen extends StatefulWidget{
 
 class _RatingState extends State<RateUserScreen>{
   DatabaseService dbService = DatabaseService();
+  bool showSignIn = true;
+  void toggleView() {
+    setState(() => showSignIn = !showSignIn);
+  }
 
   double rating=0;
   @override
@@ -84,6 +89,10 @@ class _RatingState extends State<RateUserScreen>{
     switch (value) {
       case 'Logout':
         await FirebaseAuth.instance.signOut();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SignInScreen(toggleView: toggleView,)),
+        );
         break;
       case 'Trade History':
         Navigator.push(

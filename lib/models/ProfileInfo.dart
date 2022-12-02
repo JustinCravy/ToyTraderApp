@@ -13,6 +13,7 @@ class ProfileInfo {
   String profileImageUrl = '';
   double userRating = 0.0;
   int totalRates = 0;
+  List<String> blockedUsers = <String>[];
 
  ProfileInfo({
    required this.uid,
@@ -22,7 +23,8 @@ class ProfileInfo {
    required this.toys,
    required this.profileImageUrl,
    required this.userRating,
-   required this.totalRates
+   required this.totalRates,
+   required this.blockedUsers
  });
 
  factory ProfileInfo.fromJson(Map<String, dynamic> json) => _$ProfileInfoFromJson(json);
