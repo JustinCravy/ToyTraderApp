@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toy_trader/firebase_services/DatabaseService.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
-import 'package:toy_trader/screens/TradeHistoryScreen.dart';
 import 'package:toy_trader/firebase_services/AuthService.dart';
 import 'BottomNavBar.dart';
 import 'dart:ui';
@@ -28,52 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
     var user = Provider.of<ProfileInfo?>(context);
 
     return Scaffold(
-      // backgroundColor: const Color(0xffC4DFCB),
-      appBar: AppBar(
-        actions: <Widget>[
-          PopupMenuButton<String>(
-            onSelected: handleClick,
-            itemBuilder: (BuildContext context) {
-              return {'Trade History', 'Logout'}.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
-            },
-          ),
-        ],
-        title: IconButton(
-          color: Colors.white,
-          iconSize: physicalHeight / 10,
-          icon: Image.asset('assets/images/logo.png'),
-          onPressed: () {
-            setState(() {
-              screenIndex = 2;
-            });
-          },
-          //iconSize: deviceHeight(context) / 4,
-        )
-      /*
-        title: const Text(
-          "Toy Trader",
-          style: TextStyle(
-            // color: Theme.of(context).primaryColor,
-            fontSize: 25,
-            fontWeight: FontWeight.w600,
-          ),
 
-        ),
-        
-         */
-        // centerTitle: true,
-        // backgroundColor: Colors.white,
-      ),
       body: (() {
         if(screenIndex == 0) {
           return ConversationsScreen();
         } else if( screenIndex == 1) {
-          return ProfileScreen();
+          return ProfileScreen(userId: FirebaseAuth.instance.currentUser!.uid);
         } else {
           return MainScreen();
         }
@@ -151,23 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-  void handleClick(String value) async {
-    switch (value) {
-      case 'Logout':
-        await authService.signOut();
-        break;
-      case 'Trade History':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const TradeHistory()),
-        );
-        break;
-    }
-  }
 }
 var physicalScreenSize = window.physicalSize;
 var physicalWidth = physicalScreenSize.width;
 var physicalHeight = physicalScreenSize.height;
-
-double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;
-double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;

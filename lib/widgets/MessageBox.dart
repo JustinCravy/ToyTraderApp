@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:toy_trader/widgets/MessageDetailsBox.dart';
 
+import '../models/AppColors.dart';
 import '../models/Conversation.dart';
 
 
@@ -27,6 +28,9 @@ class _MessageBoxState extends State<MessageBox> {
 
     double height      = deviceHeight(context) * .13; //controls height of message box
     Radius boxCurve    = const Radius.circular(15);
+
+
+    var displayTime = getTimeDifference(time);
 
     return Container(
       //Sets the height and width of the Row With will be locked to list while
@@ -70,11 +74,12 @@ class _MessageBoxState extends State<MessageBox> {
                     width: deviceWidth(context) * .75,
                     height: height,
                     decoration: BoxDecoration(
-                        color: Colors.black12,
+                        color: AppColors.carolinaBlue,
                         borderRadius: BorderRadius.only(
                           topLeft: boxCurve,
                           topRight: boxCurve,
                           bottomRight: boxCurve,
+                          bottomLeft: boxCurve
                         )),
                     child: Padding(
                       padding: EdgeInsets.only(
@@ -91,10 +96,10 @@ class _MessageBoxState extends State<MessageBox> {
                            Text(name,
                               style: const TextStyle(
                                   fontSize: 16,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.w600),
                               textAlign: TextAlign.left),
-                          const SizedBox(height: 10),
+                           SizedBox(height: deviceHeight(context) * .02),
 
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -105,7 +110,7 @@ class _MessageBoxState extends State<MessageBox> {
                                   lastMessage,
                                   style: const TextStyle(
                                       fontSize: 14,
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.w400
                                   ),
                                   textAlign: TextAlign.left,
@@ -115,13 +120,13 @@ class _MessageBoxState extends State<MessageBox> {
                                 ),
                               ),
                               Flexible(
-                                  child: Container(
-                                    padding: EdgeInsets.only(right: (deviceWidth(context) * .045)),
-                                child: Text(
-                                time,
-                                style: const TextStyle(
+                                child: Container(
+                                  padding: EdgeInsets.only(right: (deviceWidth(context) * .045)),
+                                  child: Text(
+                                    displayTime,
+                                  style: const TextStyle(
                                     fontSize: 14,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w400),
                                 textAlign: TextAlign.right,
                                 maxLines: 1,
@@ -146,4 +151,28 @@ class _MessageBoxState extends State<MessageBox> {
 
   double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;
   double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
+
+  getTimeDifference(String time) {
+    DateTime received  = DateTime.parse(time);
+    DateTime now       = DateTime.now();
+
+    var timeDiffDays = now.difference(received).inDays;
+    var timeDiffHours = now.difference(received).inHours;
+    var timeDiffMinutes = now.difference(received).inMinutes;
+    var timeDiffSeconds = now.difference(received).inSeconds;
+
+    if(timeDiffDays > 0){
+      return "$timeDiffDays days ago";
+    }
+    else if(timeDiffMinutes > 59){
+      return "$timeDiffHours hours ago";
+    }
+    else if(timeDiffMinutes > 0){
+      return "$timeDiffMinutes min ago";
+    }else{
+      return "$timeDiffSeconds sec ago";
+    }
+
+
+  }
 }

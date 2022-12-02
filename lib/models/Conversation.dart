@@ -19,4 +19,6 @@ class Conversation {
 
   factory Conversation.fromJson(Map<String, dynamic> json) => _$ConversationFromJson(json);
   Map<String, dynamic> toJson() => _$ConversationToJson(this);
+
+
 }

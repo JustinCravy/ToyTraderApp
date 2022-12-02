@@ -1,11 +1,19 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:toy_trader/screens/BottomNavBar.dart';
+import 'package:toy_trader/screens/HomeScreen.dart';
 import '../../../firebase_services/DatabaseService.dart';
 import '../../../models/ProfileInfo.dart';
 import '../../../models/Toy.dart';
 import 'package:uuid/uuid.dart';
+
+import '../models/AppColors.dart';
+import '../widgets/CustomButton.dart';
+import 'TradeHistoryScreen.dart';
+import 'authentication/SignInScreen.dart';
 
 
 
@@ -29,6 +37,11 @@ class _AddToyScreenState extends State<AddToyScreen> {
   DatabaseService dbService = DatabaseService();
   File? image;
 
+  bool showSignIn = true;
+  void toggleView() {
+    setState(() => showSignIn = !showSignIn);
+  }
+
   Future pickImage(ImageSource source) async{
     final image = await ImagePicker().pickImage(source: source);
     if (image ==null) return;
@@ -42,21 +55,36 @@ class _AddToyScreenState extends State<AddToyScreen> {
       toy.toyId = toyId;
       toy.ownerId = widget.profileInfo.uid;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Toy Trader",
-          style: TextStyle(
-            // color: Theme.of(context).primaryColor,
-            fontSize: 25,
-            fontWeight: FontWeight.w600,
-          ),
-
+        appBar: AppBar(
+            actions: <Widget>[
+              PopupMenuButton<String>(
+                onSelected: handleClick,
+                itemBuilder: (BuildContext context) {
+                  return {'Trade History', 'Logout'}.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
+            title: IconButton(
+              color: Colors.white,
+              iconSize: physicalHeight / 11,
+              icon: Image.asset('assets/images/logo.png'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                );
+              },
+            )
         ),
-      ),
+
         body: SingleChildScrollView (
-            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+            padding: EdgeInsets.symmetric(vertical:  deviceHeight(context) *.02, horizontal: deviceWidth(context) * .08),
             child: Column(children: <Widget>[
-              SizedBox(height: 30.0,),
               InkWell(
                 onTap: () {
                   pickImage(ImageSource.camera);
@@ -66,6 +94,11 @@ class _AddToyScreenState extends State<AddToyScreen> {
                   child: Image(image: image == null ? AssetImage('assets/images/click_to_add_img.png') : Image.file(image!).image,
                       width: double.infinity, height: 200),
                 ),
+              ),
+              CustomButton(
+                title: 'Pick from Gallery',
+                icon: Icons.camera,
+                onClick: () => pickImage(ImageSource.gallery),
               ),
               Form(
                 child: Column(
@@ -77,9 +110,9 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       validator: (val) => val!.isEmpty ? 'Enter name' : null,
                       onChanged: (val) => toy.name = val,
                     ),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 5.0),
                     TextFormField(
-                        maxLines: 7,
+                        maxLines: 4,
                         decoration: InputDecoration(
                           hintText: 'Description',
                         ),
@@ -93,7 +126,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       iconSize: 24,
                       elevation: 16,
                       hint: Text("Select Toy Condition"),
-                      style: const TextStyle(color: Colors.deepPurple),
+                      style: TextStyle(color: AppColors.prussianBlue),
                       onChanged: (String? newValue) {
                         setState(() {
                           conditionDropdownValue = newValue!;
@@ -101,11 +134,10 @@ class _AddToyScreenState extends State<AddToyScreen> {
                         });
                       },
                       items: <String>[
-                        'Barely works',
-                        'Bad',
-                        'Ok',
+                        'Acceptable',
                         'Good',
-                        'Great'
+                        'Very Good',
+                        'Like New',
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -120,7 +152,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       iconSize: 24,
                       elevation: 16,
                       hint: Text("Select Toy Category"),
-                      style: const TextStyle(color: Colors.deepPurple),
+                      style: TextStyle(color: AppColors.prussianBlue),
                       onChanged: (String? newValue) {
                         setState(() {
                           categoryDropdownValue = newValue!;
@@ -130,7 +162,6 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       items: <String>[
                         'Action Figures',
                         'Animals',
-                        'Remote Controlled',
                         'Construction Toys',
                         'Creative Toys',
                         'Dolls',
@@ -138,8 +169,11 @@ class _AddToyScreenState extends State<AddToyScreen> {
                         'Food related toys',
                         'Games',
                         'Model Building Toys',
+                        'Musical Toys',
                         'Puzzle',
-                        'Muscial Toys'
+                        'Plush',
+                        'Remote Controlled',
+
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -154,7 +188,7 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       iconSize: 24,
                       elevation: 16,
                       hint: Text("Select Age Range"),
-                      style: const TextStyle(color: Colors.deepPurple),
+                      style: TextStyle(color: AppColors.prussianBlue),
                       onChanged: (String? newValue) {
                         setState(() {
                           ageRangeDropdownValue = newValue!;
@@ -182,15 +216,43 @@ class _AddToyScreenState extends State<AddToyScreen> {
                       ),
                         child: Text('Add Toy'),
                         onPressed: () async {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Sending Message"),
+                        if(!toy.checkNullValue()){
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text("Adding Toy"),
                           ));
                           await dbService.addToyData(toy, widget.profileInfo, image!);
-                          Navigator.pop(context,true);
-                        }),
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => HomeScreen())
+                          );
+                        }
+                        else{
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text("Incomplete"),
+                            duration: Duration(seconds: 1),
+                          ));
+                        }
+                      }),
                   ],
                 ),
               ),
             ])));
+  }
+  void handleClick(String value) async {
+    switch (value) {
+      case 'Logout':
+        await FirebaseAuth.instance.signOut();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SignInScreen(toggleView: toggleView,)),
+        );
+        break;
+      case 'Trade History':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const TradeHistory()),
+        );
+        break;
+    }
   }
 }

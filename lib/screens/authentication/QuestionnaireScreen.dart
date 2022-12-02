@@ -6,6 +6,7 @@ import 'package:toy_trader/models/ProfileInfo.dart';
 
 import '../../firebase_services/AuthService.dart';
 import '../../models/Toy.dart';
+import '../../widgets/CustomButton.dart';
 
 class QuestionnaireScreen extends StatefulWidget {
   const QuestionnaireScreen({Key? key}) : super(key: key);
@@ -26,6 +27,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
     profileImageUrl: '',
     userRating: 0,
     totalRates: 0,
+    blockedUsers: <String>[]
   );
   final _formKey = GlobalKey<FormState>();
   AuthService authService = AuthService();
@@ -43,16 +45,10 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as List<String>;
     return Scaffold(
-      // backgroundColor: const Color(0xffC4DFCB),
       appBar: AppBar(
-        title: const Text(
-          "Toy Trader",
-          style: TextStyle(
-            // color: Theme.of(context).primaryColor,
-            fontSize: 25,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        title: Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 90, 0),
+            child: Image.asset('assets/images/logo.png')),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,7 +62,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                         const SizedBox(height: 20,),
                         InkWell(
                           onTap: () {
-                            pickImage(ImageSource.gallery);
+                            pickImage(ImageSource.camera);
                           },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20.0),
@@ -80,9 +76,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                           ),
                         ),
                         CustomButton(
-                          title: 'Pick from Camera',
+                          title: 'Pick from Gallery',
                           icon: Icons.camera,
-                          onClick: () => pickImage(ImageSource.camera),
+                          onClick: () => pickImage(ImageSource.gallery),
                         ),
                         SizedBox(height: 30),
                         TextFormField(
@@ -191,24 +187,4 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   }
 }
 
-Widget CustomButton({
-  required String title,
-  required IconData icon,
-  required VoidCallback onClick,
-}) {
-  return Container(
-    width: 280,
-    child: ElevatedButton(
-      onPressed: onClick,
-      child: Row(
-        children: [
-          Icon(icon),
-          SizedBox(
-            width: 20,
-          ),
-          Text(title)
-        ],
-      ),
-    ),
-  );
-}
+

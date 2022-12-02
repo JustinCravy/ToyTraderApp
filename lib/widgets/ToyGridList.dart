@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:toy_trader/models/AppColors.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
 import 'package:provider/provider.dart';
-import 'package:toy_trader/screens/HomeScreen.dart';
 import '../firebase_services/AuthService.dart';
 import '../firebase_services/DatabaseService.dart';
 import '../models/Toy.dart';
@@ -12,10 +12,11 @@ import 'ToyBox.dart';
 class ToyGridList extends StatefulWidget {
   final List<Toy> toyList;
 
-  const ToyGridList(this.toyList, {super.key});
+  const ToyGridList(this.toyList, {super.key,});
 
   @override
   _ToyGridListState createState() => _ToyGridListState();
+
 }
 
 class _ToyGridListState extends State<ToyGridList> {
@@ -37,7 +38,9 @@ class _ToyGridListState extends State<ToyGridList> {
         widgetList.add(ToyBox(
             toy: toyList[i],
             left: i % 2,
-            user: user
+            user: user, onClick: () {setState(() {
+              toyList.removeAt(i);
+            });},
         ));
       }
 
@@ -50,27 +53,8 @@ class _ToyGridListState extends State<ToyGridList> {
       children: [
         Container(
           alignment: Alignment.center,
-          child: Container(
-            child: Column(
-              //mainAxisAlignment: MainAxisAlignment.end,
-              //crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  child: Icon(
-                      Icons.thunderstorm,
-                      color: Colors.black,
-                      size: physicalScreenSize.width / 8
-                  ),
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                ),
-                const Text('There are no toys to display!',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'assets/fonts/YanoneKaffeesatz-Regular.ttf'
-                    ),
-                )
-              ],
-            )
+          child: Text(
+            "You have no Toys",
           ),
         ),
         Padding(
@@ -85,7 +69,7 @@ class _ToyGridListState extends State<ToyGridList> {
                         MaterialPageRoute(
                             builder: (context) => AddToyScreen(profileInfo: user,)));
                   },
-                  color: Colors.blue,
+                  color: AppColors.carolinaBlue,
                   textColor: Colors.white,
                   child: const Icon(
                     Icons.add,
@@ -103,7 +87,7 @@ class _ToyGridListState extends State<ToyGridList> {
       children: [
         Container(
           child: GridView.count(
-              shrinkWrap: true, crossAxisCount: 2, children: widgetList),
+              shrinkWrap: true, crossAxisCount: 2, children: [...widgetList]),
         ),
         Padding(
             padding: EdgeInsets.all(10),
@@ -118,7 +102,7 @@ class _ToyGridListState extends State<ToyGridList> {
                     )
                     );
                   },
-                  color: Colors.cyanAccent,
+                  color: AppColors.carolinaBlue,
                   textColor: Colors.white,
                   child: const Icon(
                     Icons.add,

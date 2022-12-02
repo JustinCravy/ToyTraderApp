@@ -15,9 +15,6 @@ class DatabaseService {
 
   List<Toy> toyList = [];
 
-  Toy toy1 = Toy('0', '0', 'car',"this is discription", 'condition of toy','10-11','categories',"imageurl");
-  Toy toy2 = Toy('1', '1', 'Boat',"this is discription", 'condition of toy','10-11','categories',"imageurl");
-
 
   factory DatabaseService(){
     return _instance;
@@ -25,8 +22,6 @@ class DatabaseService {
 
   //Initialization of the Instance of the class
   DatabaseService._internal(){
-    toyList.add(toy1);
-    toyList.add(toy2);
   }
 
   Future setProfileInfo(ProfileInfo profileInfo, File? imageFile) async {
@@ -95,15 +90,7 @@ class DatabaseService {
       }
 
 
-      final profileInfo = ProfileInfo(uid: userData[0].id,
-          screenName: userData[0].get("screenName"),
-          ageRange: userData[0].get("ageRange"),
-          interests: userData[0].get("interests"),
-          toys: toys,
-          profileImageUrl: userData[0].get("profileImageUrl"),
-          userRating: userData[0].get("userRating"),
-          totalRates: userData[0].get("totalRates")
-      );
+      final profileInfo = ProfileInfo.fromJson(userData[0].data());
 
       return profileInfo;
     }
@@ -117,15 +104,7 @@ class DatabaseService {
       var _toy = Toy(item["toyId"], item["ownerId"], item["name"], item["description"], item["condition"], item["ageRange"], item["categories"], item["toyImageURL"]);
       toys.add(_toy);
     }
-    final profileInfo = ProfileInfo(uid: userData[0].id,
-        screenName: userData[0].get("screenName"),
-        ageRange: userData[0].get("ageRange"),
-        interests: userData[0].get("interests"),
-        toys: toys,
-        profileImageUrl: userData[0].get("profileImageUrl"),
-        userRating: userData[0].get("userRating"),
-        totalRates: userData[0].get("totalRates")
-    );
+    final profileInfo = ProfileInfo.fromJson(userData[0].data());
 
     return profileInfo;
   }
@@ -150,57 +129,62 @@ class DatabaseService {
     return conversations;
   }
 
-  Future<List<Toy>> getMainFeed(String searchText) async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
-    var user = FirebaseAuth.instance.currentUser?.uid;
-    var profiles = querySnapshot.docs.map((doc) => doc).toList();
+  Future<List<Toy>?> getMainFeed(String searchText) async {
+    try {
+      var user = FirebaseAuth.instance.currentUser?.uid;
+      var query = await FirebaseFirestore.instance.collection('users')
+          .where('uid', isNotEqualTo: user).get();
+      var profiles = query.docs.map((doc) => doc).toList();
 
-    List<ProfileInfo> profileList = [];
+      List<ProfileInfo> profileList = [];
 
-    profiles.removeWhere((element) => element.get("uid") == user);
-    for (var i = 0; i < profiles.length; i++) {
+      profiles.removeWhere((element) => element.get("uid") == user);
+      for (var i = 0; i < profiles.length; i++) {
+        List<Toy> toyList = [];
+
+        for (var item in profiles[i].get("toys")) {
+          var _toy = Toy(
+              item["toyId"],
+              item["ownerId"],
+              item["name"],
+              item["description"],
+              item["condition"],
+              item["ageRange"],
+              item["categories"],
+              item["toyImageURL"]);
+          toyList.add(_toy);
+        }
+
+        profileList.add(ProfileInfo.fromJson(profiles[i].data()));
+      }
+
       List<Toy> toyList = [];
-
-      for (var item in profiles[i].get("toys")) {
-        var _toy = Toy(item["toyId"], item["ownerId"], item["name"], item["description"], item["condition"], item["ageRange"], item["categories"], item["toyImageURL"]);
-        toyList.add(_toy);
-      }
-
-      profileList.add(ProfileInfo(
-          uid: profiles[i].get("uid"),
-          screenName: profiles[i].get("screenName"),
-          ageRange: profiles[i].get("ageRange"),
-          interests: profiles[i].get("interests"),
-          toys: toyList,
-          profileImageUrl: profiles[i].get("profileImageUrl"),
-          userRating: profiles[0].get("userRating"),
-          totalRates: profiles[0].get("totalRates")),
-      );
-    }
-
-    List<Toy> toyList = [];
-    for (var i = 0; i < profileList.length; i++) {
-      for (var item in profileList[i].toys) {
-        print(item.toString());
-        toyList.add(item);
-      }
-    }
-
-    toyList.shuffle();
-
-    if (searchText.isEmpty) {
-      return toyList;
-    }
-
-    else {
-      List<Toy> newToyList = [];
-      for (var i = 0; i < toyList.length; i++) {
-        String toyString = toyList[i].name.toLowerCase();
-        if (toyString.contains(searchText.toLowerCase())) {
-          newToyList.add(toyList[i]);
+      for (var i = 0; i < profileList.length; i++) {
+        for (var item in profileList[i].toys) {
+          print(item.toString());
+          toyList.add(item);
         }
       }
-      return newToyList;
+
+      toyList.shuffle();
+
+      if (searchText.isEmpty) {
+        return toyList;
+      }
+
+      else {
+        List<Toy> newToyList = [];
+        for (var i = 0; i < toyList.length; i++) {
+          String toyString = toyList[i].name.toLowerCase();
+          if (toyString.contains(searchText.toLowerCase())) {
+            newToyList.add(toyList[i]);
+          }
+        }
+        return newToyList;
+      }
+    }catch(e){
+      print(e.toString());
+      return null;
     }
   }
 
@@ -231,23 +215,17 @@ class DatabaseService {
 
       var profileInfo = await getProfileInfo(FirebaseAuth.instance.currentUser!.uid);
 
-      // delete toy image from firebase storage
-      await FirebaseFirestore.instance.collection('users')
-          .doc(profileInfo.uid).collection('toys')
-          .doc(toy.toyId).delete();
+      print("Toy Id = ${toy.toyId}");
 
       // delete toy from user's profileInfo
       int len = profileInfo.toys.length;
-
-      print(profileInfo.toys);
-      for(var i =0; i < len-1;i++){
+      for(var i =0; i < len;i++){
         if(toy.toyId == profileInfo.toys[i].toyId){
           profileInfo.toys.removeAt(i);
           print("we found a match");
           break;
         }
       }
-      print(profileInfo.toys);
 
 
       setProfileInfo(profileInfo, null);
@@ -263,6 +241,11 @@ class DatabaseService {
     try{
       var senderProfileInfo = await getProfileInfo(textMessage.senderId);
       var receiverProfileInfo = await getProfileInfo(textMessage.receiverId);
+
+      // stop user from sending message if theyre on the receiver's blocked users list
+      if(receiverProfileInfo.blockedUsers.contains(senderProfileInfo.uid)) {
+        return false;
+      }
 
       var conversation = Conversation(receiverProfileInfo.uid, receiverProfileInfo.screenName, receiverProfileInfo.profileImageUrl, textMessage.message, textMessage.time);
       await FirebaseFirestore.instance.collection('users')
@@ -291,6 +274,11 @@ class DatabaseService {
 
       var senderProfileInfo = await getProfileInfo(imageMessage.senderId);
       var receiverProfileInfo = await getProfileInfo(imageMessage.receiverId);
+
+      // stop user from sending message if theyre on the receiver's blocked users list
+      if(receiverProfileInfo.blockedUsers.contains(senderProfileInfo.uid)) {
+        return false;
+      }
 
       //****************** sender ***********************
 
@@ -407,6 +395,28 @@ class DatabaseService {
       return true;
     }
     catch(e){
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> blockUser(ProfileInfo myProfileInfo, ProfileInfo otherUserProfile) async {
+    try {
+      myProfileInfo.blockedUsers.add(otherUserProfile.uid);
+      await setProfileInfo(myProfileInfo, null);
+      return true;
+    } catch(e){
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> unblockUser(ProfileInfo myProfileInfo, ProfileInfo otherUserProfile) async {
+    try {
+      myProfileInfo.blockedUsers.remove(otherUserProfile.uid);
+      await setProfileInfo(myProfileInfo, null);
+      return true;
+    } catch(e){
       print(e.toString());
       return false;
     }
