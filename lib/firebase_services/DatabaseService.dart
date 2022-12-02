@@ -291,6 +291,7 @@ class DatabaseService {
       //get and set download url
       var imgURL = (await storage.getDownloadURL()).toString();
       imageMessage.imageUrl = imgURL;
+      imageMessage.time = DateTime.now().toString();
 
       // upload conversation to Firestore
       var conversation = Conversation(receiverProfileInfo.uid, receiverProfileInfo.screenName, receiverProfileInfo.profileImageUrl, 'Image', imageMessage.time);
@@ -369,7 +370,7 @@ class DatabaseService {
           .collection('trades').doc(trade.tradeId).set(trade.toJson());
 
       // add trade to database under trade receiver
-      await FirebaseFirestore.instance.collection('users').doc(trade.senderId)
+      await FirebaseFirestore.instance.collection('users').doc(trade.receiverId)
           .collection('trades').doc(trade.tradeId).set(trade.toJson());
       return true;
     } catch (e){

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
 import 'package:toy_trader/models/AppColors.dart';
@@ -7,9 +8,12 @@ import 'package:toy_trader/models/Toy.dart';
 import 'package:toy_trader/screens/BottomNavBar.dart';
 import 'package:toy_trader/widgets/MessageDetailsBox.dart';
 import 'package:toy_trader/widgets/MyBehavior.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:toy_trader/widgets/ToyOfferList.dart';
+import 'package:uuid/uuid.dart';
+
 import '../firebase_services/DatabaseService.dart';
 import '../models/ProfileInfo.dart';
+import '../models/Trade.dart';
 import 'HomeScreen.dart';
 import 'TradeHistoryScreen.dart';
 import 'authentication/SignInScreen.dart';
@@ -27,6 +31,7 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
   Widget _body = CircularProgressIndicator();
   ProfileInfo? ownerProfileInfo;
   bool showSignIn = true;
+
   void toggleView() {
     setState(() => showSignIn = !showSignIn);
   }
@@ -64,9 +69,7 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
                   MaterialPageRoute(builder: (context) => const HomeScreen()),
                 );
               },
-            )
-        ),
-
+            )),
         body: _body);
   }
 
@@ -79,55 +82,54 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
         children: [
           Divider(thickness: 3, color: AppColors.richBlack),
           RichText(
-            text: TextSpan(
-              children: [
-                WidgetSpan(
-                  child: SizedBox(height: deviceHeight(context) * .045),
-                ), TextSpan(
-                    text: "Quality             ",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: AppColors.richBlack,
-                        fontWeight: FontWeight.w500)),
-                TextSpan(
-                    text: "${toy.condition}\n",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: AppColors.celadonBlue,
-                        fontWeight: FontWeight.w500)),
-                WidgetSpan(
-                  child: SizedBox(height: deviceHeight(context) * .045),
-                ),
-                TextSpan(
-                    text: "Ages                 ",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: AppColors.richBlack,
-                        fontWeight: FontWeight.w500)),
-                TextSpan(
-                    text: "${toy.ageRange}\n",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: AppColors.celadonBlue,
-                        fontWeight: FontWeight.w500)),
-                WidgetSpan(
-                  child: SizedBox(height: deviceHeight(context) * .045),
-                ),
-                TextSpan(
-                    text: "Category          ",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: AppColors.richBlack,
-                        fontWeight: FontWeight.w500)),
-                TextSpan(
-                    text: "${toy.categories}",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: AppColors.celadonBlue,
-                        fontWeight: FontWeight.w500,
-                      fontFamily: 'OpenSans'
-                    )
-                ),])),
+              text: TextSpan(children: [
+            WidgetSpan(
+              child: SizedBox(height: deviceHeight(context) * .045),
+            ),
+            TextSpan(
+                text: "Quality             ",
+                style: TextStyle(
+                    fontSize: 20.0,
+                    color: AppColors.richBlack,
+                    fontWeight: FontWeight.w500)),
+            TextSpan(
+                text: "${toy.condition}\n",
+                style: TextStyle(
+                    fontSize: 20.0,
+                    color: AppColors.celadonBlue,
+                    fontWeight: FontWeight.w500)),
+            WidgetSpan(
+              child: SizedBox(height: deviceHeight(context) * .045),
+            ),
+            TextSpan(
+                text: "Ages                 ",
+                style: TextStyle(
+                    fontSize: 20.0,
+                    color: AppColors.richBlack,
+                    fontWeight: FontWeight.w500)),
+            TextSpan(
+                text: "${toy.ageRange}\n",
+                style: TextStyle(
+                    fontSize: 20.0,
+                    color: AppColors.celadonBlue,
+                    fontWeight: FontWeight.w500)),
+            WidgetSpan(
+              child: SizedBox(height: deviceHeight(context) * .045),
+            ),
+            TextSpan(
+                text: "Category          ",
+                style: TextStyle(
+                    fontSize: 20.0,
+                    color: AppColors.richBlack,
+                    fontWeight: FontWeight.w500)),
+            TextSpan(
+                text: "${toy.categories}",
+                style: TextStyle(
+                    fontSize: 20.0,
+                    color: AppColors.celadonBlue,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'OpenSans')),
+          ])),
           SizedBox(height: deviceHeight(context) * .025),
           Divider(thickness: 3, color: AppColors.richBlack),
           Padding(
@@ -161,7 +163,6 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
         ],
       ),
     );
-
   }
 
   toyInteractions(context) {
@@ -198,12 +199,43 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
         ),
         InkWell(
           borderRadius: BorderRadius.circular(45),
-          onTap: () {},
+          onTap: () async {
+            Trade tradeOffer;
+            var userToys = await DatabaseService().getUserToys("");
+            var receiverToys =
+                await DatabaseService().getUserToys(widget.toy.ownerId);
+
+            int userTest = userToys.length;
+            int receiverTest = receiverToys.length;
+
+            await selectToysToTrade(userToys, receiverToys, context);
+
+            if (userTest != userToys.length &&
+                receiverTest != receiverToys.length) {
+              ProfileInfo profileInfo = await DatabaseService()
+                  .getProfileInfo(FirebaseAuth.instance.currentUser!.uid);
+              ProfileInfo otherProfileInfo = await DatabaseService()
+                  .getProfileInfo(receiverToys[0].ownerId);
+              tradeOffer = Trade(
+                  Uuid().v4(),
+                  profileInfo.uid,
+                  profileInfo.screenName,
+                  otherProfileInfo.uid,
+                  otherProfileInfo.screenName,
+                  otherProfileInfo.profileImageUrl,
+                  userToys,
+                  receiverToys,
+                  'Pending',
+                  DateTime.now().toString());
+
+              DatabaseService().sendTradeOffer(tradeOffer);
+            }
+          },
           child: Container(
             margin: const EdgeInsets.only(top: 10),
             height: deviceHeight(context) * .07,
             width: deviceWidth(context) * .40,
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               color: AppColors.prussianBlue,
               borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -220,13 +252,25 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
     );
   }
 
+  Future<void> selectToysToTrade(
+      List<Toy> userToys, List<Toy> recieverToys, BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ToyOfferList(userToys, recieverToys)),
+    );
+  }
+
   void handleClick(String value) async {
     switch (value) {
       case 'Logout':
         await FirebaseAuth.instance.signOut();
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => SignInScreen(toggleView: toggleView,)),
+          MaterialPageRoute(
+              builder: (context) => SignInScreen(
+                    toggleView: toggleView,
+                  )),
         );
         break;
       case 'Trade History':
@@ -270,15 +314,15 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
                 left: 20.0,
                 top: 20.0,
                 child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ProfileScreen(userId: widget.toy.ownerId),
-                      ),
-                    );
-                  },
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProfileScreen(userId: widget.toy.ownerId),
+                        ),
+                      );
+                    },
                     child: Container(
                         width: 60,
                         height: 60,
