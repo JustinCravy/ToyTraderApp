@@ -16,8 +16,9 @@ import '../models/Message.dart';
 
 class MessageDetailsBox extends StatefulWidget {
   final String otherUserId;
+  final String otherUserScreenName;
 
-  const MessageDetailsBox({Key? key, required this.otherUserId}) : super(key: key);
+  const MessageDetailsBox({Key? key, required this.otherUserId, required this.otherUserScreenName}) : super(key: key);
 
   @override
   State<MessageDetailsBox> createState() => _MessageDetailsBoxState();
@@ -51,7 +52,7 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Username'),
+        title: Text(widget.otherUserScreenName),
       ),
       body: Column(
         children: [

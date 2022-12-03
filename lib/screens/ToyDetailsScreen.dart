@@ -192,7 +192,7 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    MessageDetailsBox(otherUserId: widget.toy.ownerId),
+                    MessageDetailsBox(otherUserId: widget.toy.ownerId, otherUserScreenName: ownerProfileInfo!.screenName,),
               ),
             );
           },
