@@ -165,7 +165,7 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
     );
   }
 
-  toyInteractions(context) {
+  toyInteractions(context, ProfileInfo ownerProfileInfo) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -188,21 +188,25 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
             )),
           ),
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    MessageDetailsBox(otherUserId: widget.toy.ownerId, otherUserScreenName: ownerProfileInfo!.screenName,),
-              ),
-            );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MessageDetailsBox(
+                    otherUserId: widget.toy.ownerId,
+                    otherUserScreenName: ownerProfileInfo.screenName,
+                  ),
+                ),
+              );
           },
         ),
         InkWell(
           borderRadius: BorderRadius.circular(45),
           onTap: () async {
             Trade tradeOffer;
-            var userToys = await DatabaseService().getUserToys(FirebaseAuth.instance.currentUser!.uid);
-            var otherToys = await DatabaseService().getUserToys(widget.toy.ownerId);
+            var userToys = await DatabaseService()
+                .getUserToys(FirebaseAuth.instance.currentUser!.uid);
+            var otherToys =
+                await DatabaseService().getUserToys(widget.toy.ownerId);
 
             var senderToysToTrade = <Toy>[];
             var receiverToysToTrade = <Toy>[];
@@ -210,14 +214,15 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
             int userTest = userToys.length;
             int receiverTest = otherToys.length;
 
-            await selectToysToTrade(senderToysToTrade, receiverToysToTrade, userToys, otherToys, context);
+            await selectToysToTrade(senderToysToTrade, receiverToysToTrade,
+                userToys, otherToys, context);
 
             if (userTest != userToys.length &&
                 receiverTest != otherToys.length) {
               ProfileInfo? profileInfo = await DatabaseService()
                   .getProfileInfo(FirebaseAuth.instance.currentUser!.uid);
-              ProfileInfo? otherProfileInfo = await DatabaseService()
-                  .getProfileInfo(otherToys[0].ownerId);
+              ProfileInfo? otherProfileInfo =
+                  await DatabaseService().getProfileInfo(otherToys[0].ownerId);
               tradeOffer = Trade(
                   Uuid().v4(),
                   profileInfo.uid,
@@ -231,12 +236,9 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
                   'Pending',
                   DateTime.now().toString(),
                   false,
-                  false
-              );
-
+                  false);
 
               DatabaseService().sendTradeOffer(tradeOffer);
-
             }
           },
           child: Container(
@@ -261,11 +263,16 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
   }
 
   Future<void> selectToysToTrade(
-      List<Toy> senderToysToTrade, List<Toy> receiverToysToTrade, List<Toy> userToys, List<Toy> recieverToys, BuildContext context) async {
+      List<Toy> senderToysToTrade,
+      List<Toy> receiverToysToTrade,
+      List<Toy> userToys,
+      List<Toy> recieverToys,
+      BuildContext context) async {
     await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => ToyOfferList(senderToysToTrade, receiverToysToTrade, userToys, recieverToys)),
+          builder: (context) => ToyOfferList(
+              senderToysToTrade, receiverToysToTrade, userToys, recieverToys)),
     );
   }
 
@@ -291,65 +298,65 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
   }
 
   getOwnerProfileImg_setStateWhenDone(ProfileInfo? ownerProfileInfo) async {
-    await DatabaseService().getProfileInfo(widget.toy.ownerId).then((value) {
-      ownerProfileInfo = value;
-      setState(() => _body = Stack(children: [
-            ScrollConfiguration(
-              behavior: MyBehavior(),
-              child: ListView(children: [
-                Container(
-                    height: 300,
-                    width: 100,
-                    margin: const EdgeInsets.only(),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(widget.toy.toyImageURL)))),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(widget.toy.name,
-                      style: const TextStyle(
-                          fontSize: 25.0,
-                          fontFamily: 'ComicSans',
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center),
-                ),
-                titleSection(widget.toy, context),
-              ]),
-            ),
-            Positioned(
-                left: 20.0,
-                top: 20.0,
-                child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ProfileScreen(userId: widget.toy.ownerId),
-                        ),
-                      );
-                    },
-                    child: Container(
-                        width: 60,
-                        height: 60,
-                        padding: const EdgeInsets.all(200),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(width: 3, color: Colors.blue),
-                            image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: NetworkImage(
-                                    ownerProfileInfo!.profileImageUrl)))))),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: toyInteractions(context)),
-            ),
-          ]));
-    });
+    ownerProfileInfo =
+        await DatabaseService().getProfileInfo(widget.toy.ownerId);
+
+    setState(() => _body = Stack(children: [
+          ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: ListView(children: [
+              Container(
+                  height: 300,
+                  width: 100,
+                  margin: const EdgeInsets.only(),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(widget.toy.toyImageURL)))),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(widget.toy.name,
+                    style: const TextStyle(
+                        fontSize: 25.0,
+                        fontFamily: 'ComicSans',
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center),
+              ),
+              titleSection(widget.toy, context),
+            ]),
+          ),
+          Positioned(
+              left: 20.0,
+              top: 20.0,
+              child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ProfileScreen(userId: widget.toy.ownerId),
+                      ),
+                    );
+                  },
+                  child: Container(
+                      width: 60,
+                      height: 60,
+                      padding: const EdgeInsets.all(200),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(width: 3, color: Colors.blue),
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(
+                                  ownerProfileInfo!.profileImageUrl)))))),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+                alignment: Alignment.bottomCenter,
+                child: toyInteractions(context, ownerProfileInfo)),
+          ),
+        ]));
   }
 
   double deviceHeight(BuildContext context) =>
