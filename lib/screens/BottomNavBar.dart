@@ -200,10 +200,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               visible: (myProfileInfo!.uid == otherUserProfile!.uid),
                               child: TextButton.icon(
                                   onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => const EditProfileScreen())
-                                    );
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfileScreen())).then((value) {
+                                      setState(() {
+                                        getProfileInfo_setStateWhenDone();
+                                      });
+                                    });
                                   },
                                   icon: Icon(
                                     Icons.edit,

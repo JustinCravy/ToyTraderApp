@@ -49,7 +49,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
         actions: <Widget>[
           ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                await dbService.setProfileInfo(userProfile!, image);
                 Navigator.pop(context);
               },
               child: Text('Done'))
@@ -103,16 +104,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             onClick: () => pickImage(ImageSource.gallery),
                           ),
                           SizedBox(height: 30),
+                          const Text('Screen Name', style: TextStyle(fontSize: 16)),
                           TextFormField(
+                              initialValue: userProfile?.screenName,
                               textAlign: TextAlign.center,
-                              decoration: const InputDecoration(
-                                hintText: 'Screen Name',
+                              decoration: InputDecoration(
                               ),
                               validator: (val) => val!.isEmpty
                                   ? 'Screen name must not be empty'
                                   : null,
                               onChanged: (val) {
-                                //setState(() => profileInfo.screenName = val);
+                                setState(() => userProfile?.screenName = val);
                               }),
                           const SizedBox(height: 30.0),
                           const Text('Interests',
@@ -131,7 +133,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             onChanged: (String? newValue) {
                               setState(() {
                                 dropdownValue1 = newValue!;
-                                //profileInfo.interests = newValue;
+                                userProfile?.interests = newValue;
                               });
                             },
                             items: <String>[
@@ -155,7 +157,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             }).toList(),
                           ),
                           SizedBox(height: 20.0),
-                          Text('Age Range',
+                          const Text('Age Range',
                             style: TextStyle(fontSize: 16),),
                           DropdownButton<String>(
                             isExpanded: true,
@@ -171,7 +173,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             onChanged: (String? newValue) {
                               setState(() {
                                 dropdownValue2 = newValue!;
-                                //profileInfo.ageRange = newValue;
+                                userProfile?.ageRange = newValue;
                               });
                             },
                             items: <String>[

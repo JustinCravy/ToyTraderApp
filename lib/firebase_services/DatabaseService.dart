@@ -25,7 +25,6 @@ class DatabaseService {
   }
 
   Future setProfileInfo(ProfileInfo profileInfo, File? imageFile) async {
-
     if(imageFile != null) {
       final storage = FirebaseStorage.instance.ref('users').child(
           profileInfo.uid).child('profileImage');
