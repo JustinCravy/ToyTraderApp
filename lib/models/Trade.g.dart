@@ -10,6 +10,7 @@ Trade _$TradeFromJson(Map json) => Trade(
       json['tradeId'] as String,
       json['senderId'] as String,
       json['senderName'] as String,
+      json['senderProfileImgUrl'] as String,
       json['receiverId'] as String,
       json['receiverName'] as String,
       json['receiverProfileImgUrl'] as String,
@@ -21,12 +22,15 @@ Trade _$TradeFromJson(Map json) => Trade(
           .toList(),
       json['tradeStatus'] as String,
       json['date'] as String,
+      json['senderRatingRcvd'] as bool,
+      json['receiverRatingRcvd'] as bool,
     );
 
 Map<String, dynamic> _$TradeToJson(Trade instance) => <String, dynamic>{
       'tradeId': instance.tradeId,
       'senderId': instance.senderId,
       'senderName': instance.senderName,
+      'senderProfileImgUrl': instance.senderProfileImgUrl,
       'receiverId': instance.receiverId,
       'receiverName': instance.receiverName,
       'receiverProfileImgUrl': instance.receiverProfileImgUrl,
@@ -34,4 +38,6 @@ Map<String, dynamic> _$TradeToJson(Trade instance) => <String, dynamic>{
       'receiverToys': instance.receiverToys.map((e) => e.toJson()).toList(),
       'tradeStatus': instance.tradeStatus,
       'date': instance.date,
+      'senderRatingRcvd': instance.senderRatingRcvd,
+      'receiverRatingRcvd': instance.receiverRatingRcvd,
     };

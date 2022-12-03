@@ -5,11 +5,13 @@ import '../models/Toy.dart';
 import '../models/Trade.dart';
 
 class ToyOfferList extends StatefulWidget {
+  late List<Toy> senderToysToTrade;
+  late List<Toy> receiverToysToTrade;
   late List<Toy> userToys;
   late List<Toy> recieverToys;
   late String title;
 
-  ToyOfferList(this.userToys, this.recieverToys, {super.key});
+  ToyOfferList(this.senderToysToTrade, this.receiverToysToTrade, this.userToys, this.recieverToys, {super.key});
 
   @override
   _ToyOfferListState createState() => _ToyOfferListState();
@@ -116,6 +118,7 @@ class _ToyOfferListState extends State<ToyOfferList> {
       else {
         for (var i = 0; i < userToys.length; i++) {
           if (selectedFlag[i] == true) {
+            widget.senderToysToTrade.add(userToys[i]);
             widget.userToys.removeAt(i);
           }
         }
@@ -147,6 +150,7 @@ class _ToyOfferListState extends State<ToyOfferList> {
 
         for (var i = 0; i < receiverToys.length; i++) {
           if (selectedFlag[i] == true) {
+            widget.receiverToysToTrade.add(receiverToys[i]);
             widget.recieverToys.removeAt(i);
           }
         }

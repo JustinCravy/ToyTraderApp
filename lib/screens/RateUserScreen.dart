@@ -4,14 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase_services/DatabaseService.dart';
+import '../models/Trade.dart';
 import 'HomeScreen.dart';
 import 'TradeHistoryScreen.dart';
 import 'authentication/SignInScreen.dart';
 
 class RateUserScreen extends StatefulWidget{
   final String id;
+  final Trade trade;
 
-  const RateUserScreen ({Key? key, required this.id}) : super(key: key);
+  const RateUserScreen ({Key? key, required this.id, required this.trade}) : super(key: key);
   @override
   State<RateUserScreen> createState() => _RatingState();
 }
@@ -74,7 +76,7 @@ class _RatingState extends State<RateUserScreen>{
             TextButton(
                 child: const Text('submit'),
                 onPressed: () async {
-                  if (await dbService.rateUser(rating,widget.id)){
+                  if (await dbService.rateUser(rating, widget.id, widget.trade)){
                     print('Rate successfully');
                   }
                   else

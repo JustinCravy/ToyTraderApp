@@ -40,29 +40,6 @@ class DatabaseService {
   }
 
   Future<List<Toy>> getUserToys(String userId) async {
-    if (userId.isEmpty) {
-      var user = FirebaseAuth.instance.currentUser?.uid;
-      var query = await FirebaseFirestore.instance.collection('users')
-          .where('uid', isEqualTo: user).get();
-      var userData = query.docs.map((doc) => doc).toList();
-
-      var toys = <Toy>[];
-      for (var item in userData[0].get("toys")) {
-        var _toy = Toy(
-            item["toyId"],
-            item["ownerId"],
-            item["name"],
-            item["description"],
-            item["condition"],
-            item["ageRange"],
-            item["categories"],
-            item["toyImageURL"]);
-        toys.add(_toy);
-      }
-      return toys;
-    }
-
-    else {
       var query = await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: userId).get();
       var userData = query.docs.map((doc) => doc).toList();
       var toys = <Toy> [];
@@ -73,7 +50,6 @@ class DatabaseService {
       }
 
       return toys;
-    }
   }
 
   Future<ProfileInfo> getProfileInfo(String userId) async {
@@ -386,8 +362,32 @@ class DatabaseService {
     return trades;
   }
 
-  Future<bool> rateUser(double rating, String otherUserId) async{
+  Future<bool> updateTrade(Trade trade) async {
+    try {
+      await FirebaseFirestore.instance.collection('users')
+          .doc(trade.senderId).collection('trades').doc(trade.tradeId).set(
+          trade.toJson());
+      await FirebaseFirestore.instance.collection('users')
+          .doc(trade.receiverId).collection('trades').doc(trade.tradeId).set(
+          trade.toJson());
+      return true;
+    }catch (e){
+      print(e.toString());
+      return false;
+    }
+
+
+  }
+
+  Future<bool> rateUser(double rating, String otherUserId, Trade trade) async{
     try{
+      if(otherUserId == trade.receiverId){
+        trade.senderRatingRcvd = true;
+      }
+      else {
+        trade.receiverRatingRcvd = true;
+      }
+      await updateTrade(trade);
       var otherUserProfile = await getProfileInfo(otherUserId);
       otherUserProfile.userRating = otherUserProfile.userRating + rating;
       otherUserProfile.totalRates += 1;
