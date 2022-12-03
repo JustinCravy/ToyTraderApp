@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:toy_trader/models/AppColors.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
 import 'package:provider/provider.dart';
+import 'package:toy_trader/screens/HomeScreen.dart';
 import '../firebase_services/AuthService.dart';
 import '../firebase_services/DatabaseService.dart';
 import '../models/Toy.dart';
@@ -53,8 +54,27 @@ class _ToyGridListState extends State<ToyGridList> {
       children: [
         Container(
           alignment: Alignment.center,
-          child: Text(
-            "You have no Toys",
+          child: Container(
+              child: Column(
+                //mainAxisAlignment: MainAxisAlignment.end,
+                //crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Icon(
+                        Icons.thunderstorm,
+                        color: Colors.black,
+                        size: physicalScreenSize.width / 8
+                    ),
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                  ),
+                  const Text('There are no toys to display!',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'assets/fonts/YanoneKaffeesatz-Regular.ttf'
+                    ),
+                  )
+                ],
+              )
           ),
         ),
         Padding(
@@ -69,7 +89,7 @@ class _ToyGridListState extends State<ToyGridList> {
                         MaterialPageRoute(
                             builder: (context) => AddToyScreen(profileInfo: user,)));
                   },
-                  color: AppColors.carolinaBlue,
+                  color: Colors.blue,
                   textColor: Colors.white,
                   child: const Icon(
                     Icons.add,

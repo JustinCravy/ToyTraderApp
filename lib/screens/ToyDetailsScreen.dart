@@ -59,10 +59,7 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
               iconSize: physicalHeight / 11,
               icon: Image.asset('assets/images/logo.png'),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()),
-                );
+                Navigator.pop(context);
               },
             )
         ),

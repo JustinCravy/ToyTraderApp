@@ -37,7 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
         } else {
           return MainScreen();
         }
-      }()),      bottomNavigationBar: Container(
+      }()),
+      bottomNavigationBar: Container(
         height: 60,
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,

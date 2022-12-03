@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:toy_trader/models/ProfileInfo.dart';
-
 import '../../firebase_services/AuthService.dart';
 import '../../models/Toy.dart';
 import '../../widgets/CustomButton.dart';

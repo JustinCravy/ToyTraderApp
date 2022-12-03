@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:toy_trader/models/Toy.dart';
+import 'package:toy_trader/screens/EditProfileScreen.dart';
 import 'package:toy_trader/widgets/MessageList.dart';
 import 'package:toy_trader/widgets/ToyGridList.dart';
 
@@ -48,6 +49,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
               iconSize: physicalHeight / 11,
               icon: Image.asset('assets/images/logo.png'),
               onPressed: () {
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -126,6 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               iconSize: physicalHeight / 11,
               icon: Image.asset('assets/images/logo.png'),
               onPressed: () {
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -179,11 +182,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 fit: BoxFit.fill,
                                 image: NetworkImage(
                                     otherUserProfile!.profileImageUrl)))),
+                    /*
                     Container(
                         padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                         alignment: Alignment.centerLeft,
                         child: Text('Name: ' + otherUserProfile!.screenName,
                             style: const TextStyle(fontSize: 20))),
+
+                     */
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Name: ' + otherUserProfile!.screenName,
+                          style: const TextStyle(fontSize: 20)),
+                          Visibility(
+                              visible: (myProfileInfo!.uid == otherUserProfile!.uid),
+                              child: TextButton.icon(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const EditProfileScreen())
+                                    );
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Colors.black,
+                                  ),
+                                  label: Text('Edit Profile'))
+                          )
+                        ],
+                      )
+                    ),
+                    /*
+                    Positioned(
+                      child: Visibility(
+                        visible: (myProfileInfo!.uid != otherUserProfile!.uid),
+                        child: TextButton.icon(
+                            onPressed: null,
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.black,
+                            ),
+                            label: Text('Edit Profile'))
+                      )
+                    ),
+
+                     */
                     Container(
                         padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                         child: const Text(
@@ -275,6 +320,7 @@ class _MainScreenState extends State<MainScreen> {
             iconSize: physicalHeight / 11,
             icon: Image.asset('assets/images/logo.png'),
             onPressed: () {
+              Navigator.pop(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const HomeScreen()),
