@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toy_trader/screens/HomeScreen.dart';
 
 import '../../firebase_services/AuthService.dart';
 
@@ -96,6 +97,15 @@ class _SignInScreenState extends State<SignInScreen> {
                                     await authService.signIn(email, pw);
                                 if (result == null) {
                                   setState(() => error = 'Couldnt sign in...');
+                                }
+                                else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          HomeScreen(),
+                                    ),
+                                  );
                                 }
                               }
                             }),

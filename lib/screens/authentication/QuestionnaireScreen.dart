@@ -44,6 +44,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as List<String>;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Container(
             padding: EdgeInsets.fromLTRB(0, 0, 90, 0),
@@ -79,7 +80,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                           icon: Icons.camera,
                           onClick: () => pickImage(ImageSource.gallery),
                         ),
-                        SizedBox(height: 30),
+                        SizedBox(height: 15.0),
                         TextFormField(
                           textAlign: TextAlign.center,
                             decoration: const InputDecoration(

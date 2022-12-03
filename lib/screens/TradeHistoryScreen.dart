@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:toy_trader/models/ProfileInfo.dart';
 import 'package:toy_trader/screens/TradeDetailsScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase_services/DatabaseService.dart';
@@ -57,13 +58,14 @@ class _TradeHistoryState extends State<TradeHistory> {
         child: ListView.builder(
           itemCount: trades.length,
           itemBuilder: (context, i) {
+
             return ListTile(
                 leading: CircleAvatar(
                   backgroundImage:
-                  NetworkImage(trades[i].receiverProfileImgUrl),
+                  NetworkImage((FirebaseAuth.instance.currentUser!.uid == trades[i].senderId) ? trades[i].receiverProfileImgUrl : trades[i].senderProfileImgUrl),
                   radius: 25,
                 ),
-                title: Text(trades[i].receiverName),
+                title: Text((FirebaseAuth.instance.currentUser!.uid == trades[i].senderId) ?  trades[i].receiverName : trades[i].senderName ),
                 subtitle: Text(trades[i].date),
                 onTap: () => {
                 Navigator.push(
@@ -98,6 +100,8 @@ class _TradeHistoryState extends State<TradeHistory> {
 
   getTrades() async {
     trades = await DatabaseService().getTrades();
+    trades.sort((a,b) => b.date.compareTo(a.date));
+
     setState(() => trades);
   }
 }

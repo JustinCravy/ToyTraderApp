@@ -9,6 +9,7 @@ class Trade {
   String tradeId;
   String senderId;
   String senderName;
+  String senderProfileImgUrl;
   String receiverId;
   String receiverName;
   String receiverProfileImgUrl;
@@ -16,11 +17,14 @@ class Trade {
   List<Toy> receiverToys;
   String tradeStatus;
   String date;
+  bool senderRatingRcvd = false;
+  bool receiverRatingRcvd = false;
 
   Trade(
       this.tradeId,
       this.senderId,
       this.senderName,
+      this.senderProfileImgUrl,
       this.receiverId,
       this.receiverName,
       this.receiverProfileImgUrl,
@@ -28,6 +32,8 @@ class Trade {
       this.receiverToys,
       this.tradeStatus,
       this.date,
+      this.senderRatingRcvd,
+      this.receiverRatingRcvd
       );
 
   factory Trade.fromJson(Map<String, dynamic> json) => _$TradeFromJson(json);

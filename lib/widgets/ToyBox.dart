@@ -182,28 +182,44 @@ class _ToyBoxState extends State<ToyBox> {
                 break;
               case toyMenu.offer:
                 Trade tradeOffer;
-                var userToys = await dbS.getUserToys("");
-                var receiverToys = await dbS.getUserToys(toy.ownerId);
+                var userToys = await DatabaseService().getUserToys(FirebaseAuth.instance.currentUser!.uid);
+                var otherToys = await DatabaseService().getUserToys(widget.toy.ownerId);
+
+                var senderToysToTrade = <Toy>[];
+                var receiverToysToTrade = <Toy>[];
 
                 int userTest = userToys.length;
-                int receiverTest = receiverToys.length;
+                int receiverTest = otherToys.length;
 
-                await selectToysToTrade(userToys, receiverToys, context);
 
-                if (userTest != userToys.length && receiverTest != receiverToys.length) {
-                  ProfileInfo profileInfo = await DatabaseService().getProfileInfo(FirebaseAuth.instance.currentUser!.uid);
-                  ProfileInfo otherProfileInfo = await DatabaseService().getProfileInfo(receiverToys[0].ownerId);
+                await selectToysToTrade(senderToysToTrade, receiverToysToTrade, userToys, otherToys, context);
+
+                for(var toy in senderToysToTrade)
+                  print(toy.name);
+                for(var toy in receiverToysToTrade)
+                  print(toy.name);
+
+
+                if (userTest != userToys.length &&
+                    receiverTest != otherToys.length) {
+                  ProfileInfo? profileInfo = await DatabaseService()
+                      .getProfileInfo(FirebaseAuth.instance.currentUser!.uid);
+                  ProfileInfo? otherProfileInfo = await DatabaseService()
+                      .getProfileInfo(otherToys[0].ownerId);
                   tradeOffer = Trade(
                       Uuid().v4(),
                       profileInfo.uid,
                       profileInfo.screenName,
+                      profileInfo.profileImageUrl,
                       otherProfileInfo.uid,
                       otherProfileInfo.screenName,
                       otherProfileInfo.profileImageUrl,
-                      userToys,
-                      receiverToys,
+                      senderToysToTrade,
+                      receiverToysToTrade,
                       'Pending',
-                      DateTime.now().toString()
+                      DateTime.now().toString(),
+                      false,
+                      false
                   );
 
                   DatabaseService().sendTradeOffer(tradeOffer);
@@ -228,13 +244,15 @@ class _ToyBoxState extends State<ToyBox> {
     );
   }
 
-  Future<void> selectToysToTrade(List<Toy> userToys, List<Toy> recieverToys, BuildContext context) async {
+  Future<void> selectToysToTrade(
+      List<Toy> senderToysToTrade, List<Toy> receiverToysToTrade, List<Toy> userToys, List<Toy> recieverToys, BuildContext context) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ToyOfferList(
-          userToys, recieverToys)),
+      MaterialPageRoute(
+          builder: (context) => ToyOfferList(senderToysToTrade, receiverToysToTrade, userToys, recieverToys)),
     );
   }
+
 
 }
 double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;

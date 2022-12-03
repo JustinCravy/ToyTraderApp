@@ -16,8 +16,9 @@ import '../models/Message.dart';
 
 class MessageDetailsBox extends StatefulWidget {
   final String otherUserId;
+  final String otherUserScreenName;
 
-  const MessageDetailsBox({Key? key, required this.otherUserId}) : super(key: key);
+  const MessageDetailsBox({Key? key, required this.otherUserId, required this.otherUserScreenName}) : super(key: key);
 
   @override
   State<MessageDetailsBox> createState() => _MessageDetailsBoxState();
@@ -28,6 +29,8 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
   DatabaseService dbService = DatabaseService();
   List<Message> messages = [];
   int i = 0;
+
+  final fieldTextController = TextEditingController();
   @override
   Widget build(BuildContext context)  {
     if(i == 0) {
@@ -51,7 +54,7 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Username'),
+        title: Text(widget.otherUserScreenName),
       ),
       body: Column(
         children: [
@@ -96,6 +99,7 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
           Container(
             color: Colors.grey.shade300,
             child: TextField(
+              controller: fieldTextController,
               decoration:  InputDecoration(
                 contentPadding: EdgeInsets.all(12),
                 suffixIcon: IconButton(
@@ -113,7 +117,7 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
                 if(await dbService.sendTextMessage(textMessage)){
                   print('Message sent');
                 } else print('failed to send message');
-
+                fieldTextController.clear();
 
                 setState(()=> messages.add(textMessage));
               },
