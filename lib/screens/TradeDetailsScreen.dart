@@ -104,9 +104,13 @@ class _TradeDetailsScreenState extends State<TradeDetailsScreen> {
                           itemBuilder: (context, i) {
                             return ListTile(
                                 leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      widget.trade.senderToys[i].toyImageURL),
+                                  child: Image.network(
+                                    widget.trade.senderToys[i].toyImageURL,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  backgroundColor: Colors.transparent,
                                   radius: 25,
+
                                 ),
                                 title: Text(widget.trade.senderToys[i].name),
                                 subtitle: Text(
@@ -138,8 +142,11 @@ class _TradeDetailsScreenState extends State<TradeDetailsScreen> {
                           itemBuilder: (context, i) {
                             return ListTile(
                                 leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      widget.trade.receiverToys[i].toyImageURL),
+                                  child: Image.network(
+                                      widget.trade.receiverToys[i].toyImageURL,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  backgroundColor: Colors.transparent,
                                   radius: 25,
                                 ),
                                 title: Text(widget.trade.receiverToys[i].name),

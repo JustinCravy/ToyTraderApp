@@ -90,7 +90,15 @@ class _MessageDetailsBoxState extends State<MessageDetailsBox> {
                   elevation: 8,
                   child: Padding(
                     padding: const EdgeInsets.all(12),
-                    child: Text((message as TextMessage).message),
+                    child:
+                    (message.type == 'TEXT') ?
+                    Text((message as TextMessage).message) :
+                    Image(
+                      image: NetworkImage((message as ImageMessage).imageUrl,),
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.cover
+                    ),
                   ),
                 ),
               ),

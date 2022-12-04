@@ -60,12 +60,12 @@ class _ToyGridListState extends State<ToyGridList> {
                 //crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
                     child: Icon(
                         Icons.thunderstorm,
                         color: Colors.black,
                         size: physicalScreenSize.width / 8
                     ),
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
                   ),
                   const Text('There are no toys to display!',
                     style: TextStyle(
@@ -91,12 +91,12 @@ class _ToyGridListState extends State<ToyGridList> {
                   },
                   color: Colors.blue,
                   textColor: Colors.white,
+                  padding: EdgeInsets.all(5),
+                  shape: CircleBorder(),
                   child: const Icon(
                     Icons.add,
                     size: 30,
                   ),
-                  padding: EdgeInsets.all(5),
-                  shape: CircleBorder(),
                 )))
       ],
     );
@@ -110,7 +110,7 @@ class _ToyGridListState extends State<ToyGridList> {
               shrinkWrap: true, crossAxisCount: 2, children: [...widgetList]),
         ),
         Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
             child: Align(
                 alignment: Alignment.bottomRight,
                 child: MaterialButton(
@@ -124,12 +124,12 @@ class _ToyGridListState extends State<ToyGridList> {
                   },
                   color: AppColors.carolinaBlue,
                   textColor: Colors.white,
+                  padding: EdgeInsets.all(5),
+                  shape: CircleBorder(),
                   child: const Icon(
                     Icons.add,
                     size: 30,
                   ),
-                  padding: EdgeInsets.all(5),
-                  shape: CircleBorder(),
                 )))
       ],
     );
