@@ -17,26 +17,37 @@ class _MessageListState extends State<MessageList> {
   DatabaseService dbS = DatabaseService();
   List<Conversation> conversations = [];
   int i = 0;
+  Widget _body = CircularProgressIndicator();
+  List<Widget> widgetList = [];
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgetList = [];
+    showConversations(widgetList);
 
-    conversations.sort((a,b) => a.time.compareTo(b.time));
+    conversations.sort((a, b) => a.time.compareTo(b.time));
 
     for (var c in conversations.reversed) {
       widgetList.add(MessageBox(
         convo: c,
       ));
     }
-    return showConversations(widgetList);
+    return _body;
+
   }
 
+
   Widget showConversations(List<Widget> widgetList) {
-    if(i == 0) {
+    if (i == 0) {
       getConversations();
       i++;
+
     }
+
 
 
     return Container(
@@ -65,13 +76,32 @@ class _MessageListState extends State<MessageList> {
     );
   }
 
+
   getConversations() async {
     conversations =
-        await dbS.getConversations(AuthService().firebaseAuth.currentUser!.uid);
-    setState(() => conversations);
-  }
+    await dbS.getConversations(AuthService().firebaseAuth.currentUser!.uid);
+    setState(() => {
+    if(conversations.isEmpty)
+      _body = showEmptyConversations()
+      else
+        _body = showConversations(widgetList)
+    });
 }
 
-showEmptyConversations() {
-  return Text('You have no Messages');
+  showEmptyConversations() {
+    return Column(
+      children: const [
+        SizedBox(
+          width: double.infinity,
+          height: 200,
+        ),
+        Icon(Icons.inbox, size:100.0, color: Colors.grey,),
+         Text(
+        'You have no Messages',
+    style: TextStyle(fontSize:29,),
+         ),
+      ],
+    );
+
+  }
 }
