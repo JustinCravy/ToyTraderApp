@@ -17,13 +17,8 @@ class _MessageListState extends State<MessageList> {
   DatabaseService dbS = DatabaseService();
   List<Conversation> conversations = [];
   int i = 0;
-  Widget _body = CircularProgressIndicator();
+  Widget _body = Center(child: CircularProgressIndicator());
   List<Widget> widgetList = [];
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +32,6 @@ class _MessageListState extends State<MessageList> {
       ));
     }
     return _body;
-
   }
 
 
@@ -45,10 +39,7 @@ class _MessageListState extends State<MessageList> {
     if (i == 0) {
       getConversations();
       i++;
-
     }
-
-
 
     return Container(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -78,6 +69,7 @@ class _MessageListState extends State<MessageList> {
 
 
   getConversations() async {
+    conversations = [];
     conversations =
     await dbS.getConversations(AuthService().firebaseAuth.currentUser!.uid);
     setState(() => {

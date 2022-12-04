@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:toy_trader/models/Toy.dart';
 import 'package:toy_trader/screens/EditProfileScreen.dart';
 import 'package:toy_trader/widgets/MessageList.dart';
@@ -94,8 +95,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   DatabaseService dbService = DatabaseService();
   ProfileInfo? otherUserProfile;
   ProfileInfo? myProfileInfo;
-  Widget _body = CircularProgressIndicator();
   bool showSignIn = true;
+  Widget _body = const Center(child: CircularProgressIndicator());
 
   void toggleView() {
     setState(() => showSignIn = !showSignIn);
@@ -182,54 +183,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 fit: BoxFit.fill,
                                 image: NetworkImage(
                                     otherUserProfile!.profileImageUrl)))),
-                    /*
                     Container(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                        alignment: Alignment.centerLeft,
-                        child: Text('Name: ' + otherUserProfile!.screenName,
-                            style: const TextStyle(fontSize: 20))),
-
-                     */
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Name: ' + otherUserProfile!.screenName,
-                          style: const TextStyle(fontSize: 20)),
-                          Visibility(
-                              visible: (myProfileInfo!.uid == otherUserProfile!.uid),
-                              child: TextButton.icon(
-                                  onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfileScreen())).then((value) {
-                                      setState(() {
-                                        getProfileInfo_setStateWhenDone();
-                                      });
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Visibility(
+                            visible:
+                                (myProfileInfo!.uid != otherUserProfile!.uid),
+                            child: TextButton.icon(
+                              icon: Icon(
+                                Icons.block,
+                                color: Colors.red,
+                              ),
+                              label: Text(
+                                (myProfileInfo!.blockedUsers
+                                        .contains(otherUserProfile!.uid))
+                                    ? 'Unblock User'
+                                    : 'Block User',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              onPressed: () async {
+                                print("blocking user");
+                                if (!myProfileInfo!.blockedUsers
+                                    .contains(otherUserProfile!.uid)) {
+                                  await dbService.blockUser(
+                                      myProfileInfo!, otherUserProfile!);
+                                } else {
+                                  await dbService.unblockUser(
+                                      myProfileInfo!, otherUserProfile!);
+                                }
+                              },
+                            )),
+                        Visibility(
+                            visible:
+                                (myProfileInfo!.uid == otherUserProfile!.uid),
+                            child: TextButton.icon(
+                                onPressed: () {
+                                  Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditProfileScreen()))
+                                      .then((value) {
+                                    setState(() {
+                                      getProfileInfo_setStateWhenDone();
                                     });
-                                  },
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: Colors.black,
-                                  ),
-                                  label: Text('Edit Profile'))
-                          )
-                        ],
-                      )
-                    ),
-                    /*
-                    Positioned(
-                      child: Visibility(
-                        visible: (myProfileInfo!.uid != otherUserProfile!.uid),
-                        child: TextButton.icon(
-                            onPressed: null,
-                            icon: Icon(
-                              Icons.edit,
-                              color: Colors.black,
-                            ),
-                            label: Text('Edit Profile'))
-                      )
-                    ),
-
-                     */
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: Colors.black,
+                                ),
+                                label: Text('Edit Profile')))
+                      ],
+                    )),
                     Container(
                         padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                         child: const Text(
@@ -244,34 +251,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 )),
             Positioned(
-                left: 10.0,
+              left: 5.0,
+              top: 5.0,
+              child: Text('Name: ' + otherUserProfile!.screenName,
+                  style: const TextStyle(fontSize: 20)),
+            ),
+            Positioned(
+                right: 4.0,
                 top: 5.0,
-                    child: Visibility(
-                        visible: (myProfileInfo!.uid != otherUserProfile!.uid),
-                        child: TextButton.icon(
-                          icon: Icon(
-                            Icons.block,
-                            color: Colors.red,
-                          ),
-                          label: Text(
-                            (myProfileInfo!.blockedUsers
-                                    .contains(otherUserProfile!.uid))
-                                ? 'Unblock User'
-                                : 'Block User',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                          onPressed: () async {
-                            print("blocking user");
-                            if (!myProfileInfo!.blockedUsers
-                                .contains(otherUserProfile!.uid)) {
-                              await dbService.blockUser(
-                                  myProfileInfo!, otherUserProfile!);
-                            } else {
-                              await dbService.unblockUser(
-                                  myProfileInfo!, otherUserProfile!);
-                            }
-                          },
-                        ))),
+                child: Container(
+                    child: Row(children: [
+                  RatingBar.builder(
+                    initialRating: otherUserProfile!.userRating,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemSize: 25,
+                    itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                      size: 1,
+                    ),
+                    onRatingUpdate: (double value) {},
+                  ),
+                  Text(
+                    '(${otherUserProfile!.totalRates})',
+                    style: TextStyle(fontSize: 20),
+                  )
+                ]))),
           ]));
     });
   }

@@ -28,7 +28,7 @@ class ToyDetailsScreen extends StatefulWidget {
 }
 
 class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
-  Widget _body = CircularProgressIndicator();
+  Widget _body = Center(child: CircularProgressIndicator());
   ProfileInfo? ownerProfileInfo;
   bool showSignIn = true;
 
