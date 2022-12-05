@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toy_trader/screens/HomeScreen.dart';
 
 import '../../firebase_services/AuthService.dart';
+import 'RegistrationScreen.dart';
 
 class SignInScreen extends StatefulWidget {
   final Function toggleView;
@@ -36,6 +37,10 @@ class _SignInScreenState extends State<SignInScreen> {
                   TextButton.icon(
                       onPressed: () {
                         widget.toggleView();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RegistrationScreen(toggleView: widget.toggleView,)),
+                        );
                       },
                       icon: Icon(
                         Icons.person,
