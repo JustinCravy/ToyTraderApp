@@ -5,7 +5,7 @@ part 'Message.g.dart';
 
 @JsonSerializable(anyMap: true, explicitToJson: true)
 class Message {
-
+  //variables
   String messageId = '';
   String senderId = '';
   String receiverId = '';
