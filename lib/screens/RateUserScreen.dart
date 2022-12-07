@@ -25,6 +25,37 @@ class _RatingState extends State<RateUserScreen>{
     setState(() => showSignIn = !showSignIn);
   }
 
+  createAlertDialog(BuildContext context,bool flag){
+    return showDialog(context: context, builder: (BuildContext context) {
+      if (flag==false){
+        return AlertDialog(
+          title: Text('Rate Successfully!'),
+          actions: <Widget>[
+            MaterialButton(
+                elevation: 5.0,
+                child: Text('Back'),
+                onPressed: (){
+                  Navigator.pop(context);
+                })
+          ],
+        );
+      }
+      else{
+        return AlertDialog(
+          title: Text('You have already rated this one!'),
+          actions: <Widget>[
+            MaterialButton(
+                elevation: 5.0,
+                child: Text('Back'),
+                onPressed: (){
+                  Navigator.pop(context);
+                })
+          ],
+        );
+      }
+    });
+  }
+
   double rating=0;
   @override
   Widget build(BuildContext context) =>Scaffold(
@@ -76,11 +107,14 @@ class _RatingState extends State<RateUserScreen>{
             TextButton(
                 child: const Text('submit'),
                 onPressed: () async {
-                  if (await dbService.rateUser(rating, widget.id, widget.trade)){
-                    print('Rate successfully');
+                  if (widget.trade.receiverRatingRcvd==false){
+                    await dbService.rateUser(rating, widget.id, widget.trade);
+                    widget.trade.receiverRatingRcvd=true;
+                    dbService.updateTrade(widget.trade);
+                    createAlertDialog(context,widget.trade.receiverRatingRcvd);
                   }
                   else
-                    print('Error');
+                    createAlertDialog(context,widget.trade.receiverRatingRcvd);
                 }
                 ),
           ]
