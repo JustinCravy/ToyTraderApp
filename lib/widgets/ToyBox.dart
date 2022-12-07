@@ -80,6 +80,7 @@ class _ToyBoxState extends State<ToyBox> {
                         borderRadius: BorderRadius.all(boxCurve),
                         image: DecorationImage(
                             fit: BoxFit.fill,
+
                             image: NetworkImage(widget.toy.toyImageURL)
                         )
                     )

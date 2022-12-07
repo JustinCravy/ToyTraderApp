@@ -309,7 +309,7 @@ class _ToyDetailsScreenState extends State<ToyDetailsScreen> {
                   decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
                       image: DecorationImage(
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                           image: NetworkImage(widget.toy.toyImageURL)))),
               Padding(
                 padding: const EdgeInsets.all(10.0),
